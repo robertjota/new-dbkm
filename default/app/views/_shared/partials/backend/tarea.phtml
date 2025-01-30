@@ -1,0 +1,62 @@
+            <?php echo DwForm::open(); ?>
+                <div>
+                    <div class="col-xs-12">
+                        <?php echo DwForm::text('tarea.nombre', array('class'=>'input-lower input-required'), null, 'Nueva Tarea'); ?>
+                    </div>
+                </div>
+                <div>
+                    <table class="table table-bordered table-hover table-striped table-condensed table-responsive">
+                        <thead>
+                            <tr>
+                                <th class="text-center col-xs-1">NUM</th>
+                                <th class="text-center" data-search="tarea" data-order="tarea">TAREA</th>
+                                <th class="text-center" data-search="solicitado" data-order="solicitado">SOLICITADO</th>
+                                <th class="text-center" data-search="ejecutado" data-order="ejecutado">EJECUTADO</th>
+                                <th class="text-center" data-search="listo" data-order="listo">LISTO</th>
+                                <th class="col-blocked text-center col-xs-2">ACCION</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                          <?php foreach($TareasPendientes->items as $TareasPendiente): ?>
+                                <tr>
+                                    <td><?php echo $TareasPendientes->counter; ?></td>
+                                    <td><?php echo $TareasPendiente->nombre; ?></td>
+                                    <td><?php echo $TareasPendiente->solicitado; ?></td>
+                                    <td><?php echo $TareasPendiente->ejecutado; ?></td>
+                                    <td><?php echo $TareasPendiente->listo; ?></td>
+                                    <td class="text-center">
+                                        <?php echo DwHtml::buttonTable('Tarea Realizada', "registro/ciudades/editar", null, 'warning', 'fa-edit'); ?>
+                                        <?php echo DwHtml::buttonTable('Eliminar Tarea', "registro/tarea/eliminar/$key_del/", array('class'=>'js-confirm', 'msg-title'=>'Eliminar Ciudad', 'msg'=>'Está seguro de eliminar esta Tarea? <br />Recuerda que esta operación no se puede reversar.'), 'danger', 'fa-trash'); ?>
+                                    </td>
+                                </tr>
+                                <?php $TareasPendientes->counter++; ?>
+                          <?php endforeach; ?>
+                        </tbody>
+                        <?php $TareasRealizados->counter=$TareasPendientes->counter; ?>
+                        <tbody>
+                          <?php foreach($TareasRealizados->items as $TareasRealizado): ?>
+                                <tr>
+                                    <td><?php echo $TareasRealizados->counter; ?></td>
+                                    <td><?php echo $TareasRealizado->nombre; ?></td>
+                                    <td><?php echo $TareasRealizado->solicitado; ?></td>
+                                    <td><?php echo $TareasRealizado->ejecutado; ?></td>
+                                    <td><?php echo $TareasRealizado->listo; ?></td>
+                                    <td class="text-center">
+                                        <?php echo DwHtml::buttonTable('Tarea Realizada', "registro/ciudades/editar", null, 'warning', 'fa-edit'); ?>
+                                        <?php echo DwHtml::buttonTable('Eliminar Tarea', "registro/tarea/eliminar/$key_del/", array('class'=>'js-confirm', 'msg-title'=>'Eliminar Ciudad', 'msg'=>'Está seguro de eliminar esta Tarea? <br />Recuerda que esta operación no se puede reversar.'), 'danger', 'fa-trash'); ?>
+                                    </td>
+                                </tr>
+                          <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
+                <div >
+                    <div class="form-actions">
+                        <div style="display:inline-block; width: 49%;">
+                            <?php echo DwForm::send('Guardar Tarea'); ?>
+                            <?//php echo DwForm::cancel(); ?>
+                            <?php echo DwForm::focus('tarea.nombre'); ?>
+                        </div>
+                    </div>
+                </div>
+                <?php echo DwForm::close(); ?>

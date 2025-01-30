@@ -1,0 +1,68 @@
+<?php View::flash(); ?>
+
+<script type="text/javascript">
+    $(function() {
+        $('table').kgrid({
+            form_to         : $.KumbiaPHP.publicPath+'sistema/backups/buscar/',
+            form_open       : ['<?php echo $field; ?>', '<?php echo $value; ?>'],
+            order_to        : $.KumbiaPHP.publicPath+'sistema/backups/buscar/<?php echo $field; ?>/<?php echo $value; ?>/',
+            order_attr      : '<?php echo (APP_AJAX) ? 'class="js-link js-spinner"' : ''; ?>'
+        });
+    });
+</script>
+
+<div class="container shell-view">
+
+    <?php View::process($page_module, $page_title, $set_title); ?>
+
+    <div class="btn-toolbar btn-toolbar-top">
+        <div class="row">
+            <div class="btn-actions">
+                <?php echo DwHtml::button("sistema/backups/crear/", 'crear', NULL, 'fa-check-square-o', APP_AJAX); ?>
+                <?php echo DwHtml::button("sistema/backups/listar/", 'filtro', array('class'=>'btn-danger'), 'fa-ban', APP_AJAX); ?>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-overflow">
+
+        <table class="table table-bordered table-hover table-striped table-condensed table-responsive">
+            <thead>
+                <tr>
+                    <th>NUM</th>
+                    <th class="col-hidden" data-search="fecha" data-order="fecha">FECHA</th>
+                    <th class="col-hidden">HORA</th>
+                    <th class="col-hidden" data-search="denominacion" data-order="denominacion">DENOMINACION</th>
+                    <th>CREADA POR</th>
+                    <th>TAMAÑO</th>
+                    <th>ARCHIVO</th>
+                    <th class="col-blocked text-center">ACTIONS</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach($backups->items as $backup): ?>
+                    <?php $key_res = Security::setKey($backup->id, 'restaurar_backup'); ?>
+                    <?php $key_dwn = Security::setKey($backup->id, 'descargar_backup'); ?>
+                    <tr data-backup-description="<?php echo $backup->denominacion; ?>" data-backup-file="<?php echo $backup->archivo; ?>" data-backup-datetime="<?php echo $backup->backup_at; ?>">
+                        <td><?php echo $backups->counter; ?></td>
+                        <td><?php echo ($field=='fecha') ? DwUtils::resaltar($value, date("Y-m-d", strtotime($backup->backup_at))) : date("Y-m-d", strtotime($backup->backup_at)); ?></td>
+                        <td><?php echo date("H:i:s", strtotime($backup->backup_at)); ?></td>
+                        <td><?php echo ($field=='denominacion') ? DwUtils::resaltar($value, $backup->denominacion) : $backup->denominacion; ?></td>
+                        <td><?php echo $backup->nombre.' '.$backup->apellido; ?></td>
+                        <td><?php echo $backup->tamano; ?></td>
+                        <td><?php echo $backup->archivo; ?></td>
+                        <td class="btn-actions">
+                            <?php echo DwHtml::buttonTable('Descargar backup', "sistema/backups/descargar/$key_dwn/", array('class'=>'no-ajax', 'target'=>'_blank'), 'info', 'fa-download'); ?>
+                            <?php echo DwHtml::buttonTable('Restarurar sistema', "#", array('class'=>'js-confirm', 'data-to'=>PUBLIC_PATH."sistema/backups/restaurar/$key_res/", 'msg-title'=>'Restaurar sistema', 'msg'=>'Está seguro de querer restaurar el sistema con esta copia de seguridad?', 'on-confirm'=>'backupRestore'), 'danger', 'fa-warning'); ?>
+                        </td>
+                    </tr>
+                    <?php $backups->counter++; ?>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+
+    </div>
+
+    <?php View::partial('paginators/default', false, array('page'=>$backups, 'url'=>"sistema/backups/buscar/$field/$value/$order/")); ?>
+
+</div>

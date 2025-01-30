@@ -1,0 +1,147 @@
+<?php View::flash(); ?>
+
+<div class="container shell-view">
+
+    <?php View::process($page_module, $page_title, $set_title); ?>
+
+    <?php echo DwForm::open(); ?>
+
+    <ul class="nav nav-tabs hidden-xs">
+        <li class="active"><a href="#tab1" data-toggle="tab">Información personal</a></li>
+        <li><a href="#tab2" data-toggle="tab">Información de la cuenta</a></li>
+        <li><a href="#tab3" data-toggle="tab">Cargar imágen</a></li>
+    </ul>
+    <ul class="nav nav-pills nav-stacked visible-xs">
+        <li class="active">
+            <a href="#tab1" data-toggle="tab">Información personal</a>
+        </li>
+        <li>
+            <a href="#tab2" data-toggle="tab">Información de la cuenta</a>
+        </li>
+        <li>
+            <a href="#tab3" data-toggle="tab">Cargar imágen</a>
+        </li>
+    </ul>
+
+    <div class="tab-content">
+        <div class="tab-pane active" id="tab1">
+            <div class="row">
+                <div class="col-md-6">
+                    <?php echo DwForm::text('usuario.nombre', array('class'=>'input-required'), $usuario->nombre, 'Nombre'); ?>
+                </div>
+                <div class="col-md-6">
+                    <?php echo DwForm::text('usuario.apellido', array('class'=>'input-required'), $usuario->apellido, 'Apellido'); ?>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4">
+                    <?php echo DwForm::text('usuario.cedula', array('class'=>'mask_ci'), $usuario->cedula, 'Cédula de Identidad'); ?>
+                </div>
+                <div class="col-md-4">
+                    <?php echo DwForm::email('usuario.email', array('class'=>'input-email mask-email'), $usuario->email, 'Email'); ?>
+                </div>
+                <div class="col-md-4">
+                    <?php echo DwForm::text('usuario.telefono', array('class'=>'mask_phone'), $usuario->telefono, 'Teléfono'); ?>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="tab-pane" id="tab2">
+            <div class="row">
+                <div class="col-md-6">
+                    <?php echo DwForm::text('usuario.login', array('class'=>'input-readonly input-lower'), $usuario->login, 'Usuario'); ?>
+                </div>
+                <div class="col-md-6">
+                    <?php echo DwForm::oneSelect('usuario.perfil_id', $usuario->perfil, array('class'=>'input-readonly'), 'Perfil'); ?>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <?php echo DwForm::number('usuario.tiempo', array('class'=>'input-lower'), $usuario->tiempo, 'Tiempo de la Sección en Minutos'); ?>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <?php echo DwForm::pass('usuario.oldpassword', array('class'=>'input-password input-lower'), '', 'Contraseña Anterior'); ?>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <?php echo DwForm::pass('usuario.password', array('class'=>'input-password input-lower'), '', 'Nueva Contraseña'); ?>
+                </div>
+                <div class="col-md-6">
+                    <?php echo DwForm::pass('usuario.repassword', array('class'=>'input-repass input-lower', 'data-equalto'=>'usuario_password'), '', 'Repetir Contraseña'); ?>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="tab-pane" id="tab3">
+
+            <div class="row fileupload-buttonbar">
+
+                <div class="col-md-6" style="margin-bottom: 20px;">
+
+                    <div class="row">
+
+                        <div class="col-md-6">
+                            <?php echo DwForm::upload('fotografia', array('data-to'=>PUBLIC_PATH.'sistema/mi_cuenta/upload/', 'data-size'=>5000000, 'data-files'=>'images', 'data-success'=>'loadImg'), 'Fotografía'); ?>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="picture-profile text-center text-middle shadow-dark" style="margin: 5px auto 0px;">
+                                <?php echo DwHtml::img("upload/personas/$usuario->fotografia", "$usuario->nombre $usuario->apellido", array('id'=>'img-usuario')); ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <?php echo DwForm::hidden('usuario.fotografia', NULL, $usuario->fotografia); ?>
+            <?php echo DwForm::hidden('usuario.id', NULL, $usuario->id); ?>
+        </div>
+
+    </div>
+
+    <div class="row">
+        <div class="form-actions">
+            <?php echo DwForm::send('Actualizar mis datos'); ?>
+            <?php echo DwForm::cancel(); ?>
+            <?php echo DwForm::focus('usuario.nombre'); ?>
+        </div>
+    </div>
+
+
+    <?php echo DwForm::close(); ?>
+    <?php $tema = $usuario->tema; ?>
+</div>
+
+
+<script>
+    $(document).ready(function () {
+        $('#usuario_password').val(null);
+        // Skin switcher
+        var currentSkin;
+        if("<?php echo $usuario->tema ?>" == "default") {
+            currentSkin = 'blue';
+        } else {
+            currentSkin = "<?php echo 'skin-'.$usuario->tema ?>"
+        };
+
+        $('#usuario_tema').on('change', function() {
+            var skinName = 'skin-' + $(this).val()
+            $('body').removeClass(currentSkin)
+            $('body').addClass(skinName)
+            currentSkin = skinName
+        });
+    });
+
+    function loadImg(result, input) {
+            $("#usuario_fotografia").val(result.name);
+            $("#img-usuario").attr('src', '<?php echo PUBLIC_PATH; ?>img/upload/personas/'+result.name);
+    }
+</script>

@@ -1,0 +1,105 @@
+<?php View::flash(); ?>
+<!-- DataTables CSS -->
+<link rel="stylesheet" href="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-bs5/css/dataTables.bootstrap5.min.css">
+<link rel="stylesheet" href="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-buttons-bs5/css/buttons.bootstrap5.min.css">
+<link rel="stylesheet" href="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-responsive-bs5/css/responsive.bootstrap5.min.css">
+<!-- END DataTables CSS -->
+
+<!-- Page Content -->
+<div class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="block">
+                <div class="block-header pt-3">
+                    <h3 class="block-title"></h3>
+                    <div class="block-options">
+                        <?php echo DwHtml::button("sistema/usuarios/agregar/", 'Nuevo', NULL, 'fa-check-square'); ?>
+                    </div>
+                    <button type="button" class="btn btn-primary js-swal-simple">Ejemplo</button>
+                </div>
+                <div class="block-content">
+                    <div class="table-responsive mb-3">
+                        <table id="tUsuarios" class="table table-bordered table-vcenter table-hover js-dataTable-buttons table-striped table-condensed table-responsive">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th class="col-hidden text-center" data-search="login" data-order="login">USUARIO</th>
+                                    <th class="text-center" data-search="nombre" data-order="nombre">NOMBRE</th>
+                                    <th class="col-hidden text-center" data-search="email" data-order="email">EMAIL</th>
+                                    <th class="col-hidden text-center" data-search="perfil" data-order="perfil">PERFIL</th>
+                                    <th class="col-hidden text-center" data-order="estado_usuario">ESTADO</th>
+                                    <th class=""></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php $counter = 1; ?>
+                                <?php foreach ($usuarios ?? [] as $usuario) : ?>
+                                    <?php $key_shw = Security::setKey($usuario->id, 'shw_usuario'); ?>
+                                    <?php $key_upt = Security::setKey($usuario->id, 'upt_usuario'); ?>
+                                    <?php $key_ina = Security::setKey($usuario->id, 'bloquear_usuario'); ?>
+                                    <?php $key_rea = Security::setKey($usuario->id, 'reactivar_usuario'); ?>
+                                    <tr>
+                                        <td><?php echo $counter; ?></td>
+                                        <td><?php echo $usuario->login; ?></td>
+                                        <td><?php echo $usuario->nombre . ' ' . $usuario->apellido; ?></td>
+                                        <td><?php echo $usuario->email; ?></td>
+                                        <td><?php echo $usuario->perfil; ?></td>
+                                        <td class="text-center"><button class="status-toggle"
+                                                data-user-id="<?php echo $usuario->id; ?>"
+                                                data-status="<?php echo $usuario->estado; ?>"
+                                                data-key="<?php echo Security::setKey($usuario->id, 'change_status'); ?>">
+                                                <?= ($usuario->estado == Usuario::ACTIVO) ?
+                                                    '<span class="badge bg-success">Activo</span>' :
+                                                    '<span class="badge bg-danger">Bloqueado</span>'; ?>
+                                            </button></td>
+                                        <td class="text-center" width="5%">
+                                            <div class="dropdown dropstart">
+                                                <a href="javascript:void(0)" class="text-muted" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <i class="fas fa-ellipsis-v fs-4"></i>
+                                                </a>
+                                                <ul class="dropdown-menu text-center" aria-labelledby="dropdownMenuButton">
+                                                    <li class="dropdown-item">
+                                                        <?php echo DwHtml::buttonTable('Ver usuario', "sistema/usuarios/ver/$key_shw/", NULL, 'info', 'fa-search'); ?>
+                                                        <?php if ($usuario->estado == Usuario::ACTIVO) { ?>
+                                                            <?php echo DwHtml::buttonTable('Bloquear usuario', "sistema/usuarios/estado/bloquear/$key_ina/", NULL, 'success', 'fa-flag'); ?>
+                                                        <?php } else { ?>
+                                                            <?php echo DwHtml::buttonTable('Reactivar usuario', "sistema/usuarios/estado/reactivar/$key_rea/", NULL, 'danger', 'fa-flag'); ?>
+                                                        <?php } ?>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <?php $counter++; ?>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END Page Content -->
+
+<?php SectionManager::start('scripts') ?>
+<!-- DataTables JS Plugins -->
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-bs5/js/dataTables.bootstrap5.min.js"></script>
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-responsive-bs5/js/responsive.bootstrap5.min.js"></script>
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-buttons/dataTables.buttons.min.js"></script>
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-buttons-bs5/js/buttons.bootstrap5.min.js"></script>
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-buttons-jszip/jszip.min.js"></script>
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-buttons-pdfmake/pdfmake.min.js"></script>
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-buttons-pdfmake/vfs_fonts.js"></script>
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-buttons/buttons.print.min.js"></script>
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-buttons/buttons.html5.min.js"></script>
+
+<!-- DataTables JS Code -->
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/_js/pages/be_tables_datatables.js"></script>
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/_js/pages/be_comp_dialogs.js"></script>
+
+<script src="<?= PUBLIC_PATH ?>javascript/listar.js"></script>
+
+<?php SectionManager::end('scripts') ?>

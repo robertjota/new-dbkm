@@ -1,0 +1,80 @@
+<?php View::flash(); ?>
+
+<!-- Page Content -->
+<div class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="block">
+                <div class="block-content">
+                    <fieldset class="border p-2">
+                        <legend class="float-none w-auto block-header block-header-default">Datos del perfil</legend>
+                        <div class="row text-center">
+                            <div class="col-md-4">
+                                <label for="" class="control-label mb-2">Nombre del perfil:</label>
+                                <h5><?= strtoupper($perfil->perfil ?? ''); ?></h5>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="" class="control-label mb-2">Plantilla:</label>
+                                <h5><?= strtoupper($perfil->plantilla ?? ''); ?></h5>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="" class="control-label mb-2">Estado:</label>
+                                <h5><?= $perfil->estado ?? '' == 1 ? 'ACTIVO' : 'BLOQUEADO' ?></h5>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="block-content">
+                    <fieldset class="border p-2">
+                        <legend class="float-none w-auto block-header block-header-default">Listado de usuarios asignados a este perfil</legend>
+
+                        <table class="table table-bordered table-striped table-vcenter js-dataTable-simple table-hover table-condensed">
+                            <thead>
+                                <tr>
+                                    <th class="text-center"># </th>
+                                    <th class="text-center">USUARIO </th>
+                                    <th class="text-center">NOMBRE </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php $counter = 1; ?>
+                                <?php foreach ($usuarios ?? [] as $usuario): ?>
+                                    <tr>
+                                        <td class="text-center"><?= $counter; ?></td>
+                                        <td><?= $usuario->login; ?></td>
+                                        <td><?= $usuario->nombre . ' ' . $usuario->apellido; ?></td>
+                                    </tr>
+                                    <?php $counter++; ?>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </fieldset>
+                    <div class="row mb-3 mt-3">
+                        <div class="form-actions">
+                            <div class="text-left">
+                                <?= DwButton::back('sistema/perfiles/listar', 'Regresar al listado de perfiles', 'fa-undo', 'Atras'); ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END Page Content -->
+
+<!-- DataTables JS Plugins -->
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-bs5/js/dataTables.bootstrap5.min.js"></script>
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-responsive-bs5/js/responsive.bootstrap5.min.js"></script>
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-buttons/dataTables.buttons.min.js"></script>
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-buttons-bs5/js/buttons.bootstrap5.min.js"></script>
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-buttons-jszip/jszip.min.js"></script>
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-buttons-pdfmake/pdfmake.min.js"></script>
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-buttons-pdfmake/vfs_fonts.js"></script>
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-buttons/buttons.print.min.js"></script>
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-buttons/buttons.html5.min.js"></script>
+
+<!-- DataTables JS Code -->
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/_js/pages/be_tables_datatables.js"></script>

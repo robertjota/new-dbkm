@@ -1,0 +1,958 @@
+body {
+    /*background: url("img/body-bg.png") repeat scroll 0 0 #E9E9E9;*/
+    font-size: 13px/1.7em;
+}
+
+.navbar,
+footer {
+    font-family: Play, Lucila, Verdana, sans-serif;
+}
+
+.navbar-inner {
+    background: none repeat scroll 0 0 #292929;
+    border-bottom: 1px solid #121212;
+}
+
+.user-nav .brand,
+footer a {
+    color: #FFFFFF;
+}
+
+.user-nav .nav>li>a,
+footer {
+    color: #999999;
+    text-shadow: none;
+}
+
+.user-nav .nav li.dropdown>.dropdown-toggle .caret,
+.navbar .nav li.dropdown.open>.dropdown-toggle .caret,
+.user-nav .nav li.dropdown.active>.dropdown-toggle .caret,
+.navbar .nav li.dropdown.open.active>.dropdown-toggle .caret {
+    border-bottom-color: #FF9933;
+    border-top-color: #FF9933;
+}
+
+.user-nav .nav>li>a:hover,
+.navbar .nav li.dropdown.open>.dropdown-toggle,
+.navbar .nav li.dropdown.active>.dropdown-toggle,
+.navbar .nav li.dropdown.open.active>.dropdown-toggle,
+footer a:hover {
+    color: #ffffff;
+    background-color: transparent;
+}
+
+.dropdown-menu>li>a:hover,
+.dropdown-menu>li>a:focus {
+    background: rgba(0, 0, 0, 0.4);
+    color: #ffffff;
+}
+
+.dropdown-menu>.active>a,
+.dropdown-menu>.active>a:focus,
+.dropdown-menu>.active>a:hover {
+    color: #fff;
+    text-decoration: none;
+    background-color: #FF9933;
+    background-image: linear-gradient(to bottom, #FF9933 0, #ffab33 100%);
+    outline: 0;
+}
+
+.main-nav .navbar-inner {
+    background: -moz-linear-gradient(center top, #414141, #323232) repeat-x scroll 0 0 #3A3A3A;
+}
+
+.main-nav li.active.main-nav-arrow a {
+    color: #FF9933 !important;
+    background-image: url("img/top-arrow.png");
+}
+
+.main-nav li.main-nav-arrow a {
+    background-image: url("img/top-arrow.png");
+}
+
+.main-nav li.active a {
+    background-color: #333333 !important;
+    color: #FF9933 !important;
+    font-weight: bold;
+}
+
+.main-nav li {
+    border-left: 1px solid #4A4A4A;
+    border-right: 1px solid #292929;
+}
+
+.main-nav li>a {
+    color: #999 !important;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2) !important;
+}
+
+.main-nav li>a:hover {
+    color: #f5f5f5 !important;
+}
+
+.subnav {
+    background-color: #ffffff;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.subnav .nav>li>a {
+    color: #FF9933;
+    border-left: 1px solid #f5f5f5;
+    border-right: 1px solid #e5e5e5;
+}
+
+.subnav .nav>li>a>i {
+    color: #555555;
+}
+
+.subnav .nav>li>a:hover,
+.subnav .nav>li a:focus {
+    text-decoration: none;
+    background-color: #f5f5f5 !important;
+}
+
+.subnav .nav>.active>a,
+.subnav .nav>.active>a:hover {
+    color: #FF9933;
+    background-color: inherit;
+    border-right-color: #ddd;
+}
+
+@media (max-width: 768px) {
+    .nav-collapse .nav>li .active a>i {
+        color: #FF9933 !important;
+    }
+}
+
+
+/**
+ * PARA EL MENU PRINCIPAL
+ */
+
+.dropdown-submenu {
+    position: relative;
+}
+
+.dropdown-submenu>.dropdown-menu {
+    top: 0;
+    left: 100%;
+    margin-top: -6px;
+    margin-left: -1px;
+    -webkit-border-radius: 0 6px 6px 6px;
+    -moz-border-radius: 0 6px 6px;
+    border-radius: 0 6px 6px 6px;
+}
+
+.dropdown-submenu:hover>.dropdown-menu {
+    display: block;
+    margin-left: -2px;
+}
+
+.dropdown-submenu>a:after {
+    display: block;
+    content: " ";
+    float: right;
+    width: 0;
+    height: 0;
+    border-color: transparent;
+    border-style: solid;
+    border-width: 5px 0 5px 5px;
+    border-left-color: #ccc;
+    margin-top: 5px;
+    margin-right: -10px;
+}
+
+.dropdown-submenu:hover>a:after {
+    border-left-color: #fff;
+}
+
+.dropdown-submenu.pull-left {
+    float: none;
+}
+
+.dropdown-submenu.pull-left>.dropdown-menu {
+    left: -100%;
+    margin-left: 1px;
+    -webkit-border-radius: 6px 0 6px 6px;
+    -moz-border-radius: 6px 0 6px 6px;
+    border-radius: 6px 0 6px 6px;
+}
+
+
+/**
+ * PARA EL DASHBOARD
+ */
+
+#user .avatar {
+    width: 60px;
+}
+
+#user .avatar>img {
+    width: 50px;
+    height: 50px;
+    border-radius: 10%;
+}
+
+
+/*Card*/
+
+#user .panel-thumb {
+    margin: 5px auto;
+    text-align: center;
+}
+
+#user .panel-thumb .avatar-card {
+    text-align: center;
+    height: 200px;
+    margin: auto;
+    overflow: hidden;
+}
+
+#user .panel-thumb .avatar-card>img {
+    max-width: 200px;
+    max-height: 200px;
+}
+
+
+/* table*/
+
+#user .panel-table {
+    animation-duration: 3s;
+}
+
+#user .panel-table .panel-body .table {
+    margin: 0px;
+}
+
+#user .panel-table .panel-body {
+    padding: 0px;
+}
+
+#user .panel-table .panel-body .table-bordered>thead>tr>th {
+    text-align: center;
+}
+
+#user .panel-table .panel-footer {
+    height: 60px;
+    padding: 0px;
+}
+
+.modal .modal-header {
+    border-bottom: none;
+    position: relative;
+}
+
+.modal .modal-header .btn {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin-top: 0;
+    border-top-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.modal .modal-footer {
+    border-top: none;
+    padding: 0;
+}
+
+.modal .modal-footer .btn-group>.btn:first-child {
+    border-bottom-left-radius: 0;
+}
+
+.modal .modal-footer .btn-group>.btn:last-child {
+    border-top-right-radius: 0;
+}
+
+.modal .modal-background {
+    display: none;
+}
+
+.panel-footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+@media (min-width: 768px) {
+    .circle-tile {
+        margin-bottom: 30px;
+    }
+}
+
+.circle-tile {
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.circle-tile-heading {
+    position: relative;
+    width: 80px;
+    height: 80px;
+    margin: 0 auto -40px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-radius: 100%;
+    color: #fff;
+    transition: all ease-in-out .3s;
+}
+
+
+/* -- Background Helper Classes */
+
+
+/* Use these to cuztomize the background color of a div. These are used along with tiles, or any other div you want to customize. */
+
+.dark-blue {
+    background-color: #34495e;
+}
+
+.green2 {
+    background-color: #2e7d33;
+}
+
+.bluep {
+    background-color: #337ab7;
+}
+
+.blue2 {
+    background-color: #5bc0de;
+}
+
+.orange {
+    background-color: #f9a822;
+}
+
+.red {
+    background-color: #c62828;
+}
+
+.purple {
+    background-color: #8e44ad;
+}
+
+.dark-gray {
+    background-color: #7f8c8d;
+}
+
+.gray {
+    background-color: #95a5a6;
+}
+
+.light-gray {
+    background-color: #bdc3c7;
+}
+
+.yellow {
+    background-color: #f1c40f;
+}
+
+
+/* -- Text Color Helper Classes */
+
+.text-dark-blue {
+    color: #34495e;
+}
+
+.text-green {
+    color: #2e7d33;
+}
+
+.text-blue {
+    color: #2980b9;
+}
+
+.text-orange {
+    color: #f9a822;
+}
+
+.text-red {
+    color: #c62828;
+}
+
+.text-purple {
+    color: #8e44ad;
+}
+
+.text-faded {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.circle-tile-heading .fa {
+    line-height: 80px;
+}
+
+.circle-tile-content {
+    padding-top: 50px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+}
+
+.circle-tile-description {
+    text-transform: uppercase;
+}
+
+.text-faded {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.circle-tile-number {
+    padding: 5px 0 15px;
+    font-size: 26px;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.circle-tile-footer {
+    display: block;
+    padding: 5px;
+    color: rgba(255, 255, 255, 0.5);
+    background-color: rgba(0, 0, 0, 0.1);
+    transition: all ease-in-out .3s;
+}
+
+.circle-tile-footer:hover {
+    text-decoration: none;
+    color: rgba(255, 255, 255, 0.5);
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+.well {
+    margin-bottom: 0px;
+}
+
+
+/*    --------------------------------------------------
+    :: PARA CHECKBOX PERSONALIZADOS DENTRO DE LAS VISTAS ODS
+    -------------------------------------------------- */
+
+span.roundtrip {
+    list-style: none;
+}
+
+span.roundtrip li {
+    display: inline;
+}
+
+span.roundtrip li label {
+    display: inline-block;
+    background-color: rgba(255, 255, 255, .9);
+    border: 1px solid rgba(139, 139, 139, .3);
+    color: #adadad;
+    border-radius: 5px;
+    white-space: nowrap;
+    margin-left: 5px !important;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    transition: all .2s;
+}
+
+span.roundtrip li label:hover {
+    text-decoration: none;
+    color: rgba(255, 255, 255, 1);
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+span.roundtrip li label {
+    padding: 4.5px 12px;
+    cursor: pointer;
+}
+
+span.roundtrip li label::before {
+    display: inline-block;
+    font-style: normal;
+    font-variant: normal;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    font-size: 12px;
+    padding: 2px 6px 2px 2px;
+    content: "\f067";
+    transition: transform .3s ease-in-out;
+}
+
+span.roundtrip li input[type="checkbox"]:checked+label::before {
+    content: "\f00c";
+    transform: rotate(-360deg);
+    transition: transform .3s ease-in-out;
+}
+
+span.roundtrip li input[type="checkbox"]:checked+label {
+    border: 1px solid #154f9e;
+    background-color: #337ab7;
+    color: #fff;
+    transition: all .2s;
+}
+
+span.roundtrip li input[type="checkbox"] {
+    display: absolute;
+}
+
+span.roundtrip li input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+}
+
+span.roundtrip li input[type="checkbox"]:focus+label {
+    border: 1px solid #999;
+}
+
+
+/*  --------------------------------------------------
+    :: Table Filter
+    -------------------------------------------------- */
+
+.panel {
+    border: 1px solid #ddd;
+    background-color: #fcfcfc;
+}
+
+.panel .btn-group {
+    margin: 2px 0 2px;
+}
+
+.panel .btn-group .btn {
+    transition: background-color .3s ease;
+}
+
+.panel-title-text {
+    padding: 5px 0 15px;
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.panel-title-head {
+    padding: 5px 0 15px;
+    font-size: 22px;
+    font-weight: 600;
+    line-height: 1;
+}
+
+.panel h4 {
+    color: #2980b9;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.panel-title {
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 1;
+}
+
+.panel h1 {
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.panel-title-2 {
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1;
+}
+
+.table-filter {
+    background-color: #fff;
+    border-bottom: 1px solid #eee;
+}
+
+.table-filter tbody tr:hover {
+    cursor: pointer;
+    background-color: #eee;
+}
+
+.table-filter tbody tr td {
+    padding: 10px;
+    vertical-align: middle;
+    border-top-color: #eee;
+}
+
+.table-filter tbody tr.selected td {
+    background-color: #eee;
+}
+
+.table-filter tr td:first-child {
+    width: 38px;
+}
+
+.table-filter tr td:nth-child(2) {
+    width: 35px;
+}
+
+.ckbox {
+    position: relative;
+}
+
+.ckbox input[type="checkbox"] {
+    opacity: 0;
+}
+
+.ckbox label {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.ckbox label:before {
+    content: '';
+    top: 1px;
+    left: 0;
+    width: 18px;
+    height: 18px;
+    display: block;
+    position: absolute;
+    border-radius: 2px;
+    border: 1px solid #bbb;
+    background-color: #fff;
+}
+
+.ckbox input[type="checkbox"]:checked+label:before {
+    border-color: #2BBCDE;
+    background-color: #2BBCDE;
+}
+
+.ckbox input[type="checkbox"]:checked+label:after {
+    top: 3px;
+    left: 3.5px;
+    content: '\e013';
+    color: #fff;
+    font-size: 11px;
+    font-family: 'Glyphicons Halflings';
+    position: absolute;
+}
+
+.table-filter .star {
+    color: #ccc;
+    text-align: center;
+    display: block;
+}
+
+.table-filter .star.star-checked {
+    color: #F0AD4E;
+}
+
+.table-filter .star:hover {
+    color: #ccc;
+}
+
+.table-filter .star.star-checked:hover {
+    color: #F0AD4E;
+}
+
+.table-filter .media-photo {
+    width: 35px;
+}
+
+.table-filter .media-body {
+    display: block;
+    /* Had to use this style to force the div to expand (wasn't necessary with my bootstrap version 3.3.6) */
+}
+
+.table-filter .media-meta {
+    font-size: 11px;
+    color: #999;
+}
+
+.table-filter .media .title {
+    color: #2BBCDE;
+    font-size: 14px;
+    font-weight: bold;
+    line-height: normal;
+    margin: 0;
+}
+
+.table-filter .media .title span {
+    font-size: .8em;
+    margin-right: 20px;
+}
+
+.table-filter .media .title span.pagado {
+    color: #5cb85c;
+}
+
+.table-filter .media .title span.pendiente {
+    color: #f0ad4e;
+}
+
+.table-filter .media .title span.cancelado {
+    color: #d9534f;
+}
+
+.table-filter .media .summary {
+    font-size: 14px;
+}
+
+.shape {
+    border-style: solid;
+    border-width: 0 70px 40px 0;
+    float: right;
+    height: 0px;
+    width: 0px;
+    -ms-transform: rotate(360deg);
+    /* IE 9 */
+    -o-transform: rotate(360deg);
+    /* Opera 10.5 */
+    -webkit-transform: rotate(360deg);
+    /* Safari and Chrome */
+    transform: rotate(360deg);
+}
+
+.offer {
+    background: #fff;
+    border: 1px solid #ddd;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    margin: 15px 0;
+    overflow: hidden;
+}
+
+.offer:hover {
+    -webkit-transform: scale(1.1);
+    -moz-transform: scale(1.1);
+    -ms-transform: scale(1.1);
+    -o-transform: scale(1.1);
+    transform: rotate scale(1.1);
+    -webkit-transition: all 0.4s ease-in-out;
+    -moz-transition: all 0.4s ease-in-out;
+    -o-transition: all 0.4s ease-in-out;
+    transition: all 0.4s ease-in-out;
+}
+
+.shape {
+    border-color: rgba(255, 255, 255, 0) #d9534f rgba(255, 255, 255, 0) rgba(255, 255, 255, 0);
+}
+
+.offer-radius {
+    border-radius: 7px;
+}
+
+.offer-danger {
+    border-color: #d9534f;
+}
+
+.offer-danger .shape {
+    border-color: transparent #d9534f transparent transparent;
+}
+
+.offer-success {
+    border-color: #5cb85c;
+}
+
+.offer-success .shape {
+    border-color: transparent #5cb85c transparent transparent;
+}
+
+.offer-default {
+    border-color: #999999;
+}
+
+.offer-default .shape {
+    border-color: transparent #999999 transparent transparent;
+}
+
+.offer-primary {
+    border-color: #428bca;
+}
+
+.offer-primary .shape {
+    border-color: transparent #428bca transparent transparent;
+}
+
+.offer-info {
+    border-color: #5bc0de;
+}
+
+.offer-info .shape {
+    border-color: transparent #5bc0de transparent transparent;
+}
+
+.offer-warning {
+    border-color: #f0ad4e;
+}
+
+.offer-warning .shape {
+    border-color: transparent #f0ad4e transparent transparent;
+}
+
+.shape-text {
+    color: #fff;
+    font-size: 12px;
+    font-weight: bold;
+    position: relative;
+    right: -40px;
+    top: 2px;
+    white-space: nowrap;
+    -ms-transform: rotate(30deg);
+    /* IE 9 */
+    -o-transform: rotate(360deg);
+    /* Opera 10.5 */
+    -webkit-transform: rotate(30deg);
+    /* Safari and Chrome */
+    transform: rotate(30deg);
+}
+
+div.a {
+    white-space: nowrap;
+    width: 350px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
+/*  --------------------------------------------------
+    :: Table a cards-table junto a cardtable.js
+    -------------------------------------------------- */
+
+.cards-table {
+    width: 100%;
+    thead {
+        display: none;
+    }
+    tr {
+        display: block;
+        margin: 0.5rem 1rem;
+        padding: 0.5rem 0rem 0rem;
+        background-color: transparentize( white, 0.15);
+        box-shadow: 0 0 1rem transparentize( black, 0.9);
+        border: 1px solid transparentize( #58C25F, 0.5);
+    }
+    td {
+        display: block;
+        margin: 0 0.5rem 0.5rem 0;
+        padding: 0.3rem;
+        text-align: right;
+        background-color: white;
+        &:before {
+            float: left;
+            margin: -0.5rem 0.5rem -0.5rem -0.5rem;
+            padding: 0.625rem 0.5rem 0.625rem;
+            font-size: 0.75em;
+            font-weight: bold;
+            background: transparentize( #58C25F, 0.9);
+            color: #58C25F;
+        }
+        &:before {
+            content: attr(data-label) ": ";
+        }
+        &:empty {
+            display: none;
+        }
+    }
+}
+
+
+/*  --------------------------------------------------
+    :: botones personalizados fuel
+    -------------------------------------------------- */
+
+.btn-fuel {
+    color: #ffffff;
+    background-color: #FF9933;
+    border-color: #ff8d33;
+}
+
+.btn-fuel:hover,
+.btn-fuel:focus,
+.btn-fuel:active,
+.btn-fuel.active,
+.open .dropdown-toggle.btn-fuel {
+    color: #ffffff;
+    background-color: #FF9933;
+    border-color: #ff8d33;
+}
+
+.btn-fuel:active,
+.btn-fuel.active,
+.open .dropdown-toggle.btn-fuel {
+    background-image: none;
+}
+
+.btn-fuel.disabled,
+.btn-fuel[disabled],
+fieldset[disabled] .btn-fuel,
+.btn-fuel.disabled:hover,
+.btn-fuel[disabled]:hover,
+fieldset[disabled] .btn-fuel:hover,
+.btn-fuel.disabled:focus,
+.btn-fuel[disabled]:focus,
+fieldset[disabled] .btn-fuel:focus,
+.btn-fuel.disabled:active,
+.btn-fuel[disabled]:active,
+fieldset[disabled] .btn-fuel:active,
+.btn-fuel.disabled.active,
+.btn-fuel[disabled].active,
+fieldset[disabled] .btn-fuel.active {
+    background-color: #FF9933;
+    border-color: #ff8d33;
+}
+
+.btn-fuel .badge {
+    color: #FF9933;
+    background-color: #ffffff;
+}
+
+
+/*  --------------------------------------------------
+    :: botones de Paginación personalizados para aeroser fuel
+    -------------------------------------------------- */
+
+.pagination>.active>a,
+.pagination>.active>a:focus,
+.pagination>.active>a:hover,
+.pagination>.active>span,
+.pagination>.active>span:focus,
+.pagination>.active>span:hover {
+    z-index: 3;
+    color: #fff;
+    cursor: default;
+    background-color: #FF9933;
+    border-color: #FF9933;
+}
+
+
+/*  --------------------------------------------------
+    :: botones de Datatables personalizados
+    -------------------------------------------------- */
+
+.dt-button.dark-blue {
+    color: #34495e;
+}
+
+.dt-button.green {
+    color: #2e7d33;
+}
+
+.dt-button.blue {
+    color: #2980b9;
+}
+
+.dt-button.orange {
+    color: #f9a822;
+}
+
+.dt-button.red {
+    color: #c62828;
+}
+
+.datatablebtn {
+    margin-bottom: 10px;
+}
+
+
+/*  --------------------------------------------------
+    :: zoom para imagenes
+    -------------------------------------------------- */
+
+img.zoom {
+    width: 350px;
+    height: 200px;
+    transition: all 1s ease-in-out;
+    -moz-transition: all 1s ease-in-out;
+    -o-transition: all 1s ease-in-out;
+    -ms-transition: all 1s ease-in-out;
+}
+
+.transition {
+    transform: scale(2.5);
+}

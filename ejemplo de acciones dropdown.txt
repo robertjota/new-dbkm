@@ -1,0 +1,16 @@
+menu de las acciones
+
+<td class="text-center" width="5%">
+                          <div class="dropdown dropstart">
+                            <a href="javascript:void(0)" class="text-muted" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                              <i class="fas fa-ellipsis-v fs-4"></i>
+                            </a>
+                            <ul class="dropdown-menu text-center" aria-labelledby="dropdownMenuButton">
+                              <li class="dropdown-item">
+                                //ACCIONES
+
+                              </li>
+                            </ul>
+                          </div>
+                        </td>
+

@@ -1,0 +1,76 @@
+<?php View::flash(); ?>
+<!-- DataTables CSS -->
+<link rel="stylesheet" href="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-bs5/css/dataTables.bootstrap5.min.css">
+<link rel="stylesheet" href="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-buttons-bs5/css/buttons.bootstrap5.min.css">
+<link rel="stylesheet" href="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-responsive-bs5/css/responsive.bootstrap5.min.css">
+<!-- END DataTables CSS -->
+
+<!-- Page Content -->
+<div class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="block">
+                <div class="block-header pt-3">
+                    <h3 class="block-title"></h3>
+                    <div class="block-options">
+                        <?= DwHtml::button("sistema/sucesos/", 'volver', ['class' => 'btn-secondary'], 'fa-undo', APP_AJAX); ?>
+                    </div>
+                </div>
+                <div class="block-content">
+                    <div class="table-responsive mb-3">
+                        <table class="table table-bordered table-vcenter table-hover js-dataTable-buttons table-striped table-condensed table-responsive">
+                            <thead>
+                                <tr>
+                                    <th width="5%">#</th>
+                                    <th class="text-center">FECHA</th>
+                                    <th class="text-center">TIPO</th>
+                                    <th class="text-center">DESCRIPCION</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php $counter = 1; ?>
+                                <?php if ($loggers->items ?? false) { ?>
+                                    <?php foreach ($loggers->items ?? [] as $log) : ?>
+                                        <tr>
+                                            <td><?php echo $counter; ?></td>
+                                            <td nowrap><?php echo date("d-m-Y", strtotime($log['fecha'])); ?></td>
+                                            <td>
+                                                <?php if ($log['tipo'] == 'ERROR' or $log['tipo'] == 'ALERT') { ?>
+                                                    <span class="badge text-bg-danger"><?php echo $log['tipo']; ?></span>
+                                                <?php } else if ($log['tipo'] == 'WARNING' or $log['tipo'] == 'CRITICAL' or $log['tipo'] == 'EMERGENCE') { ?>
+                                                    <span class="badge text-bg-warning"><?php echo $log['tipo']; ?></span>
+                                                <?php } else if ($log['tipo'] == 'NOTICE' or $log['tipo'] == 'INFO') { ?>
+                                                    <span class="badge text-bg-info"><?php echo $log['tipo']; ?></span>
+                                                <?php } else { ?>
+                                                    <span class="badge text-bg-secondary"><?php echo $log['tipo']; ?></span>
+                                                <?php } ?>
+                                            </td>
+                                            <td><?php echo $log['descripcion']; ?></td>
+                                        </tr>
+                                        <?php $counter++; ?>
+                                    <?php endforeach; ?>
+                                <?php } ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END Page Content -->
+<!-- DataTables JS Plugins -->
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-bs5/js/dataTables.bootstrap5.min.js"></script>
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-responsive-bs5/js/responsive.bootstrap5.min.js"></script>
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-buttons/dataTables.buttons.min.js"></script>
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-buttons-bs5/js/buttons.bootstrap5.min.js"></script>
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-buttons-jszip/jszip.min.js"></script>
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-buttons-pdfmake/pdfmake.min.js"></script>
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-buttons-pdfmake/vfs_fonts.js"></script>
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-buttons/buttons.print.min.js"></script>
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-buttons/buttons.html5.min.js"></script>
+
+<!-- DataTables JS Code -->
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/_js/pages/be_tables_datatables.js"></script>

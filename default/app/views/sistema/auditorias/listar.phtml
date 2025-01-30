@@ -1,0 +1,78 @@
+<?php View::flash(); ?>
+<!-- DataTables CSS -->
+<link rel="stylesheet" href="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-bs5/css/dataTables.bootstrap5.min.css">
+<link rel="stylesheet" href="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-buttons-bs5/css/buttons.bootstrap5.min.css">
+<link rel="stylesheet" href="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-responsive-bs5/css/responsive.bootstrap5.min.css">
+<!-- END DataTables CSS -->
+
+<!-- Page Content -->
+<div class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="block">
+                <div class="block-header pt-3">
+                    <h3 class="block-title"></h3>
+                    <div class="block-options">
+                        <?= DwHtml::button("sistema/auditorias/", 'volver', ['class' => 'btn-secondary'], 'fa-undo', APP_AJAX); ?>
+                    </div>
+                </div>
+                <div class="block-content">
+                    <div class="table-responsive mb-3">
+                        <table class="table table-bordered table-vcenter table-hover js-dataTable-buttons table-striped table-condensed table-responsive">
+                            <thead>
+                                <tr>
+                                    <th width="10%">#</th>
+                                    <th>FECHA</th>
+                                    <th>TIPO</th>
+                                    <th>USUARIO</th>
+                                    <th class="col-hidden">IP</th>
+                                    <th>DESCRIPCION</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php $counter = 1; ?>
+                                <?php foreach ($audits->items ?? [] as $audit) : ?>
+                                    <tr>
+                                        <td><?= $counter; ?></td>
+                                        <td nowrap><?= $audit['fecha']; ?></td>
+                                        <td>
+                                            <?php if ($audit['tipo'] == 'ERROR' or $audit['tipo'] == 'ALERT') { ?>
+                                                <span class="label label-danger"><?= $audit['tipo']; ?></span>
+                                            <?php } else if ($audit['tipo'] == 'WARNING' or $audit['tipo'] == 'CRITICAL' or $audit['tipo'] == 'EMERGENCE') { ?>
+                                                <span class="label label-warning"><?= $audit['tipo']; ?></span>
+                                            <?php } else if ($audit['tipo'] == 'NOTICE' or $audit['tipo'] == 'INFO') { ?>
+                                                <span class="label label-info"><?= $audit['tipo']; ?></span>
+                                            <?php } else { ?>
+                                                <span class="label label-default"><?= $audit['tipo']; ?></span>
+                                            <?php } ?>
+                                        </td>
+                                        <td><?= $audit['usuario']; ?></td>
+                                        <td><?= $audit['ip']; ?></td>
+                                        <td><?= $audit['descripcion']; ?></td>
+                                    </tr>
+                                    <?php $counter++; ?>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END Page Content -->
+<!-- DataTables JS Plugins -->
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-bs5/js/dataTables.bootstrap5.min.js"></script>
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-responsive-bs5/js/responsive.bootstrap5.min.js"></script>
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-buttons/dataTables.buttons.min.js"></script>
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-buttons-bs5/js/buttons.bootstrap5.min.js"></script>
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-buttons-jszip/jszip.min.js"></script>
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-buttons-pdfmake/pdfmake.min.js"></script>
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-buttons-pdfmake/vfs_fonts.js"></script>
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-buttons/buttons.print.min.js"></script>
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-buttons/buttons.html5.min.js"></script>
+
+<!-- DataTables JS Code -->
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/_js/pages/be_tables_datatables.js"></script>

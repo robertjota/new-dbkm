@@ -1,0 +1,94 @@
+<?php View::flash(); ?>
+<?php SectionManager::start('styles')  ?>
+<!-- DataTables CSS -->
+<link rel="stylesheet" href="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-bs5/css/dataTables.bootstrap5.min.css">
+<link rel="stylesheet" href="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-buttons-bs5/css/buttons.bootstrap5.min.css">
+<link rel="stylesheet" href="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-responsive-bs5/css/responsive.bootstrap5.min.css">
+<!-- END DataTables CSS -->
+<?php SectionManager::end('styles')  ?>
+
+<!-- Page Content -->
+<div class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="block">
+                <div class="block-header pt-3">
+                    <h3 class="block-title"></h3>
+                    <div class="block-options">
+                        <button type="button" class="btn btn-primary">
+                            Crear Producto
+                        </button>
+                    </div>
+                </div>
+                <div class="block-content">
+                    <div class="table-responsive">
+                        <table id="tProductos" class="table table-bordered table-vcenter table-hover js-dataTable-buttons table-striped table-condensed table-responsive">
+                            <thead>
+                                <tr>
+                                    <th class="text-center" style="width: 80px;">#</th>
+                                    <th>codigo</th>
+                                    <th>nombre</th>
+                                    <th>categoria</th>
+                                    <th>unidad</th>
+                                    <th>existencia</th>
+                                    <th>costo</th>
+                                    <th class="text-center" style="width: 100px;">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody class="table-group-divider">
+                                <?php $count = 1;
+                                ?>
+                                <?php foreach ($productos as $producto) { ?>
+                                    <?php $key_upd = Security::setKey($producto->id, 'upd_producto'); ?>
+                                    <?php $key_del = Security::setKey($producto->id, 'del_producto'); ?>
+                                    <?php $key_shw = Security::setKey($producto->id, 'shw_producto'); ?>
+                                    <tr>
+                                        <td class="text-center">
+                                            <?= $count++ ?>
+                                        </td>
+                                        <td><?= $producto->codigo ?></td>
+                                        <td><?= $producto->nombre ?></td>
+                                        <td><?= $producto->getCategoria()->nombre ?></td>
+                                        <td><?= $producto->getUnidad()->nombre ?></td>
+                                        <td class="text-center"><?= $producto->existencia ?></td>
+                                        <td class="text-end"><?= $producto->costo ?></td>
+                                        <td class="text-center">
+                                            <div class="btn-group">
+                                                <a type="button" class="btn btn-sm btn-alt-secondary" href="<?= PUBLIC_PATH ?>admin/productos/editar/<?= $key_upd ?>" data-bs-toggle="tooltip" title="Editar">
+                                                    <i class="fa fa-pencil-alt"></i>
+                                                </a>
+                                                <a type="button" class="btn btn-sm btn-alt-secondary js-sweetalert" data-bs-toggle="tooltip" title="ELiminar" msg-nombre="<?= $producto->nombre ?>" href="<?= PUBLIC_PATH ?>admin/productos/eliminar/<?= $key_del ?>" msg-title='Eliminar Registro' msg='¿Está seguro de eliminar este registro? <br>¡Recuerda que esta operación no se puede reversar.!'>
+                                                    <i class="fa fa-trash"></i>
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                <?php } ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END Page Content -->
+
+<?php SectionManager::start('scripts')  ?>
+<!-- DataTables JS Plugins -->
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-bs5/js/dataTables.bootstrap5.min.js"></script>
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-responsive-bs5/js/responsive.bootstrap5.min.js"></script>
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-buttons/dataTables.buttons.min.js"></script>
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-buttons-bs5/js/buttons.bootstrap5.min.js"></script>
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-buttons-jszip/jszip.min.js"></script>
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-buttons-pdfmake/pdfmake.min.js"></script>
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-buttons-pdfmake/vfs_fonts.js"></script>
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-buttons/buttons.print.min.js"></script>
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-buttons/buttons.html5.min.js"></script>
+
+<!-- DataTables JS Code -->
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/_js/pages/be_tables_datatables.js"></script>
+
+<?php SectionManager::end('scripts')  ?>

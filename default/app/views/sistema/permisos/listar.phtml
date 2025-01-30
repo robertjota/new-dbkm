@@ -1,0 +1,117 @@
+<?php View::flash(); ?>
+<!-- DataTables CSS -->
+<link rel="stylesheet" href="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-bs5/css/dataTables.bootstrap5.min.css">
+<link rel="stylesheet" href="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-buttons-bs5/css/buttons.bootstrap5.min.css">
+<link rel="stylesheet" href="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-responsive-bs5/css/responsive.bootstrap5.min.css">
+<!-- END DataTables CSS -->
+
+<!-- Page Content -->
+<div class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="block">
+                <!-- <div class="block-header pt-3">
+                    <h3 class="block-title"></h3>
+                    <div class="block-options">
+                    </div>
+                </div> -->
+                <div class="block-content">
+                    <?php echo DwForm::open(); ?>
+
+                    <!-- Inicio de Encabezado de Tabs -->
+                    <nav class="mb-3">
+                        <div class="nav nav-tabs nav-justified" id="nav-tab" role="tablist">
+                            <?php $count = 1; ?>
+                            <?php foreach ($recursos ?? [] as $recurso) : ?>
+                                <button class="nav-link <?= $count == 1 ? 'active' : ''; ?>" id="<?= 'nav-' . strtolower($recurso->modulo) . '-tab'; ?>" data-bs-toggle="tab" data-bs-target=<?= '#nav-' . strtolower($recurso->modulo); ?> type="button" role="tab" aria-controls="<?= 'nav-' . strtolower($recurso->modulo); ?>" aria-selected="<?= ($count == 1) ? 'true' : 'false'; ?>"><?= ucfirst($recurso->modulo); ?></button>
+                                <?php $count++; ?>
+                            <?php endforeach; ?>
+                        </div>
+                    </nav>
+
+                    <!-- Fin de Encabezado de Tabs -->
+
+                    <!-- Inicio de Tabs -->
+                    <div class="tab-content" id="nav-TabContent">
+                        <?php $counter = 1; ?>
+                        <?php foreach ($recursos ?? [] as $modulo): ?>
+                            <div class="tab-pane fade show <?php echo ($counter == 1) ? 'active' : ''; ?>" id="<?= 'nav-' . strtolower($modulo->modulo); ?>">
+
+                                <?php $recurso = $modulo->getRecursosPorModulo($modulo->modulo, $order); ?>
+                                <div class="table-responsive mb-3">
+                                    <table class="table table-bordered table-striped table-vcenter js-dataTable-simple table-hover table-condensed">
+                                        <thead>
+                                            <tr>
+                                                <th rowspan="2" class="text-middle text-center">RECURSO</th>
+                                                <th rowspan="2" class="text-middle text-center">DESCRIPCION</th>
+                                                <th colspan="<?php echo count($perfiles); ?>" class="text-center">PERFILES</th>
+                                            </tr>
+                                            <tr>
+                                                <?php foreach ($perfiles ?? [] as $perfil) { ?>
+                                                    <th title="<?php echo $perfil->perfil; ?>" class="text-center"><?php echo substr($perfil->perfil, 0, 3); ?></th>
+                                                <?php } ?>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php if ($recurso) { ?>
+                                                <?php foreach ($recurso as $row) : ?>
+                                                    <tr>
+                                                        <td><?php echo $row->recurso; ?></td>
+                                                        <td><?php echo $row->descripcion; ?></td>
+                                                        <?php foreach ($perfiles ?? [] as $perfil) { ?>
+                                                            <td title="<?php echo $perfil->perfil; ?>" class="text-center">
+                                                                <?php if (in_array("$row->id-$perfil->id", $privilegios)) { ?>
+                                                                    <?php $old_privilegios[] = $row->id . '-' . $perfil->id ?>
+                                                                    <?php echo DwForm::check('privilegios[]', $row->id . '-' . $perfil->id, NULL, TRUE); ?>
+                                                                <?php } else { ?>
+                                                                    <?php echo DwForm::check('privilegios[]', $row->id . '-' . $perfil->id); ?>
+                                                                <?php } ?>
+                                                            </td>
+                                                        <?php } ?>
+                                                    </tr>
+                                                <?php endforeach; ?>
+                                            <?php } ?>
+                                        </tbody>
+
+                                    </table>
+                                </div>
+                            </div>
+                            <?php $counter++; ?>
+                        <?php endforeach; ?>
+
+                    </div>
+
+                    <?php if (!empty($old_privilegios)) { ?>
+                        <?php echo DwForm::hidden('old_privilegios', null, join(',', $old_privilegios)); ?>
+                    <?php } ?>
+
+                    <div class="row mb-3">
+                        <div class="form-actions">
+                            <?php echo DwForm::send('Guardar privilegios'); ?>
+                            <?php echo DwButton::back('dashboard'); ?>
+                        </div>
+                    </div>
+
+                    <?php echo DWForm::close(); ?>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END Page Content -->
+
+<!-- DataTables JS Plugins -->
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-bs5/js/dataTables.bootstrap5.min.js"></script>
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-responsive-bs5/js/responsive.bootstrap5.min.js"></script>
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-buttons/dataTables.buttons.min.js"></script>
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-buttons-bs5/js/buttons.bootstrap5.min.js"></script>
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-buttons-jszip/jszip.min.js"></script>
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-buttons-pdfmake/pdfmake.min.js"></script>
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-buttons-pdfmake/vfs_fonts.js"></script>
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-buttons/buttons.print.min.js"></script>
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-buttons/buttons.html5.min.js"></script>
+
+<!-- DataTables JS Code -->
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/_js/pages/be_tables_datatables.js"></script>

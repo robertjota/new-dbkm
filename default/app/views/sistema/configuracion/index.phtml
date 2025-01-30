@@ -1,0 +1,126 @@
+<?php View::flash(); ?>
+<!-- DataTables CSS -->
+<link rel="stylesheet" href="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-bs5/css/dataTables.bootstrap5.min.css">
+<link rel="stylesheet" href="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-buttons-bs5/css/buttons.bootstrap5.min.css">
+<link rel="stylesheet" href="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-responsive-bs5/css/responsive.bootstrap5.min.css">
+<!-- END DataTables CSS -->
+
+<!-- Page Content -->
+<div class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="block pt-3">
+                <div class="block-header pt-3 d-flex justify-content-center">
+                    <?php echo DwHtml::button("sistema/configuracion/", 'basic', array('class' => 'mx-1 btn-sm btn-success active'), 'fa-asterisk', APP_AJAX); ?>
+                    <?php echo DwHtml::button("sistema/configuracion/config/", 'config all', array('class' => 'mx-1 btn-sm btn-info'), 'fa-asterisk', APP_AJAX); ?>
+                    <?php echo DwHtml::button("sistema/configuracion/routes/", 'routes', array('class' => 'mx-1 btn-sm btn-info'), 'fa-random', APP_AJAX); ?>
+                    <?php echo DwHtml::button("sistema/configuracion/databases/", 'databases', array('class' => 'mx-1 btn-sm btn-info'), 'fa-hdd-o', APP_AJAX); ?>
+                    <div class="pull-right">
+                        <?php echo DwHtml::button("sistema/configuracion/reset/", 'reset', array('class' => 'mx-1 btn-sm btn-danger js-confirm', 'msg-title' => 'Restarurar archivos de configuración', 'msg' => 'Está seguro de querer restastaurar los archivos de configuración? <br />Recuerda que esta operación no se puede reversar.'), 'fa-warning', APP_AJAX); ?>
+
+                    </div>
+                </div>
+                <div class="block-content">
+
+                    <?php echo DwForm::open(); ?>
+
+                    <div class="row justify-content-evenly">
+
+                        <div class="col-md-5">
+
+                            <fieldset class="border px-3">
+                                <legend class="float-none w-auto block-header block-header-default">Configuración básica</legend>
+                                <?php echo DwForm::text('application.name', array('class' => 'input-lower input-required'), $config['application']['name'], 'Nombre del proyecto:'); ?>
+
+                                <?php echo DwForm::text('application.base_url', array('class' => 'input-lower input-required'), $config['application']['base_url'], 'Ruta base del proyecto:'); ?>
+
+                                <?php echo DwForm::select('application.production', array('Off' => 'No', 'On' => 'Si'), array('class' => 'input-required'), $config['application']['production'], 'Proyecto en producción:'); ?>
+
+                                <?php echo DwForm::select('application.database', array('development' => 'Development', 'production' => 'Production'), array('class' => 'input-required'), $config['application']['database'], 'Entorno de conexión BD:'); ?>
+
+                                <?php echo DwForm::text('application.dbdate', array('class' => 'input-required input-lower'), $config['application']['dbdate'], 'Formato de fecha en BD:'); ?>
+
+                                <?php echo DwForm::select('application.debug', array('Off' => 'No', 'On' => 'Si'), array('class' => 'input-required'), $config['application']['debug'], 'Muestra errores en pantalla:'); ?>
+
+                                <?php echo DwForm::select('application.log_exceptions', array('Off' => 'No', 'On' => 'Si'), array('class' => 'input-required'), $config['application']['log_exceptions'], 'Muestra las excepciones en pantalla:'); ?>
+
+                                <?php echo DwForm::text('application.template', array('class' => 'input-lower input-required'), $config['application']['template'], 'Plantilla del proyecto:'); ?>
+
+                                <p>si no existe en el directorio, se usara la plantilla por defecto</p>
+                            </fieldset>
+                        </div>
+
+                        <div class="col-md-5">
+                            <fieldset class="border px-3">
+                                <legend class="float-none w-auto block-header block-header-default">Configuración personalizada</legend>
+
+                                <?php if (isset($config['custom'])) { ?>
+                                    <?php foreach ($config['custom'] as $campo => $valor) : ?>
+                                        <?php
+                                        if ($campo == 'app_logger' or $campo == 'app_office' or $campo == 'pag_min' or $campo == 'pag_med' or $campo == 'pag_max' or $campo == 'pag_ext') {
+                                            continue;
+                                        }
+                                        ?>
+                                        <?php
+                                        switch ($campo) {
+                                            case 'app_update':
+                                                $text = 'Sistema en mantenimiento';
+                                                break;
+                                            case 'app_update_time':
+                                                $text = 'Tiempo de la mantenimiento';
+                                                break;
+                                            case 'app_version':
+                                                $text = 'Versión de la aplicación';
+                                                break;
+                                            case 'app_logger':
+                                                $text = 'Generar logs de la base de datos';
+                                                break;
+                                            case 'app_office':
+                                                $text = 'Manejo de sucursales de la empresa';
+                                                break;
+                                            case 'app_ajax':
+                                                $text = 'Cargar con AJAX';
+                                                break;
+                                            case 'app_local':
+                                                $text = 'La aplicación se encuentra en el localhost';
+                                                break;
+                                            case 'login_exclusion':
+                                                $text = 'Nombre de usuarios excluidos';
+                                                break;
+                                            case 'datagrid':
+                                                $text = 'Cantidad de datos por página en los reportes';
+                                                break;
+                                            default:
+                                                $text = $campo;
+                                                break;
+                                        }
+                                        ?>
+                                        <?php if (in_array($valor, array('On', 'Off'))) {  ?>
+                                            <?php echo DwForm::select("custom.$campo", array('Off' => 'No', 'On' => 'Si'), array('class' => 'input-required'), $valor, ucfirst($text)); ?>
+                                        <?php } else { ?>
+                                            <?php echo DwForm::text("custom.$campo", array('class' => 'input-lower input-required'), $valor, ucfirst($text)); ?>
+                                        <?php } ?>
+                                    <?php endforeach; ?>
+                                <?php } ?>
+
+                                <div id="append-config"></div>
+                                <p>Los campos creados se definirán automáticamente al cargar el aplicativo y se almacenarán en el config.ini</p>
+                                <p>Para eliminar una variable puede colocar el valor "delete-var" en el input.</p>
+
+                            </fieldset>
+
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="form-actions">
+                            <?php echo DwForm::send('Guardar configuración'); ?>
+                            <?php echo DwForm::cancel(); ?>
+                        </div>
+                    </div>
+
+
+                    <?php echo DwForm::close(); ?>
+
+
+                </div>

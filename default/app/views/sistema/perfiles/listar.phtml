@@ -1,0 +1,90 @@
+<?php View::flash(); ?>
+<!-- DataTables CSS -->
+<link rel="stylesheet" href="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-bs5/css/dataTables.bootstrap5.min.css">
+<link rel="stylesheet" href="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-buttons-bs5/css/buttons.bootstrap5.min.css">
+<link rel="stylesheet" href="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-responsive-bs5/css/responsive.bootstrap5.min.css">
+<!-- END DataTables CSS -->
+
+<!-- Page Content -->
+<div class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="block">
+                <div class="block-header pt-3">
+                    <h3 class="block-title"></h3>
+                    <div class="block-options">
+                        <?= DwHtml::button("sistema/perfiles/agregar/", 'Nuevo', NULL, 'fa-check-square', APP_AJAX); ?>
+                    </div>
+                </div>
+                <div class="block-content">
+                    <div class="table-responsive mb-3">
+                        <table class="table table-bordered table-striped table-vcenter js-dataTable-simple table-hover table-condensed">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">#</th>
+                                    <th class="text-center">PERFIL</th>
+                                    <th class="text-center">PLANTILLA</th>
+                                    <th class="text-center">USUARIOS</th>
+                                    <th class="text-center">ESTADO</th>
+                                    <th class="text-center"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php $counter = 1; ?>
+                                <?php foreach ($perfiles ?? [] as $perfil) : ?>
+                                    <?php $key_show = Security::setKey($perfil->id, 'show_perfil'); ?>
+                                    <?php $key_upd = Security::setKey($perfil->id, 'upd_perfil'); ?>
+                                    <?php $key_inac = Security::setKey($perfil->id, 'inactivar_perfil'); ?>
+                                    <?php $key_reac = Security::setKey($perfil->id, 'reactivar_perfil'); ?>
+                                    <tr>
+                                        <td class="text-center"><?php echo $counter; ?></td>
+                                        <td><?php echo $perfil->perfil; ?></td>
+                                        <td class="text-center"><?php echo $perfil->plantilla; ?></td>
+                                        <td class="text-center"><?php echo $perfil->usuarios; ?></td>
+                                        <td class="text-center"><?php echo ($perfil->estado == Perfil::ACTIVO) ? '<span class="badge text-bg-success">Activo</span>' : '<span class="badge text-bg-danger">Inactivo</span>'; ?></td>
+                                        <td class="text-center" width="5%">
+                                            <div class="dropdown dropstart">
+                                                <a href="javascript:void(0)" class="text-muted" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <i class="fas fa-ellipsis-v fs-4"></i>
+                                                </a>
+                                                <ul class="dropdown-menu text-center" aria-labelledby="dropdownMenuButton">
+                                                    <li class="dropdown-item">
+                                                        <?php echo DwHtml::buttonTable('Ver perfil', "sistema/perfiles/ver/$key_show/", null, 'info', 'fa-search'); ?>
+                                                        <?php echo DwHtml::buttonTable('Modificar perfil', "sistema/perfiles/editar/$key_upd/", null, 'warning', 'fa-edit'); ?>
+                                                        <?php if ($perfil->estado == Perfil::ACTIVO) { ?>
+                                                            <?php echo DwHtml::buttonTable('Inactivar perfil', "sistema/perfiles/estado/inactivar/$key_inac/", null, 'success', 'fa-flag'); ?>
+                                                        <?php } else { ?>
+                                                            <?php echo DwHtml::buttonTable('Reactivar perfil', "sistema/perfiles/estado/reactivar/$key_reac/", null, 'danger', 'fa-flag'); ?>
+                                                        <?php } ?>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <?php $counter++; ?>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END Page Content -->
+
+<!-- DataTables JS Plugins -->
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-bs5/js/dataTables.bootstrap5.min.js"></script>
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-responsive-bs5/js/responsive.bootstrap5.min.js"></script>
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-buttons/dataTables.buttons.min.js"></script>
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-buttons-bs5/js/buttons.bootstrap5.min.js"></script>
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-buttons-jszip/jszip.min.js"></script>
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-buttons-pdfmake/pdfmake.min.js"></script>
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-buttons-pdfmake/vfs_fonts.js"></script>
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-buttons/buttons.print.min.js"></script>
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-buttons/buttons.html5.min.js"></script>
+
+<!-- DataTables JS Code -->
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/_js/pages/be_tables_datatables.js"></script>

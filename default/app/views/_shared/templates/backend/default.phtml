@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <title><?php echo $page_title; ?></title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta charset="<?php echo APP_CHARSET; ?>">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=0" />
+    <meta name="google-site-verification" content="3jvWIWMzaoKXAgecayfrQ5aq6FY8oaCtdtTKu58lybE" />
+    <meta name="robots" content="noindex,nofollow" />
+    <link rel="shortcut icon" href="<?php echo PUBLIC_PATH; ?>img/favicon.png" type="image/x-icon" />
+    <?php Tag::css('bootstrap/bootstrap.min'); ?>
+    <?php //Tag::css('bootstrap/bootstrap-theme.min');
+    ?>
+    <?php Tag::css('bootstrap/bootstrap-datetimepicker.min'); ?>
+    <!-- select2 CSS basico -->
+    <?php Tag::css('select2/select2.min'); ?>
+    <!-- datatables estilo bootstrap 3 CSS -->
+    <?php Tag::css('select2/select2-bootstrap.min'); ?>
+    <!-- datatables CSS basico -->
+    <?php Tag::css('datatables/datatables.min'); ?>
+    <!-- datatables estilo bootstrap 3 CSS -->
+    <?php Tag::css('datatables/DataTables-1.10.22/css/dataTables.bootstrap.min'); ?>
+    <?php //Tag::css('datatables/responsive/2.2.7/css/responsive.bootstrap.min');
+    ?>
+    <!-- datatables CSS basico -->
+    <?php //Tag::css('sweetalert2/theme/bootstrap-4');
+    ?>
+
+    <?php Tag::css('file-upload/jquery.fileupload'); ?>
+    <?php Tag::css('file-upload/jquery.fileupload-ui'); ?>
+    <?php //Tag::css('font-awesome.min');
+    ?>
+    <?php //Tag::css('adminlte');
+    ?>
+
+    <!-- Theme style -->
+    <?php Tag::css('backend/base'); ?>
+    <?php Tag::css('backend/style'); ?>
+    <?php //Tag::css('backend/themes/' . SKIN . '/' . SKIN);
+    ?>
+    <?php echo Html::includeCss(); ?>
+    <link href="https://fonts.googleapis.com/css?family=Play:400,700" rel="stylesheet" type="text/css">
+    <!-- cargamos algunos CDN -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/searchpanes/1.3.0/css/searchPanes.dataTables.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/select/1.3.3/css/select.dataTables.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.2.7/css/responsive.bootstrap.min.css" />
+    <link href="https://cdn.datatables.net/fixedcolumns/4.3.0/css/fixedColumns.bootstrap.css" rel="stylesheet">
+    <link href="https://cdn.datatables.net/fixedheader/3.4.0/css/fixedHeader.bootstrap.css" rel="stylesheet">
+
+    <style type="text/css">
+        <?php if (APP_MAYUS) { ?>.input-lower,
+        .input-email,
+        email,
+        .mask-email,
+        .js-datepicker {
+            text-transform: none !important;
+            font-size: 14px !important
+        }
+
+        textarea,
+        select,
+        input[type="text"],
+        input[type="search"],
+        .uneditable-input {
+            text-transform: uppercase;
+            font-size: 13px
+        }
+
+        <?php } ?>
+    </style>
+
+    <?php echo Tag::js('jquery/jquery.min') . PHP_EOL; ?>
+    <?php echo Tag::js('jquery/jquery.validate') . PHP_EOL; ?>
+    <?php echo Tag::js('jquery/ui/jquery.ui.widget'); ?>
+    <?php echo Tag::js('jquery/jquery-file-upload/jquery.iframe-transport'); ?>
+    <?php echo Tag::js('jquery/jquery-file-upload/jquery.fileupload'); ?>
+    <?php echo Tag::js('jquery/jquery-file-upload/jquery.fileupload-fp'); ?>
+    <?php echo Tag::js('jquery/jquery-file-upload/jquery.fileupload-ui'); ?>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <!--[if gte IE 8]><?php echo Tag::js('jquery/jquery-file-upload/cors/jquery.xdr-transport'); ?><![endif]-->
+
+    <script type="text/javascript">
+        function changeTitle(title) {
+            if ($(document).attr('title') != title) {
+                $(document).attr('title', title);
+            }
+        }
+    </script>
+
+</head>
+
+<body>
+
+
+
+    <?php View::partial('backend/header'); ?>
+
+
+    <div id="shell-load">
+        <div id="console" class="container"></div>
+        <div id="shell-content" class="container-fluid">
+            <noscript>
+                <h5 style="text-align: center;">¡Tu navegador no soporta Javascript!.. Activa el uso de Javascript en tu navegador.</h5>
+                <meta http-equiv="refresh" content="1; URL=<?php echo PUBLIC_PATH; ?>sistema/login/salir/no-script/" />
+            </noscript>
+            <?php View::content(); ?>
+
+        </div>
+    </div>
+
+    <?php View::partial('backend/footer'); ?>
+
+
+    <div id="loading-content" class="alpha60"></div>
+    <div id="spinner" class="preview corner-all shadow-dark"></div>
+
+    <?php echo Tag::js('moment/moment.min') . PHP_EOL; ?>
+    <?php echo Tag::js('moment/lang/es') . PHP_EOL; ?>
+    <?php echo Tag::js('bootstrap/bootstrap.min') . PHP_EOL; ?>
+    <?php echo Tag::js('bootstrap/bootstrap.typehead.min') . PHP_EOL; ?>
+    <?php echo Tag::js('bootstrap/bootstrap-datetimepicker.min') . PHP_EOL; ?>
+    <!-- datatables JS -->
+    <?php echo Tag::js('datatables/datatables.min') . PHP_EOL; ?>
+    <!-- Fontawesome 5 modificado -->
+    <?php echo Tag::js('fontawesome') . PHP_EOL; ?>
+
+    <!-- para usar botones en datatables JS -->
+    <?php echo Tag::js('datatables/Buttons-1.6.5/js/dataTables.buttons.min') . PHP_EOL; ?>
+    <?php echo Tag::js('datatables/JSZip-2.5.0/jszip.min') . PHP_EOL; ?>
+    <?php echo Tag::js('datatables/pdfmake-0.1.36/pdfmake.min') . PHP_EOL; ?>
+    <?php echo Tag::js('datatables/pdfmake-0.1.36/vfs_fonts') . PHP_EOL; ?>
+    <?php echo Tag::js('datatables/Buttons-1.6.5/js/buttons.html5.min') . PHP_EOL; ?>
+    <?php echo Tag::js('datatables/Buttons-1.6.5/js/buttons.colVis.min') . PHP_EOL; ?>
+    <?php echo Tag::js('datatables/Responsive-2.2.7/js/dataTables.responsive.min') . PHP_EOL; ?>
+    <?php echo Tag::js('datatables/Responsive-2.2.7/js/responsive.bootstrap.min') . PHP_EOL; ?>
+
+
+    <!-- para usar select2 en español JS -->
+    <?php echo Tag::js('select2/select2.min') . PHP_EOL; ?>
+    <?php echo Tag::js('select2/i18n/es') . PHP_EOL; ?>
+    <!-- para ejecutar select2 usar la clase select2 en el select -->
+    <?php echo Tag::js('sel2') . PHP_EOL; ?>
+    <?php echo Tag::js('jquery/jquery.kumbiaphp') . PHP_EOL; ?>
+    <?php echo Tag::js('jquery/jquery.keyfilter') . PHP_EOL; ?>
+    <?php echo Tag::js('jquery/jquery.kgrid') . PHP_EOL; ?>
+    <?php echo Tag::js('jquery/jquery.kload') . PHP_EOL; ?>
+    <?php echo Tag::js('jquery/jquery.spin') . PHP_EOL; ?>
+    <?php echo Tag::js('jquery/jquery.mask.min') . PHP_EOL; ?>
+    <?php echo Tag::js('html5shiv') . PHP_EOL; ?>
+    <?php echo Tag::js('cardtable') . PHP_EOL; ?>
+    <?php echo Tag::js('backend') . PHP_EOL; ?>
+    <?php echo Tag::js('validador') . PHP_EOL; ?>
+    <?php echo Tag::js('masks') . PHP_EOL; ?>
+    <!-- SweetAlert2 -->
+    <?php echo Tag::js('sweetalert2/sweetalert2.all.min') . PHP_EOL; ?>
+
+    <!-- para hacer una suma de totales por columnas en datatables-->
+    <script src="https://cdn.datatables.net/plug-ins/1.10.24/api/sum().js"></script>
+    <!-- para los estilos en Excel de exportacion datatables-->
+    <script src="https://cdn.jsdelivr.net/npm/datatables-buttons-excel-styles@1.1.1/js/buttons.html5.styles.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/datatables-buttons-excel-styles@1.1.1/js/buttons.html5.styles.templates.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/searchpanes/1.3.0/js/dataTables.searchPanes.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/select/1.3.3/js/dataTables.select.min.js"></script>
+    <script src="https://cdn.datatables.net/fixedcolumns/4.3.0/js/dataTables.fixedColumns.js"></script>
+    <script src="https://cdn.datatables.net/fixedheader/3.4.0/js/dataTables.fixedHeader.js"></script>
+    <?php //echo Tag::js('Chart.min') . PHP_EOL;
+    ?>
+    <?php //echo Tag::js('datatables_buttons').PHP_EOL;
+    ?>
+
+    <script type="text/javascript">
+        <?php if (IS_TABLET || IS_DESKTOP) { ?>
+            $(document).ready(function() {
+                url = (window.location.hash.lenth > 1) ? window.hash : window.location.pathname;
+                url = url.split('order')[0].split('pag')[0];
+                var activePageSubMenuId;
+                var activePageMainMenuElement;
+                $(".subnav").each(function(i) {
+                    if (!$(this).hasClass("hidden")) {
+                        activePageSubMenuId = $(this).attr("id");
+                    } else {
+                        contenedor = $(this).attr('id');
+                        $(this).find('a').each(function(i) {
+                            if (url == $(this).attr('href')) {
+                                $('#' + contenedor).removeClass('hidden');
+                                $(this).parent().addClass('active');
+                                $('[data-filter="' + contenedor + '"]').each(function() {
+                                    $(this).parent().addClass('main-nav-arrow active');
+                                    $(this).removeClass('hidden');
+                                    return false;
+                                });
+                                return false;
+                            }
+                        });
+                    }
+                });
+                $(".dropdown-menu").each(function(i) {
+                    $(this).find('a').each(function(i) {
+                        if (url == $(this).attr('href')) {
+                            $(this).parent().addClass('active');
+                            return false;
+                        }
+                    });
+                });
+                $('.dropdown-menu a').on('click', function() {
+                    este = $(this);
+                    $(".dropdown-menu a").each(function(i) {
+                        $(this).parents().removeClass('active');
+                    });
+                    este.parent().addClass('active');
+                });
+                //Activa el menú actual
+                $(".main-menu-link").each(function(i) {
+                    if ($(this).parent().hasClass("active")) {
+                        activePageMainMenuElement = $(this).attr("id");
+                    }
+                });
+                // Habilita el submenú
+                $(".main-menu-link").on('click', function() {
+                    var submenu = $("#" + $(this).attr("data-filter"));
+                    $(".subnav").each(function(i) {
+                        $(this).attr("class", "subnav hidden");
+                    });
+                    submenu.attr("class", "subnav");
+                    $(".main-menu-link").each(function(i) {
+                        $(this).parent().removeClass("main-nav-arrow");
+                    });
+                    $(this).parent().addClass("main-nav-arrow");
+                });
+                //Activa el submenú actual
+                $('.subnav a').on('click', function() {
+                    este = $(this);
+                    $(".subnav li").removeClass('active');
+                    $(".main-menu-link").parent().removeClass('active');
+                    este.parent().addClass('active');
+                    $('.main-nav-arrow').addClass('active');
+                    //este.parents('div.subnav').removeClass('hidden');
+                    //$(this).parent().addClass("main-nav-arrow");
+                });
+                //Activa el menú manualmente
+                $('.main-menu-link').on('click', function() {
+                    if ($(this).attr('href').length > 2) {
+                        $(".main-menu-link").parent().removeClass('active');
+                        $(this).parent().addClass('active');
+                    }
+                });
+
+            });
+        <?php } ?>
+
+
+        $(function() {
+            /** Tooltip **/
+            $("[rel=tooltip]").tooltip();
+        });
+    </script>
+
+    <!-- DESDE AQUI CAMBIO PARA CERRAR SESION -->
+    <script type="text/javascript">
+        var autoLogoutTimer;
+        resetTimer();
+        //console.log(autoLogoutTimer); // Descomentar esta linea para revisar cuales eventos ocurren
+        $(document).on('mouseover mousedown touchstart click keydown mousewheel DDMouseScroll wheel scroll', document, function(e) {
+            //console.log(e.type); // Descomentar esta linea para revisar cuales eventos ocurren
+            resetTimer();
+        }); // resetTimer es usado para el conteo del tiempo para el logout
+        function resetTimer() {
+            clearTimeout(autoLogoutTimer)
+            autoLogoutTimer = setTimeout(idleLogout, <?php echo Session::get('seccion') * 60000; ?>) // 1000 = 1 segundo (tiempo de inactividad)
+            //autoLogoutTimer = setTimeout(idleLogout, 180000) // 1000 = 1 segundo (tiempo de inactividad)
+        }
+        // idleLogout es usado redirigir al logout cuando se acaba el tiempo
+        function idleLogout() {
+            window.location.href = "<?php echo PUBLIC_PATH; ?>; ?>sistema/login/salir/sesion"; // redireccion para hacer logout
+        }
+    </script>
+
+
+
+
+
+    <?php echo DwJs::alert('Se ha producido un error en la validación del formulario.', 'subtext: Verifica los datos e intenta nuevamente.', 'title: Formulario incorrecto', 'name: errorForm'); ?>
+    <?php if (PRODUCTION) { ?>
+        <?php echo DwJs::alert('Se ha generado la siguiente excepción: <br /><span id="error-ajax"></span>.', 'title: Oops! hemos realizado algo mal.', 'name: errorAjax'); ?>
+    <?php } else { ?>
+        <?php echo DwJs::alert('Se ha generado la siguiente excepción: <br /><span id="error-ajax"></span>.<br /><span id="info-error-ajax"></span>', 'title: Oops! hemos realizado algo mal.', 'name: errorAjax', 'style: width: 80%;'); ?>
+    <?php } ?>
+    <?php echo DwJs::alert('Usted no posee los permisos necesarios para realizar esta acción.', 'title: Acceso denegado', 'name: accessControl'); ?>
+
+    <script>
+        document.write('<script src="http://' + (location.host || '${1:localhost}').split(':')[0] + ':${2:35729}/livereload.js?snipver=1"></' + 'script>')
+    </script>
+
+</body>
+
+</html>

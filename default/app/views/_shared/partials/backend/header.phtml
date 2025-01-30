@@ -1,0 +1,63 @@
+<?php ErMenu::load(Menu::BACKEND, Session::get('perfil_id')); ?>
+<header>
+    <nav class="navbar navbar-inverse navbar-fixed-top user-nav" role="navigation" id="slide-nav">
+        <div class="container-fluid">
+            <div class="navbar-header hidden-xs">
+                <?php echo DwHtml::link('dashboard', DwHtml::img("dbkm-logo-n.png", Config::get('config.application.name'), array('style' => 'height: 40px; margin: 2.5% 0 2.5% 0;')), '', FALSE); ?>
+            </div>
+            <div style="margin: 5px;">
+
+                <?php ErMenu::Desktop(); ?>
+                <ul class="nav navbar-nav navbar-right hidden-xs">
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"><i class="fa fa-user-circle"></i> <?php echo Session::get('nombre'); ?> <b class="caret"></b></a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li><?php echo DwHtml::link('sistema/mi_cuenta/', 'Mi Cuenta', array('class' => 'no-load'), 'fa-user', FALSE); ?></li>
+                            <li class="divider"></li>
+                            <li><?php echo DwHtml::link('sistema/login/salir', 'Salir', array('class' => 'no-load'), 'fa-power-off', FALSE); ?></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- MENU LATERAL PARA TAMAÑO XS -->
+            <!-- BOTON MENU PARA TAMAÑO XS-->
+            <div class="navbar-header visible-xs">
+                <a class="navbar-toggle">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </a>
+                <?php //echo DwHtml::link('dashboard', APP_NAME, array('class'=>'navbar-brand'), '' , FALSE);
+                ?>
+            </div>
+            <!-- FIN BOTON MENU TAMAÑO XS -->
+
+            <!-- MENU LATERAL PARA TAMAÑO XS-->
+            <div id="slidemenu" class="visible-xs">
+                <!-- LOGO MENU LATERAL PARA TAMAÑO XS-->
+                <div class="text-center navbar-form" style="height: 50px;">
+                    <?php echo DwHtml::link('dashboard', DwHtml::img("dbkm-logo-n.png", Config::get('config.application.name'), array('style' => 'height: 40px; margin-top: 1%')), '', FALSE); ?>
+                </div>
+                <div class="slide-navbar">
+                    <?php ErMenu::Tablet(); ?>
+                    <ul class="nav navbar-nav">
+                        <li class="divider"></li>
+                        <li><?php echo DwHtml::link('sistema/mi_cuenta/', 'Mi Cuenta'); ?></li>
+                        <li class="divider"></li>
+                        <li><?php echo DwHtml::link('login/salir/', 'Salir', array('class' => 'no-load'), 'fa-power-off', FALSE); ?></li>
+                        <li class="divider"></li>
+                        <li>
+                            <div class="text-center">
+                                <?php echo DwHtml::link('dashboard', DwHtml::img("dbkm-logo-n.png", Config::get('config.application.name'), array('style' => 'height: 30px; margin-top: 2%')), '', FALSE); ?>
+                                <p style="color: #f5f5f5">&copy; Copyright <?php echo date("Y"); ?>.</p>
+                                <p style="color: #f5f5f5">Todos los derechos reservados.</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <!-- FIN MENU LATERAL PARA TAMAÑO XS -->
+    </nav>
+</header>

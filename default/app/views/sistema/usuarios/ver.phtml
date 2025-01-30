@@ -1,0 +1,84 @@
+<?php View::flash(); ?>
+
+<div class="container shell-view">
+
+    <?php View::process($page_module, $page_title, $set_title); ?>
+
+    <?php View::partial('subnav/usuario/principal', FALSE, array('id' => $usuario->id));
+    ?>
+
+    <?php echo DwForm::open(); ?>
+
+    <ul class="nav nav-tabs hidden-xs">
+        <li class="active"><a href="#tab1" data-toggle="tab">Información personal</a></li>
+        <li><a href="#tab2" data-toggle="tab">Información de la cuenta</a></li>
+    </ul>
+    <ul class="nav nav-pills nav-stacked visible-xs">
+        <li class="active"><a href="#tab1" data-toggle="tab">Información personal</a></li>
+        <li><a href="#tab2" data-toggle="tab">Información de la cuenta</a></li>
+    </ul>
+
+    <div class="tab-content">
+        <div class="tab-pane active" id="tab1">
+
+            <div class="row">
+                <div class="col-md-4 text-right visible-xs visible-sm">
+                    <div class="col-md-6 profile-picture text-center text-middle shadow-dark" style="margin-top: 5px">
+                        <?php echo DwHtml::img("upload/personas/$usuario->fotografia", $usuario->nombre . ' ' . $usuario->apellido, array('id' => 'img-persona')); ?>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <?php echo DwForm::text('usuario.nombre', array('disabled' => 'disabled'), $usuario->nombre, 'Nombre'); ?>
+                        </div>
+                        <div class="col-md-6">
+                            <?php echo DwForm::text('usuario.apellido', array('disabled' => 'disabled'), $usuario->apellido, 'Apellido'); ?>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <?php echo DwForm::text('usuario.cedula', array('disabled' => 'disabled'), $usuario->cedula, 'Cédula de Identidad'); ?>
+                        </div>
+                        <div class="col-md-4">
+                            <?php echo DwForm::email('usuario.email', array('disabled' => 'disabled'), $usuario->email, 'Email'); ?>
+                        </div>
+                        <div class="col-md-4">
+                            <?php echo DwForm::text('usuario.telefono', array('disabled' => 'disabled'), $usuario->telefono, 'Teléfono'); ?>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 text-right hidden-xs hidden-sm">
+                    <div class="col-md-6 profile-picture text-center text-middle shadow-dark" style="margin-top: 5px">
+                        <?php echo DwHtml::img("upload/personas/$usuario->fotografia", $usuario->nombre . ' ' . $usuario->apellido, array('id' => 'img-persona')); ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane" id="tab2">
+            <div class="row">
+                <div class="col-md-4">
+                    <?php echo DwForm::text('usuario.login', array('disabled' => 'disabled'), $usuario->login, 'Usuario'); ?>
+                </div>
+                <div class="col-md-4">
+                    <?php echo DwForm::oneSelect('usuario.perfil', $usuario->perfil, array('disabled' => 'disabled'), 'Perfil'); ?>
+                </div>
+                <div class="col-md-4">
+                    <?php echo DwForm::number('usuario.tiempo', array('class' => 'input-lower'), $usuario->tiempo, 'Tiempo de la Sección en Minutos'); ?>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-actions">
+            <div class="text-left">
+                <?php echo DwButton::back(); ?>
+                <?php //echo DwButton::redir('/sistema/usuarios/listar');
+                ?>
+            </div>
+        </div>
+    </div>
+    <?php echo DwForm::close(); ?>
+</div>

@@ -1,0 +1,36 @@
+<?php View::flash(); ?>
+
+<!-- Page Content -->
+<div class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="block">
+                <div class="block-content">
+
+                    <?php echo DwForm::open(); ?>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <?php echo DwForm::text('perfil.perfil', array('class' => 'input-lower input-required'), NULL, 'Perfil'); ?>
+                        </div>
+                        <div class="col-md-6">
+                            <?php echo DwForm::text('perfil.plantilla', array('class' => 'input-lower input-alphanum'), NULL, 'Plantilla', 'La plantilla se debe ubicar dentro la caperta "templates/backend".'); ?>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="form-actions">
+                            <?php echo DwForm::send('Guardar perfil'); ?>
+                            <?php echo DwButton::back('sistema/perfiles/listar'); ?>
+                            <?php echo DwForm::focus('perfil.perfil'); ?>
+                        </div>
+                    </div>
+
+                    <?php echo DwForm::close(); ?>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END Page Content -->

@@ -1,0 +1,13 @@
+<footer class="navbar navbar-inverse navbar-fixed-bottom hidden-xs">
+    <div class="container">
+        <div class="pull-right hidden-xs">
+            <!-- <p>Versión: <?php echo KUMBIA_VERSION ?> - Ip: <?php echo Session::has('ip') ? Session::get('ip') : DwUtils::getIp(); ?> - Tiempo: <?php echo number_format(round((microtime(1) - START_TIME), 4), 4), ' seg.' ?></p> -->
+            <p>PHP: <?php echo phpversion(); ?> - APP: <?php echo KUMBIA_VERSION ?></p>
+        </div>
+        <div>
+            <p class="visible-xs">&copy; Copyright <?php echo date("Y"); ?>.</p>
+            <p class="visible-xs">Todos los derechos reservados.</p>
+            <p class="hidden-xs">&copy; Copyright <?php echo date("Y"); ?>, <b>JRSistemas</b> - Todos los derechos reservados.</p>
+        </div>
+    </div>
+</footer>

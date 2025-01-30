@@ -1,0 +1,45 @@
+<?php View::flash(); ?>
+
+<!-- Page Content -->
+<div class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="block">
+                <div class="block-content">
+
+                    <?php echo DwForm::open('', 'post', array('id' => 'form', 'class' => 'form-validate')); ?>
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <?php echo DwForm::text('recurso.modulo', array('class' => 'input-lower'), NULL, 'Módulo'); ?>
+                        </div>
+                        <div class="col-md-4">
+                            <?php echo DwForm::text('recurso.controlador', array('class' => 'input-lower input-required'), NULL, 'Controlador'); ?>
+                        </div>
+                        <div class="col-md-4">
+                            <?php echo DwForm::text('recurso.accion', array('class' => 'input-lower'), NULL, 'Acción'); ?>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <?php echo DwForm::textarea('recurso.descripcion', array('class' => 'input-lower input-required'), NULL, 'Descripción'); ?>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="form-actions">
+                            <?php echo DwForm::send('Editar recurso'); ?>
+                            <?php echo DwButton::back('sistema/recursos/listar'); ?>
+                            <?php echo DwForm::focus('recurso.modulo'); ?>
+                        </div>
+                    </div>
+
+                    <?php echo DwForm::close(); ?>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END Page Content -->

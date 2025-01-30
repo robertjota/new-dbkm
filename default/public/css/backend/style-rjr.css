@@ -1,0 +1,54 @@
+/*
+Style-rjr.css
+Archivo que contiene maquetación adicional para el sistema
+Nuevo 11-08-2024
+Agregada configuracion para compatibilidad con bootstrap 5
+-------------------------------------------------------
+License
+-------------------------------------------------------
+• New BSD License
+-------------------------------------------------------
+*/
+
+/*
+*
+* ==========================================
+* CUSTOM UTIL CLASSES
+* ==========================================
+*
+*/
+/* DIVISORES */
+hr.dashed {
+    border-top: 2px dashed #999;
+}
+
+hr.dotted {
+    border-top: 2px dotted #999;
+}
+
+hr.solid {
+    border-top: 2px solid #999;
+    opacity: 0.5;
+}
+
+hr.hr-text {
+  position: relative;
+    border: none;
+    height: 1px;
+    background: #999;
+}
+
+hr.hr-text::before {
+    content: attr(data-content);
+    display: inline-block;
+    background: #fff;
+    font-weight: bold;
+    font-size: 0.85rem;
+    color: #999;
+    border-radius: 30rem;
+    padding: 0.2rem 2rem;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}

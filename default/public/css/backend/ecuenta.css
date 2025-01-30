@@ -1,0 +1,93 @@
+.panel-primary {
+    box-shadow: 0 1px 21px #808080;
+    margin-top: 20px;
+}
+
+.panel-heading {
+    font-size: 16px;
+    text-align: center;
+}
+
+.heading {
+    font-size: 27px;
+    line-height: 120%;
+    text-decoration: underline;
+    margin-bottom: 30px;
+}
+
+.item {
+    display: inline-block;
+    width: 100%;
+    clear: both;
+    /* margin-top: 5px; */
+    margin-bottom: 10px;
+    line-height: 2em;
+}
+
+.item .title {
+    font-size: 18px;
+    margin-bottom: 5px;
+}
+
+.item .info {
+    /* margin-top: 5px; */
+    color: #808080;
+    font-size: 20px;
+    text-align: right;
+}
+
+.total {
+    margin-top: 10px;
+    margin-bottom: 20px;
+    border-top: 1px solid #808080;
+    text-align: right;
+}
+
+.total-pagado {
+    padding-top: 5px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    border-top: 1px solid #808080;
+}
+
+.pagos {
+    background: chocolate;
+    color: white;
+    text-align: center;
+}
+
+.pagos p {
+    padding: 5px 0;
+    font-size: 14;
+}
+
+.totalInner {
+    display: inline-block;
+    /* width: 220px; */
+}
+
+.totalInner .price {
+    margin-top: 5px;
+    font-size: 25px;
+    font-weight: 700;
+    color: red;
+}
+
+.totalInner .price #priceValue {
+    font-size: 32px;
+}
+
+.totalInner .purchase {
+    margin-top: 5px;
+    border-top: 2px solid #333333;
+    padding-top: 10px;
+}
+
+.totalInner #purchaseBtn {
+    width: 100%;
+    font-size: 24px;
+}
+
+.slider {
+    width: 100%;
+}

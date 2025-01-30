@@ -1,0 +1,256 @@
+<?php View::flash(); ?>
+<!-- DataTables CSS -->
+<link rel="stylesheet" href="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-bs5/css/dataTables.bootstrap5.min.css">
+<link rel="stylesheet" href="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-buttons-bs5/css/buttons.bootstrap5.min.css">
+<link rel="stylesheet" href="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-responsive-bs5/css/responsive.bootstrap5.min.css">
+<!-- END DataTables CSS -->
+
+<!-- Page Content -->
+<div class="content">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="block">
+        <div class="block-header pt-3">
+          <h3 class="block-title"></h3>
+          <div class="block-options">
+            <?= DwHtml::button("sistema/menus/agregar/", 'NUEVO', NULL, 'fa-check-square'); ?>
+          </div>
+        </div>
+        <div class="block-content">
+          <!-- Inicio de Encabezado de Tabs -->
+          <nav class="mb-3">
+            <div class="nav nav-tabs nav-justified" id="nav-tab" role="tablist">
+              <?php $count = 1; ?>
+              <?php foreach ($menus ?? [] as $menu) : ?>
+                <?php if ($menu->visibilidad != Menu::BACKEND) { ?>
+                  <?php continue; ?>
+                <?php } ?>
+                <button class="nav-link <?= $count == 1 ? 'active' : ''; ?>" id="<?= 'nav-' . strtolower($menu->menu) . '-tab'; ?>" data-bs-toggle="tab" data-bs-target=<?= '#nav-' . strtolower($menu->menu); ?> type="button" role="tab" aria-controls="<?= 'nav-' . strtolower($menu->menu); ?>" aria-selected="<?= ($count == 1) ? 'true' : 'false'; ?>"><?= ucfirst($menu->menu); ?></button>
+                <?php $count++; ?>
+              <?php endforeach; ?>
+            </div>
+          </nav>
+          <!-- Fin de Encabezado de Tabs -->
+
+          <!-- Inicio de Tabs -->
+          <div class="tab-content" id="nav-TabContent">
+            <?php $counter = 1; ?>
+
+            <?php foreach ($menus ?? [] as  $menu) : ?>
+              <?php if ($menu->visibilidad != Menu::BACKEND) { ?>
+                <?php continue; ?>
+              <?php } ?>
+              <?php $key_upd = Security::setKey($menu->id, 'upd_menu'); ?>
+              <?php $key_ina = Security::setKey($menu->id, 'inactivar_menu'); ?>
+              <?php $key_rea = Security::setKey($menu->id, 'reactivar_menu'); ?>
+              <?php $key_del = Security::setKey($menu->id, 'eliminar_menu'); ?>
+
+              <div class="tab-pane fade show <?= ($counter == 1) ? 'active' : ''; ?>" id="<?= 'nav-' . strtolower($menu->menu); ?>" role="tabpanel" aria-labelledby="<?= 'nav-' . strtolower($menu->menu) . '-tab'; ?>" tabindex="0">
+
+                <?php $items = $menu->getMenusPorPadre($menu->id, Menu::ACTIVO); ?>
+                <div class="table-responsive mb-3">
+                  <table class="table table-bordered table-striped table-vcenter js-dataTable-simple table-hover table-condensed">
+                    <thead>
+                      <tr>
+                        <th class="text-center">#</th>
+                        <th class="text-center">POS</th>
+                        <th class="text-center">PADRE</th>
+                        <th class="text-center">TITULO</th>
+                        <th class="text-center">RECURSO</th>
+                        <th class="text-center">URL</th>
+                        <th class="text-center" class="col-collapse">ICO</th>
+                        <!-- <th class="text-center">VIS</th> -->
+                        <th class="text-center">ESTADO</th>
+                        <th class="text-center"></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td class="text-center"></td>
+                        <td class="text-center"><?= $menu->posicion; ?></td>
+                        <td class="text-center"></td>
+                        <td><?= $menu->menu; ?></td>
+                        <td><?= $menu->recurso; ?></td>
+                        <td><?= $menu->url; ?></td>
+                        <?php $icono = $menu->icono; ?>
+                        <td class="text-center"><i class="<?= $icono; ?>"></i></td>
+                        <!-- <td class="text-center"><?= ($menu->visibilidad == Menu::BACKEND) ? '<span class="badge text-bg-success">Backend</span>' : '<span class="badge text-bg-warning">Frontend</span>'; ?></td> -->
+                        <td class="text-center"><?= ($menu->activo == Menu::ACTIVO) ? '<span class="badge text-bg-success">Activo</span>' : '<span class="badge text-bg-danger">Bloqueado</span>'; ?></td>
+                        <td class="text-center" width="5%">
+                          <div class="dropdown dropstart">
+                            <a href="javascript:void(0)" class="text-muted" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                              <i class="fas fa-ellipsis-v fs-4"></i>
+                            </a>
+                            <ul class="dropdown-menu text-center" aria-labelledby="dropdownMenuButton">
+                              <li class="dropdown-item">
+                                <?= DwHtml::buttonTable('Modificar menú', "sistema/menus/editar/$key_upd/", ['class' => 'btn-sm'], 'warning', 'fa-edit'); ?>
+
+                                <?php if ($menu->activo == Menu::ACTIVO) { ?>
+                                  <?= DwHtml::buttonTable('Bloquear menú', "sistema/menus/estado/inactivar/$key_ina/", null, 'success', 'fa-flag'); ?>
+                                <?php } else { ?>
+                                  <?= DwHtml::buttonTable('Reactivar menú', "sistema/menus/estado/reactivar/$key_rea/", null, 'danger', 'fa-flag'); ?>
+                                <?php } ?>
+
+                                <?= DwHtml::buttonTable('Eliminar menú', "sistema/menus/eliminar/$key_del/", ['class' => 'js-confirm', 'confirm-title' => 'Eliminar menú', 'confirm-body' => 'Está seguro de eliminar este menú? <br />Recuerda que esta operación no se puede reversar.'], 'danger', 'fa-trash'); ?>
+                              </li>
+                            </ul>
+                          </div>
+                        </td>
+
+                      </tr>
+                      <?php if ($items) { ?>
+                        <?php $counter2 = 1; ?>
+                        <?php foreach ($items as $row) : ?>
+
+                          <?php $key_upd = Security::setKey($row->id, 'upd_menu'); ?>
+                          <?php $key_ina = Security::setKey($row->id, 'inactivar_menu'); ?>
+                          <?php $key_rea = Security::setKey($row->id, 'reactivar_menu'); ?>
+                          <?php $key_del = Security::setKey($row->id, 'eliminar_menu'); ?>
+
+                          <tr>
+                            <td nowrap class="text-center"><?= $counter2; ?></td>
+                            <td class="text-center"><?= $row->posicion; ?></td>
+                            <td class="text-center"><?= $row->padre; ?></td>
+                            <td><?= $row->menu; ?></td>
+                            <td><?= $row->recurso; ?></td>
+                            <td><?= $row->url; ?></td>
+                            <?php $iconoRow = $row->icono; ?>
+                            <td class="text-center"><i class="<?= $iconoRow; ?>"></i></td>
+                            <!-- <td class="text-center"><?= ($row->visibilidad == Menu::BACKEND) ? '<span class="badge text-bg-success">Backend</span>' : '<span class="badge text-bg-warning">Frontend</span>'; ?></td> -->
+                            <td class="text-center"><?= ($row->activo == Menu::ACTIVO) ? '<span class="badge text-bg-success">Activo</span>' : '<span class="badge text-bg-danger">Bloqueado</span>'; ?></td>
+                            <td class="text-center" width="5%">
+                              <div class="dropdown dropstart">
+                                <a href="javascript:void(0)" class="text-muted" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                  <i class="fas fa-ellipsis-v fs-4"></i>
+                                </a>
+                                <ul class="dropdown-menu text-center" aria-labelledby="dropdownMenuButton">
+                                  <li class="dropdown-item">
+                                    <?= DwHtml::buttonTable('Modificar menú', "sistema/menus/editar/$key_upd/", ['class' => 'btn-sm'], 'warning', 'fa-edit'); ?>
+                                    <?php if ($row->activo == Menu::ACTIVO) { ?>
+                                      <?= DwHtml::buttonTable('Bloquear menú', "sistema/menus/estado/inactivar/$key_ina/", ['class' => 'btn-sm'], 'success', 'fa-flag'); ?>
+                                    <?php } else { ?>
+                                      <?= DwHtml::buttonTable('Reactivar menú', "sistema/menus/estado/reactivar/$key_rea/", ['class' => 'btn-sm'], 'danger', 'fa-flag'); ?>
+                                    <?php } ?>
+                                    <?= DwHtml::buttonTable('Eliminar menú', "sistema/menus/eliminar/$key_del/", array('class' => 'js-confirm btn-sm', 'confirm-title' => 'Eliminar menú', 'confirm-body' => 'Está seguro de eliminar este menú? <br />Recuerda que esta operación no se puede reversar.'), 'danger', 'fa-trash'); ?>
+                                  </li>
+                                </ul>
+                              </div>
+                            </td>
+                          </tr>
+
+                          <?php $hijos = $row->getMenusPorPadre($row->id); ?>
+                          <?php if ($hijos) { ?>
+                            <!-- ////////////////////////////// -->
+                            <?php //echo '<pre>';print_r($hijos);die();
+                            ?>
+                            <!-- ////////////////////////////// -->
+
+                            <?php $counter3 = 1; ?>
+                            <?php foreach ($hijos as $hijo) : ?>
+                              <?php $key_upd = Security::setKey($hijo->id, 'upd_menu'); ?>
+                              <?php $key_ina = Security::setKey($hijo->id, 'inactivar_menu'); ?>
+                              <?php $key_rea = Security::setKey($hijo->id, 'reactivar_menu'); ?>
+                              <?php $key_del = Security::setKey($hijo->id, 'eliminar_menu'); ?>
+                              <tr>
+                                <td nowrap class="text-center"><?= $counter2 . '-' . $counter3; ?></td>
+                                <td class="text-center"><?= $hijo->posicion; ?></td>
+                                <td class="text-center"><?= $hijo->padre; ?></td>
+                                <td><?= $hijo->menu; ?></td>
+                                <td><?= $hijo->recurso; ?></td>
+                                <td><?= $hijo->url; ?></td>
+                                <?php $iconoHijo = "fa " . $hijo->icono; ?>
+                                <td class="text-center"><i class="<?= $iconoHijo; ?>"></i></td>
+                                <!-- <td class="text-center"><?= ($hijo->visibilidad == Menu::BACKEND) ? '<span class="badge text-bg-success">Backend</span>' : '<span class="badge text-bg-warning">Frontend</span>'; ?></td> -->
+                                <td class=" text-center"><?= ($hijo->activo == Menu::ACTIVO) ? '<span class="badge text-bg-success">Activo</span>' : '<span class="badge text-bg-danger">Bloqueado</span>'; ?></td>
+                                <td class="text-center">
+                                  <?= DwHtml::buttonTable('Modificar menú', "sistema/menus/editar/$key_upd/", null, 'warning', 'fa-edit'); ?>
+                                  <?php if ($hijo->activo == Menu::ACTIVO) { ?>
+                                    <?= DwHtml::buttonTable('Bloquear menú', "sistema/menus/estado/inactivar/$key_ina/", null, 'success', 'fa-flag'); ?>
+                                  <?php } else { ?>
+                                    <?= DwHtml::buttonTable('Reactivar menú', "sistema/menus/estado/reactivar/$key_rea/", null, 'danger', 'fa-flag'); ?>
+                                  <?php } ?>
+                                  <?= DwHtml::buttonTable('Eliminar menú', "sistema/menus/eliminar/$key_del/", array('class' => 'js-confirm', 'confirm-title' => 'Eliminar menú', 'confirm-body' => 'Está seguro de eliminar este menú? <br />Recuerda que esta operación no se puede reversar.'), 'danger', 'fa-trash'); ?>
+                                </td>
+                              </tr>
+                              <?php $nietos = $hijo->getMenusPorPadre($hijo->id); ?>
+                              <?php if ($nietos) { ?>
+                                <!-- ////////////////////////////// -->
+                                <?php //echo '<pre>';print_r($nietos);die();
+                                ?>
+                                <!-- ////////////////////////////// -->
+
+                                <?php $counter4 = 1; ?>
+                                <?php foreach ($nietos as $nieto) : ?>
+                                  <?php $key_upd = Security::setKey($nieto->id, 'upd_menu'); ?>
+                                  <?php $key_ina = Security::setKey($nieto->id, 'inactivar_menu'); ?>
+                                  <?php $key_rea = Security::setKey($nieto->id, 'reactivar_menu'); ?>
+                                  <?php $key_del = Security::setKey($nieto->id, 'eliminar_menu'); ?>
+                                  <tr>
+                                    <td nowrap class="text-center"><?= $counter2 . '-' . $counter3 . '-' . $counter4; ?></td>
+                                    <td class="text-center"><?= $nieto->posicion; ?></td>
+                                    <td class="text-center"><?= $nieto->padre; ?></td>
+                                    <td><?= $nieto->menu; ?></td>
+                                    <td><?= $nieto->recurso; ?></td>
+                                    <td><?= $nieto->url; ?></td>
+                                    <?php $iconoNieto = "fa " . $nieto->icono; ?>
+                                    <td class="text-center"><i class="<?= $iconoNieto; ?>"></i></td>
+                                    <!-- <td class="text-center"><?= ($nieto->visibilidad == Menu::BACKEND) ? '<span class="badge text-bg-success">Backend</span>' : '<span class="badge text-bg-warning">Frontend</span>'; ?></td> -->
+                                    <td class="text-center"><?= ($nieto->activo == Menu::ACTIVO) ? '<span class="badge text-bg-success">Activo</span>' : '<span class="badge text-bg-danger">Bloqueado</span>'; ?></td>
+                                    <td class="text-center" width="5%">
+                                      <div class="dropdown dropstart">
+                                        <a href="javascript:void(0)" class="text-muted" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                          <i class="fas fa-ellipsis-v fs-4"></i>
+                                        </a>
+                                        <ul class="dropdown-menu text-center" aria-labelledby="dropdownMenuButton">
+                                          <li class="dropdown-item">
+                                            <?= DwHtml::buttonTable('Modificar menú', "sistema/menus/editar/$key_upd/", null, 'warning', 'fa-edit'); ?>
+                                            <?php if ($nieto->activo == Menu::ACTIVO) { ?>
+                                              <?= DwHtml::buttonTable('Bloquear menú', "sistema/menus/estado/inactivar/$key_ina/", null, 'success', 'fa-flag'); ?>
+                                            <?php } else { ?>
+                                              <?= DwHtml::buttonTable('Reactivar menú', "sistema/menus/estado/reactivar/$key_rea/", null, 'danger', 'fa-flag'); ?>
+                                            <?php } ?>
+                                            <?= DwHtml::buttonTable('Eliminar menú', "sistema/menus/eliminar/$key_del/", array('class' => 'js-confirm', 'confirm-title' => 'Eliminar menú', 'confirm-body' => 'Está seguro de eliminar este menú? <br />Recuerda que esta operación no se puede reversar.'), 'danger', 'fa-trash'); ?>
+                                          </li>
+                                        </ul>
+                                      </div>
+                                    </td>
+                                  </tr>
+
+                                  <?php $counter4++; ?>
+                                <?php endforeach; ?>
+                              <?php } ?>
+                              <?php $counter3++; ?>
+                            <?php endforeach; ?>
+                          <?php } ?>
+                          <?php $counter2++; ?>
+                        <?php endforeach; ?>
+                      <?php } ?>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <?php $counter++; ?>
+            <?php endforeach; ?>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- END Page Content -->
+
+<!-- DataTables JS Plugins -->
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-bs5/js/dataTables.bootstrap5.min.js"></script>
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-responsive-bs5/js/responsive.bootstrap5.min.js"></script>
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-buttons/dataTables.buttons.min.js"></script>
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-buttons-bs5/js/buttons.bootstrap5.min.js"></script>
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-buttons-jszip/jszip.min.js"></script>
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-buttons-pdfmake/pdfmake.min.js"></script>
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-buttons-pdfmake/vfs_fonts.js"></script>
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-buttons/buttons.print.min.js"></script>
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-buttons/buttons.html5.min.js"></script>
+
+<!-- DataTables JS Code -->
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/_js/pages/be_tables_datatables.js"></script>

@@ -1,0 +1,122 @@
+<?php View::flash(); ?>
+<!-- DataTables CSS -->
+<link rel="stylesheet" href="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-bs5/css/dataTables.bootstrap5.min.css">
+<link rel="stylesheet" href="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-buttons-bs5/css/buttons.bootstrap5.min.css">
+<link rel="stylesheet" href="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-responsive-bs5/css/responsive.bootstrap5.min.css">
+<!-- END DataTables CSS -->
+
+<!-- Page Content -->
+<div class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="block">
+                <div class="block-header pt-3">
+                    <h3 class="block-title"></h3>
+                    <div class="block-options">
+                        <?= DwHtml::button("sistema/recursos/agregar/", 'Nuevo', NULL, 'fa-check-square-o', APP_AJAX); ?>
+                    </div>
+                </div>
+                <div class="block-content">
+                    <!-- Inicio de Encabezado de Tabs -->
+                    <nav class="mb-3">
+                        <div class="nav nav-tabs nav-justified" id="nav-tab" role="tablist">
+                            <?php $counter = 1; ?>
+                            <?php foreach ($recursos ?? [] as $recurso) : ?>
+                                <button class="nav-link <?= $counter == 1 ? 'active' : ''; ?>" id="<?= 'nav-' . strtolower($recurso->modulo) . '-tab'; ?>" data-bs-toggle="tab" data-bs-target=<?= '#nav-' . strtolower($recurso->modulo); ?> type="button" role="tab" aria-controls="<?= 'nav-' . strtolower($recurso->modulo); ?>" aria-selected="<?= ($counter == 1) ? 'true' : 'false'; ?>"><?= ucfirst($recurso->modulo); ?></button>
+                                <?php $counter++; ?>
+                            <?php endforeach; ?>
+                        </div>
+                    </nav>
+                    <!-- Fin de Encabezado de Tabs -->
+
+                    <!-- Inicio de Tabs -->
+                    <div class="tab-content" id="nav-TabContent">
+                        <?php $counter = 1; ?>
+                        <?php foreach ($recursos ?? [] as $modulo): ?>
+                            <div class="tab-pane fade show <?php echo ($counter == 1) ? 'active' : ''; ?>" id="<?= 'nav-' . strtolower($modulo->modulo); ?>">
+
+                                <?php $recurso = $modulo->getRecursosPorModulo($modulo->modulo, $order); ?>
+
+                                <div class="table-responsive mb-3">
+                                    <table class="table table-bordered table-striped table-vcenter js-dataTable-simple table-hover table-condensed">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-center">#</th>
+                                                <th class="text-center">CONTROLADOR</th>
+                                                <th class="text-center">ACCION</th>
+                                                <th class="text-center">DESCRIPCION</th>
+                                                <th class="text-center">ESTADO</th>
+                                                <th class="text-center"></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php if ($recurso) { ?>
+                                                <?php $counter2 = 1; ?>
+                                                <?php foreach ($recurso as $row): ?>
+                                                    <?php $key_upd = Security::setKey($row->id, 'upd_recurso'); ?>
+                                                    <?php $key_ina = Security::setKey($row->id, 'inactivar_recurso'); ?>
+                                                    <?php $key_rea = Security::setKey($row->id, 'reactivar_recurso'); ?>
+                                                    <?php $key_del = Security::setKey($row->id, 'eliminar_recurso'); ?>
+                                                    <tr>
+                                                        <td class="text-center"><?php echo $counter2; ?></td>
+                                                        <td class="text-left"><?php echo empty($row->controlador) ? '' : $row->controlador; ?></td>
+                                                        <td><?php echo empty($row->accion) ? '' : $row->accion; ?></td>
+                                                        <td><?php echo $row->descripcion; ?></td>
+                                                        <td class="text-center"><?php echo ($row->activo == Recurso::ACTIVO) ? '<span class="badge text-bg-success">Activo</span>' : '<span class="badge text-bg-danger">Inactivo</span>'; ?></td>
+                                                        <td class="text-center" width="5%">
+                                                            <div class="dropdown dropstart">
+                                                                <a href="javascript:void(0)" class="text-muted" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                                                    <i class="fas fa-ellipsis-v fs-4"></i>
+                                                                </a>
+                                                                <ul class="dropdown-menu text-center" aria-labelledby="dropdownMenuButton">
+                                                                    <li class="dropdown-item">
+                                                                        <?php if (empty($recurso->custom) && Session::get('perfil_id') != Perfil::SUPER_USUARIO) { ?>
+                                                                            <?php echo DwHtml::buttonTable('Editar recurso', "", array('class' => 'btn-disabled'), 'warning', 'fa-edit'); ?>
+                                                                            <?php echo DwHtml::buttonTable('Bloquear recurso', "", array('class' => 'btn-disabled'), 'success', 'fa-flag'); ?>
+                                                                            <?php echo DwHtml::buttonTable('Eliminar recurso', "", array('class' => 'btn-disabled'), 'danger', 'fa-trash'); ?>
+                                                                        <?php } else { ?>
+                                                                            <?php echo DwHtml::buttonTable('Modificar recurso', "sistema/recursos/editar/$key_upd/", null, 'warning', 'fa-edit'); ?>
+                                                                            <?php if ($row->activo == Recurso::ACTIVO) { ?>
+                                                                                <?php echo DwHtml::buttonTable('Bloquear recurso', "sistema/recursos/estado/inactivar/$key_ina/", null, 'success', 'fa-flag'); ?>
+                                                                            <?php } else { ?>
+                                                                                <?php echo DwHtml::buttonTable('Reactivar recurso', "sistema/recursos/estado/reactivar/$key_rea/", null, 'danger', 'fa-flag'); ?>
+                                                                            <?php } ?>
+                                                                            <?php echo DwHtml::buttonTable('Eliminar recurso', "sistema/recursos/eliminar/$key_del/", array('class' => 'js-confirm', 'msg-title' => 'Eliminar recurso', 'msg' => 'Está seguro de eliminar este recurso? <br />Recuerda que esta operación no se puede reversar.'), 'danger', 'fa-trash'); ?>
+                                                                        <?php } ?>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    <?php $counter2++; ?>
+                                                <?php endforeach; ?>
+                                            <?php } ?>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <?php $counter++; ?>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END Page Content -->
+
+<!-- DataTables JS Plugins -->
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-bs5/js/dataTables.bootstrap5.min.js"></script>
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-responsive-bs5/js/responsive.bootstrap5.min.js"></script>
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-buttons/dataTables.buttons.min.js"></script>
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-buttons-bs5/js/buttons.bootstrap5.min.js"></script>
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-buttons-jszip/jszip.min.js"></script>
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-buttons-pdfmake/pdfmake.min.js"></script>
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-buttons-pdfmake/vfs_fonts.js"></script>
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-buttons/buttons.print.min.js"></script>
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-buttons/buttons.html5.min.js"></script>
+
+<!-- DataTables JS Code -->
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/_js/pages/be_tables_datatables.js"></script>

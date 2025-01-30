@@ -1,0 +1,18 @@
+<?php View::flash(); ?>
+<?php echo Form::open('login', 'POST', ['class' => 'js-validation-signin']) ?>
+<div class="py-3">
+    <div class="mb-4">
+        <?php echo Form::input('text', 'login.usuario', ['class' => 'form-control form-control-alt form-control-lg', 'placeholder' => 'Usuario']) ?>
+    </div>
+    <div class="mb-4">
+        <?php echo Form::input('password', 'login.password', ['class' => 'form-control form-control-alt form-control-lg', 'placeholder' => 'Password']) ?>
+    </div>
+</div>
+<div class="row mb-4">
+    <div class="col-md-6 col-xl-5">
+        <button type="submit" class="btn w-100 btn-alt-primary">
+            <i class="fa fa-fw fa-sign-in-alt me-1 opacity-50"></i> Entrar
+        </button>
+    </div>
+</div>
+<?php echo Form::close() ?>
