@@ -1,4 +1,5 @@
 <?php
+
 /**
  * KumbiaPHP web & app Framework
  *
@@ -15,7 +16,7 @@
  */
 
 // @see Util
-require CORE_PATH.'kumbia/util.php';
+require CORE_PATH . 'kumbia/util.php';
 
 // Autocarga de clases
 function kumbia_autoload($class)
@@ -23,11 +24,11 @@ function kumbia_autoload($class)
     // Optimizando carga
     static $classes;
     $classes ??= [
-        'ActiveRecord'    => APP_PATH.'libs/active_record.php',
-        'Load'            => CORE_PATH.'kumbia/load.php',
-        'KumbiaException' => CORE_PATH.'kumbia/kumbia_exception.php',
-        'KumbiaRouter'    => CORE_PATH.'kumbia/kumbia_router.php',
-        'KumbiaFacade'    => CORE_PATH.'kumbia/kumbia_facade.php'
+        'ActiveRecord'    => APP_PATH . 'libs/active_record.php',
+        'Load'            => CORE_PATH . 'kumbia/load.php',
+        'KumbiaException' => CORE_PATH . 'kumbia/kumbia_exception.php',
+        'KumbiaRouter'    => CORE_PATH . 'kumbia/kumbia_router.php',
+        'KumbiaFacade'    => CORE_PATH . 'kumbia/kumbia_facade.php'
     ];
 
     if (isset($classes[$class])) {
@@ -45,18 +46,19 @@ function kumbia_autoload($class)
         return;
     }
 
+
     // Convert to smallcase
     $sclass = Util::smallcase($class);
-    if (is_file(APP_PATH."models/$sclass.php")) {
-        include APP_PATH."models/$sclass.php";
+    if (is_file(APP_PATH . "models/$sclass.php")) {
+        include APP_PATH . "models/$sclass.php";
         return;
     }
-    if (is_file(APP_PATH."libs/$sclass.php")) {
-        include APP_PATH."libs/$sclass.php";
+    if (is_file(APP_PATH . "libs/$sclass.php")) {
+        include APP_PATH . "libs/$sclass.php";
         return;
     }
-    if (is_file(CORE_PATH."libs/$sclass/$sclass.php")) {
-        include CORE_PATH."libs/$sclass/$sclass.php";
+    if (is_file(CORE_PATH . "libs/$sclass/$sclass.php")) {
+        include CORE_PATH . "libs/$sclass/$sclass.php";
         return;
     }
     // Perhaps is PEAR,  zend framework 1, ...
@@ -66,7 +68,7 @@ function kumbia_autoload($class)
 function kumbia_autoload_vendor($class): void
 {
     //Autoload PSR0
-    $psr0 = dirname(APP_PATH, 2).'/vendor/'.str_replace(['_', '\\'], DIRECTORY_SEPARATOR, $class).'.php';
+    $psr0 = dirname(APP_PATH, 2) . '/vendor/' . str_replace(['_', '\\'], DIRECTORY_SEPARATOR, $class) . '.php';
     if (is_file($psr0)) {
         include $psr0;
     }
@@ -75,12 +77,12 @@ function kumbia_autoload_vendor($class): void
 function kumbia_autoload_helper($class): void
 {
     $sclass = Util::smallcase($class);
-    if (is_file(APP_PATH."extensions/helpers/$sclass.php")) {
-        include APP_PATH."extensions/helpers/$sclass.php";
+    if (is_file(APP_PATH . "extensions/helpers/$sclass.php")) {
+        include APP_PATH . "extensions/helpers/$sclass.php";
         return;
     }
-    if (is_file(CORE_PATH."extensions/helpers/$sclass.php")) {
-        include CORE_PATH."extensions/helpers/$sclass.php";
+    if (is_file(CORE_PATH . "extensions/helpers/$sclass.php")) {
+        include CORE_PATH . "extensions/helpers/$sclass.php";
     }
 }
 

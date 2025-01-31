@@ -1,5 +1,7 @@
 <?php
 
+use Mpdf\Tag\Dd;
+
 /**
  *
  * Extension para el manejo de algunas etiquetas html
@@ -25,6 +27,9 @@ class DwHtml extends Html
         if (is_array($attrs) or empty($attrs)) {
             if (empty($attrs)) {
                 $attrs = array();
+            }
+            if ($action == "dashboard/") {
+                $loadAjax = false;
             }
             if ($loadAjax) {
                 if (empty($attrs['class'])) {
@@ -86,6 +91,9 @@ class DwHtml extends Html
             if (empty($attrs)) {
                 $attrs['class'] = 'btn-info';
             }
+            if ($action == "dashboard/") {
+                $loadAjax = false;
+            }
             if ($loadAjax) {
                 if (empty($attrs['class'])) {
                     $attrs['class'] = 'js-link js-spinner js-url';
@@ -128,8 +136,6 @@ class DwHtml extends Html
         return "<a href=\"$action\" $attrs >$text</a>";
     }
 
-
-
     /**
      * Crea un enlace externo
      *
@@ -153,21 +159,66 @@ class DwHtml extends Html
      * @param string $action
      * @param array $attrs
      * @param string $type
-     * @param string $icon
-     * @param string $text
+     * @param strin $icon
      * @param boolean $loadAjax
      * @return string
      */
-    public static function buttonTable($title, $action, $attrs = NULL, $type = 'info', $icon = ' ', $text = '', $loadAjax = APP_AJAX)
+    public static function buttonTable($title, $action, $attrs = NULL, $type = 'info', $icon = 'fa-search', $label = null, $loadAjax = APP_AJAX)
     {
         if (empty($attrs)) {
             $attrs = array();
-            $attrs['class'] = "btn-sm btn-$type";
+            $attrs['class'] = "btn-small btn-$type";
         } else {
-            $attrs['class'] = empty($attrs['class']) ? "btn-sm btn-$type" : "btn-sm btn-$type " . $attrs['class'];
+            $attrs['class'] = empty($attrs['class']) ? "btn-small btn-$type" : "btn-small btn-$type " . $attrs['class'];
         }
         $attrs['title'] = $title;
         $attrs['rel'] = 'tooltip';
-        return self::button($action, $text, $attrs, $icon, $loadAjax);
+        return self::button($action, $label, $attrs, $icon, $loadAjax);
+    }
+
+    /**
+     * Método para crear un botón de tabla con confirmación SweetAlert2
+     * @param string $title Título del botón
+     * @param string $action URL de la acción
+     * @param array $attrs Atributos adicionales
+     * @param string $type Tipo de botón (ej. 'info', 'danger')
+     * @param string $icon Clase del ícono
+     * @return string
+     */
+    public static function buttonTableSA($title, $action, $attrs = NULL, $type = 'info', $icon = 'fa-search', $label = null)
+    {
+        if (empty($attrs)) {
+            $attrs = array();
+        }
+        $pp = (empty($label) ? 'btn-small' : '');
+        $attrs['class'] = empty($attrs['class']) ? "btn $pp text-bold text-uppercase js-url js-spinner js-link btn-$type" : "btn $pp text-bold text-uppercase js-url js-spinner js-link btn-$type " . $attrs['class'];
+        $attrs['title'] = $title;
+        $attrs['rel'] = 'tooltip';
+        if (!empty($label)) {
+            $attrs['style'] = "margin-right: 0;";
+        }
+
+
+        $msg_title = isset($attrs['msg-title']) ? $attrs['msg-title'] : 'Confirmar acción';
+        $msg = isset($attrs['msg']) ? $attrs['msg'] : '¿Estás seguro de realizar esta acción?';
+        $msg_nombre = isset($attrs['msg-nombre']) ? $attrs['msg-nombre'] : '';
+
+        unset($attrs['confirm-title'], $attrs['msg']);
+
+        $attrs['onclick'] = "confirmarAccion('/$action', '$msg_title', '$msg', '$msg_nombre'); return false;";
+
+        $attrs = Tag::getAttrs($attrs);
+
+        if (empty($label) && !empty($icon)) {
+            $text = '<i class="fa ' . $icon . '"></i>';
+        } else if (empty($icon)) {
+            $text = '<i class="fa ' . $label . '"></i>';
+        } else {
+            $text = '<i class="fa ' . $icon . '"></i>&nbsp;&nbsp;' . $label;
+        }
+
+        return "<button $attrs>$text</button>";
+
+        $pp = mb_strlen('casa');
     }
 }

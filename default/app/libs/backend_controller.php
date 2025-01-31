@@ -21,12 +21,10 @@ require_once APP_PATH . 'extensions/helpers/dw_form.php';
 //Cargo el método para crear variables tipo define del config
 DwConfig::load();
 
-
 //Cargo los modelos básicos
 Load::models('sistema/usuario', 'sistema/menu');
 class BackendController extends Controller
 {
-
     /**
      * Titulo de la página
      */
@@ -41,8 +39,6 @@ class BackendController extends Controller
      * Tipo de formato del reporte
      */
     public $page_format;
-
-
 
     /**
      * Variable que indica el cambio de título de la página en las respuestas ajax
@@ -101,7 +97,7 @@ class BackendController extends Controller
             if (APP_UPDATE && (Session::get('perfil_id') != Perfil::SUPER_USUARIO)) { //Solo el super usuario puede hacer todo
                 if ($this->module_name != 'dashboard' && $this->controller_name != 'index') {
                     $msj = 'Estamos en labores de actualización y mantenimiento.';
-                    $msj .= '<br />';
+                    $msj .= '<br>';
                     $msj .= 'El servicio se reanudará dentro de ' . APP_UPDATE_TIME;
                     if (Input::isAjax()) {
                         View::appUpdate();

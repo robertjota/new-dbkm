@@ -25,7 +25,7 @@ class DwButton
      * @param type $text Texto a mostrar
      * @return type
      */
-    public static function save($title = 'Save', $icon = 'fa-save', $attrs = NULL, $text = 'save')
+    public static function save($title = 'Guardar', $icon = 'fa-save', $attrs = NULL, $text = 'Guardar')
     {
         if (is_array($attrs) or empty($attrs)) {
             $attrs['class'] = (empty($attrs['class'])) ? 'btn-success' : $attrs['class'];
@@ -58,14 +58,14 @@ class DwButton
      * @param type $icon Icono a mostrar
      * @return type
      */
-    public static function cancel($redir = NULL, $title = '', $icon = 'fa-ban', $etq = 'CANCEL')
+    public static function cancel($redir = NULL, $title = '', $icon = 'fa-ban', $etq = 'CANCELAR')
     {
-        $attrs = array();
-        $attrs['class'] = 'btn-secondary';
-        $attrs['title'] = empty($title) ? 'cancel action' : $title;
+        $attrs = [];
+        $attrs['class'] = 'btn-default';
+        $attrs['title'] = empty($title) ? 'Cancelar' : $title;
         if (empty($redir)) {
-            $attrs['class'] .= ' btn-back';
-            return self::showButton($icon, $attrs, 'cancel', 'button');
+            $attrs['onclick'] = 'history.back()';
+            return self::showButton($icon, $attrs, 'Cancelar', 'button');
         } else {
             return DwHtml::button($redir, $etq, $attrs, $icon);
         }
@@ -78,17 +78,17 @@ class DwButton
      * @param type $icon Icono a mostrar
      * @return type
      */
-    public static function back($redir = NULL, $title = '', $icon = 'fa-undo', $texto = NULL)
+    public static function back($redir = NULL, $title = '', $icon = 'fa-undo')
     {
         $attrs = array();
-        $attrs['class'] = 'btn-outline-secondary';
+        $attrs['class'] = 'btn-success';
         $attrs['rel'] = 'tooltip';
-        $attrs['title'] = empty($title) ? 'Atras' : $title;
+        $attrs['title'] = empty($title) ? 'ATRAS' : $title;
         if (empty($redir)) {
             $attrs['class'] .= ' btn-back';
-            return self::showButton($icon, $attrs, 'back', 'button');
+            return self::showButton($icon, $attrs, empty($title) ? 'ATRAS' : $title, 'button');
         } else {
-            return DwHtml::button($redir, ($texto == NULL ? 'CANCELAR' : $texto), $attrs, $icon);
+            return DwHtml::button($redir, empty($title) ? 'ATRAS' : $title, $attrs, $icon);
         }
     }
 
@@ -116,8 +116,8 @@ class DwButton
     /**
      * Método para crear un botón para regresar a la página anterior
      * @param type $redir Página a redirigir al presionar el botón
-     * @param type $title Título a mostrar
-     * @param type $icon Icono a mostrar
+     * @param string $title Título a mostrar
+     * @param string $icon Icono a mostrar
      * @return type
      */
     public static function aprobar($redir = NULL, $title = '', $icon = 'fa-external-link', $etq = 'IR A')
@@ -125,10 +125,10 @@ class DwButton
         $attrs = array();
         $attrs['class'] = 'btn-danger btn-xs cerrar-modal';
         $attrs['rel'] = 'tooltip';
-        $attrs['title'] = empty($title) ? "GO TO" : $title;
+        $attrs['title'] = empty($title) ? "IR A" : $title;
         if (empty($redir)) {
             $attrs['class'] .= ' btn-back';
-            return self::showButton($icon, $attrs, 'go to', 'button');
+            return self::showButton($icon, $attrs, 'IR A', 'button');
         } else {
             return DwHtml::button($redir, $etq, $attrs, $icon);
         }
@@ -142,9 +142,9 @@ class DwButton
     {
         $attrs = array();
         $attrs['class'] = 'btn-info';
-        $attrs['title'] = empty($title) ? 'Next' : $title;
+        $attrs['title'] = empty($title) ? 'Siguiente' : $title;
         $attrs['class'] .= ' js-next-tab';
-        return self::showButton($icon, $attrs, 'Next', 'button', 'right');
+        return self::showButton($icon, $attrs, 'Siguiente', 'button', 'right');
     }
 
     /**
@@ -155,50 +155,25 @@ class DwButton
     {
         $attrs = array();
         $attrs['class'] = 'btn-info';
-        $attrs['title'] = empty($title) ? 'Previous' : $title;
+        $attrs['title'] = empty($title) ? 'Anterior' : $title;
         $attrs['class'] .= ' js-prev-tab';
-        return self::showButton($icon, $attrs, 'Previous', 'button');
+        return self::showButton($icon, $attrs, 'Anterior', 'button');
     }
 
     /**
      * Método para crear un botón para imprimir reportes
-     * @param type $path Ruta del controlador del módulo de reporte
-     * @param type $file Tipos de formato de reporte
-     * @param type $title (opcional) Titulo del botón
-     * @param type $text (opcional) Texto a mostrar en el botón
+     * @param string $path Ruta del controlador del módulo de reporte
+     * @param string $file Tipos de formato de reporte
+     * @param string $title (opcional) Titulo del botón
+     * @param string $text (opcional) Texto a mostrar en el botón
      * @return type
      */
-    public static function report($path = '#', $files = 'html', $title = '', $text = '')
+    public static function report($path, $files = 'html', $title = '', $text = '')
     {
         $path = '/reporte/' . trim($path, '/') . '/';
         $attrs = array();
-        $attrs['class'] = 'btn-success js-report no-ajax';
-        $attrs['title'] = ($title == '' ? 'Imprimir reporte' : $title);
-        $attrs['data-report-title'] = (empty($title)) ? 'Imprimir reporte' : $title;
-        $attrs['data-report-format'] = $files;
-        if (empty($text)) {
-            return DwHtml::button($path, '', $attrs, 'fa-print');
-        } else {
-            return DwHtml::button($path, strtoupper($text), $attrs, 'fa-print');
-        }
-    }
-
-    /**
-     * Método para crear un botón para imprimir reportes
-     * @param type $path Ruta del controlador del módulo de reporte
-     * @param type $file Tipos de formato de reporte
-     * @param type $title (opcional) Titulo del botón
-     * @param type $text (opcional) Texto a mostrar en el botón
-     * @return type
-     */
-    public static function report_modal($path = '#', $files = 'html', $title = '', $text = '')
-    {
-        $path = '/reporte/' . trim($path, '/') . '/';
-        $attrs = array();
-        $attrs['class'] = 'btn-success js-report no-ajax';
-        $attrs['data-backdrop'] = "false";
-        $attrs['data-dismiss'] = "modal";
-        $attrs['title'] = ($title == '' ? 'Imprimir reporte' : $title);
+        $attrs['class'] = 'btn-info js-report no-ajax';
+        $attrs['title'] = 'Imprimir reporte';
         $attrs['data-report-title'] = (empty($title)) ? 'Imprimir reporte' : $title;
         $attrs['data-report-format'] = $files;
         if (empty($text)) {
@@ -210,10 +185,10 @@ class DwButton
 
     /**
      * Método para crear un botón para envío de formularios
-     * @param type $title Título a mostrar
-     * @param type $icon Icono a mostrar
-     * @param type $attrs Atributos adicionales
-     * @param type $text Texto a mostrar
+     * @param string $title Título a mostrar
+     * @param string $icon Icono a mostrar
+     * @param array $attrs Atributos adicionales
+     * @param string $text Texto a mostrar
      * @return type
      */
     public static function submit($title = 'Guardar registro', $icon = 'fa-save', $attrs = NULL, $text = 'Save')
@@ -224,10 +199,10 @@ class DwButton
 
     /**
      * Método que se encarga de crear el botón
-     * @param type $icon
-     * @param type $attrs
-     * @param type $text
-     * @param type $type
+     * @param string $icon
+     * @param array $attrs
+     * @param string $text
+     * @param string $type
      * @return type
      */
     public static function showButton($icon = '', $attrs = array(), $text = '', $type = 'button', $iconAlign = 'left')

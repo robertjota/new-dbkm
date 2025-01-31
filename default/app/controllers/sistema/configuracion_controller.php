@@ -106,7 +106,7 @@ class ConfiguracionController extends BackendController
     {
         if (!Input::isAjax()) {
             Flash::error('Acceso incorrecto para la verificación del sistema.');
-            return Redirect::toRoute('module: dashboard', 'controller: index');
+            return Redirect::to('dashboard');
         }
         if (!Input::hasPost('development') or !(Input::hasPost('production'))) {
             Flash::error('Oops!. No hemos recibido algún parámetro de configuración.');

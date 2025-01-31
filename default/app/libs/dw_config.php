@@ -18,27 +18,32 @@ class DwConfig
      */
     public static function read($file, $source = '', $force = FALSE)
     {
-        $tmp = $file;
-        $file = Config::read($file, $force);
-        foreach ($file as $seccion => $filas) {
-            foreach ($filas as $variable => $valor) {
-                if ($valor == '1') {
-                    $file[$seccion][$variable] = 'On';
-                } else if (empty($valor)) {
-                    $file[$seccion][$variable] = ($tmp == 'databases') ? NULL : 'Off';
+        $config = Config::read($file, $force);
+
+        if (is_array($config)) {
+            foreach ($config as $seccion => &$filas) {
+                if (is_array($filas)) {
+                    foreach ($filas as $variable => &$valor) {
+                        if ($valor === '1' || $valor === 1) {
+                            $valor = 'On';
+                        } else if (empty($valor) && $valor !== '0') {
+                            $valor = ($file == 'databases') ? NULL : 'Off';
+                        }
+                    }
                 }
             }
         }
+
         if ($source) {
             if (is_array($source)) {
-                $key = @array_shift(array_keys($source));
+                $key = array_key_first($source);
                 $var = $source[$key];
-                return (isset($file[$key][$var])) ? $file[$key][$var] : NULL;
-            } else {
-                return (isset($file[$source])) ? $file[$source] : NULL;
+                return isset($config[$key][$var]) ? $config[$key][$var] : NULL;
             }
+            return isset($config[$source]) ? $config[$source] : NULL;
         }
-        return $file;
+
+        return $config;
     }
 
     /**
@@ -50,78 +55,45 @@ class DwConfig
     public static function write($file, $data, $source = '')
     {
         $vars = self::read($file, '', TRUE);
-        $org = APP_PATH . "config/$file.php"; //Archivo actual
-        @chmod(APP_PATH . "config/$file.php", 0777); //Le damos permisos para editar
-        //Verifico si tiene copia del original, sino se crea
+        $org = APP_PATH . "config/$file.php";
+
+        @chmod($org, 0777);
+
+        // Backup original if not exists
         if (!is_file(APP_PATH . "config/$file.org.php")) {
-            //@TODO Verificar que funcione en windows
-            $org = APP_PATH . "config/$file.php";
-            $des = APP_PATH . "config/$file.org.php";
-            copy($org, $des); //Copio el actual y lo paso a original
-            @chmod($des, 0777); //Permisos
-            unlink($org); //Elimino el original para crear el nuevo
-            touch($des); //Creo el nuevo .php
+            copy($org, APP_PATH . "config/$file.org.php");
+            @chmod(APP_PATH . "config/$file.org.php", 0777);
         }
-        //Armo el archivo
-        $php = ";; Archivo de configuración" . PHP_EOL;
-        $php .= PHP_EOL;
-        $php .= "; Si desea conocer más acerca de este archivo" . PHP_EOL;
-        $php .= "; puede abrir el archivo $file.org.php, el cual tendrá" . PHP_EOL;
-        $php .= "; la descripción de los parámetros aplicados." . PHP_EOL;
-        $php .= PHP_EOL;
-        //Verifico si no está el source especificado para crearlo
-        if (!array_key_exists($source, $vars)) {
-            $vars[$source] = $data;
+
+        // Update config array with new data
+        if (!empty($source)) {
+            $vars[$source] = array_merge($vars[$source] ?? [], $data);
         }
-        //Recorro el archivo para ver que variables cambian, se crean o se eliminan
-        foreach ($vars as $seccion => $filas) {
-            $php .= "[$seccion]" . PHP_EOL;
-            if (is_array($filas)) {
-                foreach ($filas as $variable => $valor) {
-                    if ($source && $seccion == $source) {
-                        if (array_key_exists($variable, $data)) {
-                            if ($data[$variable] != 'delete-var') { //Verifico si es para eliminar la variable
-                                $valor = $data[$variable];
-                            } else {
-                                continue;
-                            }
-                        }
-                    }
-                    $variable = Filter::get($variable, 'lower');
-                    if (in_array($valor, array('On', 'Off')) || is_numeric($valor)) {
-                        $php .= "$variable = $valor" . PHP_EOL;
-                    } else {
-                        $valor = Filter::get($valor, 'htmlspecialchars');
-                        $php .= "$variable = $valor" . PHP_EOL;
-                    }
-                }
-                if ($source && $seccion == $source) { //Verifico si está en el source correspondiente
-                    foreach ($data as $variable => $valor) { //Verifico que variables se crean
-                        if (!array_key_exists($variable, $filas)) {
-                            $variable = DwUtils::getSlug($variable, '_');
-                            if ($file == 'routes') {
-                                $variable = "/$variable";
-                                $valor = "/" . ltrim($valor, '/');
-                            }
-                            if (in_array($valor, array('On', 'Off')) || is_numeric($valor)) {
-                                $php .= "$variable = $valor" . PHP_EOL;
-                            } else {
-                                $valor = Filter::get($valor, 'htmlspecialchars');
-                                $php .= "$variable = $valor" . PHP_EOL;
-                            }
-                        }
-                    }
+
+        // Generate PHP config content
+        $php = "<?php\n\n";
+        $php .= "return [\n";
+
+        foreach ($vars as $section => $values) {
+            $php .= "    '$section' => [\n";
+            foreach ($values as $key => $value) {
+                if ($value !== 'delete-var') {
+                    $value = is_numeric($value) ? $value : "'$value'";
+                    $php .= "        '$key' => $value,\n";
                 }
             }
-            $php .= PHP_EOL;
+            $php .= "    ],\n";
         }
-        $php .= PHP_EOL;
-        $rs = file_put_contents(APP_PATH . "config/$file.php", $php);
-        @chmod(APP_PATH . "config/$file.php", 0777);
-        //Actualizo las variables de configuracion
-        self::read($file, '', TRUE);
+
+        $php .= "];\n";
+
+        // Write new config
+        $rs = file_put_contents($org, $php);
+        @chmod($org, 0777);
+
         return $rs;
     }
+
 
     /**
      * Método para crear variables tipo define del config.php
@@ -129,35 +101,42 @@ class DwConfig
     public static function load()
     {
         $config = self::read('config');
-        // Nombre del aplicativo
-        if (!defined('APP_NAME')) {
+
+        if (!defined('APP_NAME') && isset($config['application']['name'])) {
             define('APP_NAME', $config['application']['name']);
         }
-        if (!defined('PRODUCTION')) {
-            define('PRODUCTION', $config['application']['production']);
+
+        if (!defined('PRODUCTION') && isset($config['application']['production'])) {
+            define('PRODUCTION', $config['application']['production'] === 'On');
         }
 
-        //Carga y define automáticamente las variables defphpdas en el config.php
         if (isset($config['custom'])) {
             foreach ($config['custom'] as $variable => $valor) {
                 $variable = Filter::get($variable, 'upper');
-                if (in_array($valor, array('On', 'Off'))) {
-                    $valor = ($valor == 'On') ? TRUE : FALSE;
+
+                if (in_array($valor, ['On', 'Off'])) {
+                    $valor = ($valor == 'On');
                 }
-                if ($variable == 'APP_AJAX') {
-                    $valor = (Session::get('app_ajax') && ($valor)) ? TRUE : FALSE;
-                } else if ($variable == 'DATAGRID') {
-                    $valor = (Session::get('datagrid') > 0) ? Session::get('datagrid') : $valor;
+
+                if (!empty($_SESSION)) {
+                    if ($variable == 'APP_AJAX') {
+                        $valor = (Session::get('app_ajax') && $valor);
+                    } else if ($variable == 'DATAGRID') {
+                        $valor = (Session::get('datagrid') > 0) ? Session::get('datagrid') : $valor;
+                    }
                 }
-                define($variable, $valor);
+
+                if (!defined($variable)) {
+                    define($variable, $valor);
+                }
             }
         }
 
-        //Se verifica que tipo de dispositivo es
         Load::lib('Mobile_Detect');
         $detect = new Mobile_Detect();
-        define('IS_MOBILE', $detect->isMobile());
-        define('IS_TABLET', $detect->isTablet());
-        define('IS_DESKTOP', (!IS_MOBILE && !IS_TABLET) ? TRUE : FALSE);
+
+        if (!defined('IS_MOBILE')) define('IS_MOBILE', $detect->isMobile());
+        if (!defined('IS_TABLET')) define('IS_TABLET', $detect->isTablet());
+        if (!defined('IS_DESKTOP')) define('IS_DESKTOP', (!IS_MOBILE && !IS_TABLET));
     }
 }

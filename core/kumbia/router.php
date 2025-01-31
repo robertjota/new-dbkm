@@ -1,4 +1,5 @@
 <?php
+
 /**
  * KumbiaPHP web & app Framework
  *
@@ -45,7 +46,7 @@ class Router
     /**
      * Array estático con las variables del router por defecto
      * TODO: Convertir a constante
-     * 
+     *
      * @var array
      */
     protected static $default = [
@@ -73,7 +74,7 @@ class Router
     /**
      * Procesamiento basico del router
      * @param string $url
-     * 
+     *
      * @throws KumbiaException
      * @return void
      */
@@ -93,38 +94,30 @@ class Router
      * Ejecuta una url
      *
      * @param string $url
-     * 
+     *
      * @throws KumbiaException
      * @return Controller
      */
     public static function execute($url)
     {
         self::init($url);
-        //alias
         $router = self::$router;
-        $conf   = Config::get('config.application.routes');
-        //Si config.ini tiene routes activados, mira si esta routed
-        if ($conf) {
-            /*Esta activado el router*/
-            /* This if for back compatibility*/
-            if ($conf === '1') {
-                $url = $router::ifRouted($url);
-            } else {
-                /*Es otra clase de router*/
-                $router = self::$router = $conf;
-            }
+        $routeConfig = Config::get('config.application.routes');
+
+        if ($routeConfig && ($routeConfig === '1' || $routeConfig === 1 || $routeConfig === true || $routeConfig === 'On')) {
+            $url = $router::ifRouted($url);
+        } elseif ($routeConfig) {
+            $router = self::$router = $routeConfig;
         }
 
-        // Descompone la url
         self::$vars = $router::rewrite($url) + self::$default;
 
-        // Despacha la ruta actual
         return static::dispatch($router::getController(self::$vars));
     }
 
     /**
      * Realiza el dispatch de la ruta actual
-     * 
+     *
      * @param Controller $cont  Controlador a usar
      *
      * @throws KumbiaException
@@ -138,23 +131,24 @@ class Router
         }
 
         if (method_exists($cont, $cont->action_name)) {
-            if (strcasecmp($cont->action_name, 'k_callback') === 0 ) {
+            if (strcasecmp($cont->action_name, 'k_callback') === 0) {
                 throw new KumbiaException('Esta intentando ejecutar un método reservado de KumbiaPHP');
             }
 
             if ($cont->limit_params) { // with variadic php5.6 delete it
                 $reflectionMethod = new ReflectionMethod($cont, $cont->action_name);
                 $num_params = count($cont->parameters);
-                
-                if ($num_params < $reflectionMethod->getNumberOfRequiredParameters() ||
-                    $num_params > $reflectionMethod->getNumberOfParameters()) {
-                        
-                    throw new KumbiaException('', 'num_params');   
+
+                if (
+                    $num_params < $reflectionMethod->getNumberOfRequiredParameters() ||
+                    $num_params > $reflectionMethod->getNumberOfParameters()
+                ) {
+
+                    throw new KumbiaException('', 'num_params');
                 }
-                        
             }
         }
-        
+
         call_user_func_array([$cont, $cont->action_name], $cont->parameters);
 
         //Corre los filtros after y finalize
@@ -168,7 +162,7 @@ class Router
 
     /**
      * Redirecciona la ejecución internamente
-     * 
+     *
      * @throws KumbiaException
      * @return void
      */
@@ -192,7 +186,7 @@ class Router
      * <code>Router::get('controller')</code>
      *
      * @param string $var (opcional) un atributo: route, module, controller, action, parameters o routed
-     * 
+     *
      * @return array|string con el valor del atributo
      */
     public static function get($var = '')
@@ -205,7 +199,7 @@ class Router
      *
      * @param array $params array de $vars (móddulo, controller, action, params, ...)
      * @param boolean $intern si la redirección es interna
-     * 
+     *
      * @return void
      */
     public static function to(array $params, $intern = false)

@@ -35,7 +35,7 @@ class DwAudit extends Logger
     /**
      * Inicializa el Logger
      */
-    public static function initialize($name): void
+    public static function initialize($name = '')
     {
         if (empty($name)) {
             self::$_logName = 'audit' . date('Y-m-d') . '.txt';
@@ -52,11 +52,8 @@ class DwAudit extends Logger
      * @param string $msg
      * @param string $name_log
      */
-    public static function log($type, $msg, $name_log): void
+    public static function log($type = 'DEBUG', $msg = null, $name_log = null)
     {
-        if ($type == '') {
-            $type == 'DEBUG';
-        }
         self::initialize($name_log);
         $msg = trim(trim($msg), '.') . '.';
         parent::log($type, '[' . self::$_route . '][' . self::$_login . '][' . self::$_ip . '] ' . $msg, self::$_logName);
@@ -69,7 +66,7 @@ class DwAudit extends Logger
      * @param string $msg
      * @param string $name_log
      */
-    public static function warning($msg, $name_log = ''): void
+    public static function warning($msg, $name_log = '')
     {
         self::log('WARNING', $msg, $name_log);
     }
@@ -81,7 +78,7 @@ class DwAudit extends Logger
      * @param string $msg
      * @param string $name_log
      */
-    public static function error($msg, $name_log = ''): void
+    public static function error($msg, $name_log = '')
     {
         self::log('ERROR', $msg, $name_log);
     }
@@ -93,9 +90,9 @@ class DwAudit extends Logger
      * @param string $msg
      * @param string $name_log
      */
-    public static function debug($msg, $name_log = '', $NoDebug = ''): void
+    public static function debug($msg, $name_log = '')
     {
-        self::log('DEBUG', $msg, $name_log, $NoDebug);
+        self::log('DEBUG', $msg, $name_log);
     }
 
     /**
@@ -105,7 +102,7 @@ class DwAudit extends Logger
      * @param string $msg
      * @param string $name_log
      */
-    public static function info($msg, $name_log = ''): void
+    public static function info($msg, $name_log = '')
     {
         self::log('INFO', $msg, $name_log);
     }

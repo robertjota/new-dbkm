@@ -109,15 +109,16 @@ class DwForm extends Form
             }
             //Verifico si se utiliza la mayúscula solo para los text y textarea
             if (($type == 'text') or ($type == 'textarea')) {
-                if (('APP_MAYUS' && !preg_match("/\binput-lower\b/i", $attrs['class'])) or preg_match("/\binput-upper\b/i", $attrs['class'])) {
+                if ((APP_MAYUS && !preg_match("/\binput-lower\b/i", $attrs['class'])) or preg_match("/\binput-upper\b/i", $attrs['class'])) {
                     $attrs['onchange'] = !isset($attrs['onchange']) ? 'this.value=this.value.toUpperCase()' : rtrim($attrs['onchange'], ';') . '; this.value=this.value.toUpperCase()';
                 }
             }
+
             if ($type == 'upload') {
                 //Reviso si está el js-uploady
-                if (!preg_match("/\bjs-upload\b/i", $attrs['class'])) {
+                /* if (!preg_match("/\bjs-upload\b/i", $attrs['class'])) {
                     $attrs['class'] = 'js-upload ' . $attrs['class'];
-                }
+                } */
                 //Reviso si está la url a donde envía
                 if (!isset($attrs['data-to'])) {
                     Flash::error('No se ha especificado la url para la carga de archivo(s).');
@@ -302,6 +303,28 @@ class DwForm extends Form
     }
 
     /**
+     * Crea una etiqueta de formulario multipart.
+     *
+     * @param string       $action Acción del formulario (opcional)
+     * @param string|array $attrs  Atributos de etiqueta (opcional)
+     *
+     * @return string
+     */
+
+    public static function openMultipart($action = null, $attrs = '')
+    {
+        parent::$multipart = true;
+        if (is_array($attrs)) {
+            $attrs['enctype'] = 'multipart/form-data';
+            $attrs = Tag::getAttrs($attrs);
+        } else {
+            $attrs = ['enctype' => 'multipart/form-data'];
+        }
+
+        return self::open($action, 'post', $attrs);
+    }
+
+    /**
      * Método para aplicar el foco a un input
      *
      * @param string $field Nombre del campo: modelo.campo
@@ -354,6 +377,47 @@ class DwForm extends Form
         }
         $input .= '<span class="input-group-addon"><i class="fa fa-calendar"></i></span>';
         $input .= '</div>';
+        //Verifico si el formato del formulario muestra el help
+        if (self::$_help_block) {
+            $input .= self::help($help);
+        }
+        //Cierro el controls
+        $input .= self::getControls();
+        if (!self::$_help_block) {
+            return $input . PHP_EOL;
+        }
+        //Verifico si tiene un label
+        $label = ($label && self::$_show_label) ? self::label($label, $field, null, $attrs['class'])  : '';
+        return '<div class="form-group">' . $label . $input . '</div>' . PHP_EOL;
+    }
+
+    public static function dateNew($field, $attrs = null, $value = null, $label = '', $help = '')
+    {
+        //Tomo los nuevos atributos definidos en las clases
+        $attrs = self::_getAttrsClass($attrs, 'date');
+        //Armo el input
+        $input = self::getControls();
+        if (self::$_style == 'form-search' or self::$_style == 'form-inline') {
+            $attrs['placeholder'] = $label;
+        }
+
+        //Verifico si está definida la máscara mask-date
+        if (!preg_match("/\bmask_fecha\b/i", $attrs['class'])) {
+            $attrs['class'] = 'mask_fecha ' . $attrs['class'];
+        }
+        //Armo el input del form
+        if (!IS_DESKTOP) {
+            $input .= '<div class="input-date input-group date">';
+            $input .= parent::date($field, $attrs, $value);
+        } else {
+            $tmp = self::_getFieldName($field);
+            //Verifico si está definida la clase input-date
+            if (!preg_match("/\binput-date\b/i", $attrs['class'])) {
+                $attrs['class'] = 'input-date ' . $attrs['class'];
+            }
+            $input .= parent::date($field, $attrs, $value);
+        }
+
         //Verifico si el formato del formulario muestra el help
         if (self::$_help_block) {
             $input .= self::help($help);
@@ -483,46 +547,29 @@ class DwForm extends Form
         return self::text($field, $attrs, $value, $label, $help, 'pass');
     }
 
-    /**
-     * Método para crear un select a partir de un array de objetos de ActiveRecord. <br />
-     * Permite mostrar varios valores por fila y valor con slug
-     *
-     * @param string $field Nombre del select: modelo.campo
-     * @param string, array $show Campo a mostrar de la consulta.  Es posible mostrar mas de un campo con array('campo1', 'campo2')
-     * @param object $data Array de objetos. Puede dejarse nulo y carga automáticamente la data o indicar el modelo, método y parámetros
-     * @param string|array $blank Texto a mostrar en blanco
-     * @param array $attrs Atributos del input
-     * @param string $value Valor del select
-     * @param string $label Texto a mostrar en la etiqueta <label>
-     * @param boolean $help Texto de descripción del campo
-     * @return string
-     */
-    public static function dbSelect($field, $show = null, $data = null, $blank = 'Select', $attrs = null, $value = null, $label = '', $help = '')
+    public static function dbSelect($field, $show = null, $data = null, $blank = 'Seleccione...', $attrs = null, $value = null, $label = '', $help = '')
     {
-
         $attrs = self::_getAttrsClass($attrs, 'select');
         if (empty($data)) {
-            $data = array('' => 'Select');
+            $data = array('' => 'Seleccione...');
         }
 
         if (empty($blank)) {
-            $blank = 'Select';
+            $blank = 'Seleccione...';
         }
 
         $attrs2 = $attrs;
 
         $input = self::getControls();
 
-        if (is_array($attrs)) { //Cargo los atributos
+        if (is_array($attrs)) {
             $attrs = Tag::getAttrs($attrs);
-            $attrs = $attrs;
         }
 
         list($id, $name, $value) = self::getFieldData($field, $value);
 
         $options = '';
 
-        //Muestro el blank
         if (!empty($blank) && $blank != 'none') {
             if (is_array($blank)) {
                 $options_key = @array_shift(array_keys($blank));
@@ -531,9 +578,119 @@ class DwForm extends Form
                 $options = '<option value="">' . htmlspecialchars($blank, ENT_COMPAT, APP_CHARSET) . '</option>';
             }
         }
-        //Verifico si existe una data
+
         if ($data === null) {
-            //por defecto el modelo de modelo(_id)
+            $model_asoc = explode('.', $field, 2);
+            $model_asoc = substr(end($model_asoc), 0, -3);
+            $model_name = $model_asoc;
+            $model_asoc = Load::model($model_asoc);
+            $pk = $model_asoc->primary_key[0];
+            if (!$show) {
+                $show = $model_asoc->non_primary[0];
+            }
+            $data = $model_asoc->find("columns: $pk,$show", "order: $show asc");
+        } else if (isset($data[0]) && is_string($data[0])) {
+            $model_name = explode('/', $data[0]);
+            $model_name = end($model_name);
+            $model_asoc = Load::model($data[0]);
+            $pk = $model_asoc->primary_key[0];
+            if (isset($data[2]) && isset($data[3])) {
+                $data = $model_asoc->{$data[1]}($data[2], $data[3]);
+            } else if (isset($data[2])) {
+                $data = $model_asoc->{$data[1]}($data[2]);
+            } else {
+                $data = $model_asoc->{$data[1]}();
+            }
+        } else {
+            $model_asoc = explode('.', $field, 2);
+            $model_name = $model_asoc[0];
+            $tam = strlen(end($model_asoc));
+            $pk = substr(end($model_asoc), $tam - 2, $tam);
+        }
+
+        if (!empty($data) && is_array($data)) {
+            foreach ($data as $p) {
+                if (!is_object($p)) {
+                    continue;  // Skip if not an object
+                }
+                $slug = $model_name . "_slug";
+                if (is_array($show) && in_array($slug, $show)) {
+                    $show_value = (isset($p->$slug)) ? $p->$slug : (isset($p->$pk) ? $p->$pk : '');
+                } else {
+                    $show_value = isset($p->$pk) ? $p->$pk : '';
+                }
+                $options .= "<option value=\"$show_value\"";
+                if ($show_value == $value) {
+                    $options .= ' selected="selected"';
+                }
+                if (is_array($show)) {
+                    $opt = '';
+                    foreach ($show as $item) {
+                        if ($item != $slug) {
+                            if (isset($p->$item)) {
+                                $opt .= htmlspecialchars($p->$item, ENT_COMPAT, APP_CHARSET) . ' ';
+                            } else {
+                                $opt .= htmlspecialchars($item, ENT_COMPAT, APP_CHARSET) . ' ';
+                            }
+                        }
+                    }
+                    $options .= '>' . trim($opt) . '</option>';
+                } else {
+                    $options .= '>' . (isset($p->$show) ? htmlspecialchars($p->$show, ENT_COMPAT, APP_CHARSET) : '') . '</option>';
+                }
+            }
+        }
+
+        $input .=  "<select id=\"$id\" name=\"$name\" $attrs>$options</select>";
+        if (self::$_help_block) {
+            $input .= self::help($help);
+        }
+        $input .= self::getControls();
+        if (!self::$_help_block) {
+            return $input . PHP_EOL;
+        }
+
+        $label = ($label && self::$_show_label) ? self::label($label, $field, null, $attrs2['class'])  : '';
+        return '<div class="form-group">' . $label . $input . '</div>' . PHP_EOL;
+    }
+
+
+    /**
+     * Método para crear un select múltiple a partir de un array de objetos de ActiveRecord.
+     *
+     * @param string $field Nombre del select: modelo.campo
+     * @param string|array $show Campo a mostrar de la consulta. Es posible mostrar mas de un campo con array('campo1', 'campo2')
+     * @param object $data Array de objetos. Puede dejarse nulo y carga automáticamente la data o indicar el modelo, método y parámetros
+     * @param string|array $blank Texto a mostrar en blanco
+     * @param array $attrs Atributos del input
+     * @param array $value Valores seleccionados del select
+     * @param string $label Texto a mostrar en la etiqueta <label>
+     * @param boolean $help Texto de descripción del campo
+     * @return string
+     */
+    public static function dbMultiSelect($field, $show = null, $data = null, $blank = 'Seleccione...', $attrs = null, $value = [], $label = '', $help = '')
+    {
+        $attrs = self::_getAttrsClass($attrs, 'select');
+        $attrs['multiple'] = 'multiple'; // Añadir atributo multiple
+
+        $attrs2 = $attrs;
+
+        $input = self::getControls();
+
+        if (is_array($attrs)) {
+            $attrs = Tag::getAttrs($attrs);
+        }
+
+        list($id, $name, $dummy) = self::getFieldData($field, null);
+        $name .= '[]'; // Modificar el nombre para que sea un array
+
+        $options = '';
+
+        // Agregar la opción "Seleccione..." como la primera opción, deshabilitada y no seleccionable
+        $options .= '<option value="" disabled>' . htmlspecialchars((string)$blank, ENT_COMPAT, APP_CHARSET) . '</option>';
+
+        // Verifico si existe una data
+        if ($data === null) {
             $model_asoc = explode('.', $field, 2);
             $model_asoc = substr(end($model_asoc), 0, -3); //se elimina el _id
             $model_name = $model_asoc; //Tomo el nombre del modelo
@@ -543,7 +700,7 @@ class DwForm extends Form
                 $show = $model_asoc->non_primary[0]; //por defecto el primer campo no pk
             }
             $data = $model_asoc->find("columns: $pk,$show", "order: $show asc"); //mejor usar array
-        } else if (isset($data[0]) && is_string($data[0])) { //Verifico si ha enviado el modelo, método y/o parámetros
+        } else if (isset($data[0]) && is_string($data[0])) {
             $model_name = explode('/', $data[0]); //Tomo el nombre del modelo
             $model_name = end($model_name);
             $model_asoc = Load::model($data[0]); //Cargo el modelo
@@ -556,73 +713,66 @@ class DwForm extends Form
             } else {
                 $data = $model_asoc->{$data[1]}();
             }
-        } else { //Si ha enviado una data determino la llave primaria
+        } else {
             $model_asoc = explode('.', $field, 2);
             $model_name = $model_asoc[0];
             $tam = strlen(end($model_asoc));
             $pk = substr(end($model_asoc), $tam - 2, $tam); //se utiliza el id
         }
-        //Recorro la data
+
+        // Asegurarse de que $value sea un array
+        $value = is_array($value) ? $value : [];
+
+        // Recorro la data
         foreach ($data as $p) {
-            //Muestro el valor del id como show value, a menos que tenga un {nombre_modelo}_slug
             $slug = $model_name . "_slug";
             if (is_array($show) && in_array($slug, $show)) {
-                $show_value = (isset($p->$slug)) ? $p->$slug : $p->$pk; //Verifico si existe un campo llamado {nombre_modelo}_slug, lo tomo sino la pk
+                $show_value = (isset($p->$slug)) ? $p->$slug : $p->$pk;
             } else {
                 $show_value = $p->$pk;
             }
+
             $options .= "<option value=\"$show_value\"";
-            if ($show_value == $value) {
+            if (in_array($show_value, $value, true)) {
                 $options .= ' selected="selected"';
             }
-            if (is_array($show)) { //Verifico si se muestran varios campos
+
+            if (is_array($show)) {
                 $opt = '';
-                $i = 0;
                 foreach ($show as $item) {
-                    if ($show[$i] != $slug) {
-                        if (isset($p->{$show[$i]})) {
-                            $opt .= htmlspecialchars($p->$item, ENT_COMPAT, APP_CHARSET) . ''; //&#8211;&#187;
+                    if ($item != $slug) {
+                        if (isset($p->$item)) {
+                            $opt .= htmlspecialchars($p->$item, ENT_COMPAT, APP_CHARSET) . ' ';
                         } else {
-                            $opt .= htmlspecialchars($show[$i], ENT_COMPAT, APP_CHARSET) . ''; //&#8211;&#187;
+                            $opt .= htmlspecialchars($item, ENT_COMPAT, APP_CHARSET) . ' ';
                         }
                     }
-                    $i++;
                 }
-                $options .= '>' . trim($opt, ' &#8211;&#187; ') . '</option>'; // caracter especial a mostrar &#8211;&#187;
+                $options .= '>' . trim($opt) . '</option>';
             } else {
                 $options .= '>' . htmlspecialchars($p->$show, ENT_COMPAT, APP_CHARSET) . '</option>';
             }
         }
-        $input .=  "<select id=\"$id\" name=\"$name\" $attrs>$options</select>";
+
+        $input .= "<select id=\"$id\" name=\"$name\" $attrs>$options</select>";
+
         if (self::$_help_block) {
             $input .= self::help($help);
         }
+
         $input .= self::getControls();
+
         if (!self::$_help_block) {
             return $input . PHP_EOL;
         }
-        //Verifico si tiene un label
-        $label = ($label && self::$_show_label) ? self::label($label, $field, null, $attrs2['class'])  : '';
+
+        $label = ($label && self::$_show_label) ? self::label($label, $field, null, $attrs2['class']) : '';
+
         return '<div class="form-group">' . $label . $input . '</div>' . PHP_EOL;
     }
 
     /**
-     * METODO MODIFICADO POR ROBERT ARIAS PARA SEPARAR VARIOS CAMPOS POR ESPACIOS
-     * Método para crear un select a partir de un array de objetos de ActiveRecord. <br />
-     * Permite mostrar varios valores por fila y valor con slug
-     *
-     * @param string $field Nombre del select: modelo.campo
-     * @param string, array $show Campo a mostrar de la consulta.  Es posible mostrar mas de un campo con array('campo1', 'campo2')
-     * @param object $data Array de objetos. Puede dejarse nulo y carga automáticamente la data o indicar el modelo, método y parámetros
-     * @param string|array $blank Texto a mostrar en blanco
-     * @param array $attrs Atributos del input
-     * @param string $value Valor del select
-     * @param string $label Texto a mostrar en la etiqueta <label>
-     * @param boolean $help Texto de descripción del campo
-     * @return string
-     */
-
-    /**
+     * METODO DE UTILIDAD MODIFICADO POR ROBERT ARIAS PARA GENERAR UN SELECT CON DOS CAMPOS CONCATENADOS
      * Método para crear un select a partir de un array de objetos de ActiveRecord. <br />
      * Permite mostrar varios valores por fila y valor con slug
      *
@@ -702,33 +852,23 @@ class DwForm extends Form
         }
         //Recorro la data
         foreach ($data as $p) {
-            //Muestro el valor del id como show value, a menos que tenga un {nombre_modelo}_slug
             $slug = $model_name . "_slug";
-            if (is_array($show) && in_array($slug, $show)) {
-                $show_value = (isset($p->$slug)) ? $p->$slug : $p->$pk; //Verifico si existe un campo llamado {nombre_modelo}_slug, lo tomo sino la pk
-            } else {
-                $show_value = $p->$pk;
-            }
+            $show_value = (is_array($show) && in_array($slug, $show)) ?
+                (isset($p->$slug) ? $p->$slug : $p->$pk) :
+                $p->$pk;
+
             $options .= "<option value=\"$show_value\"";
-            if ($show_value == $value) {
-                $options .= ' selected="selected"';
-            }
-            if (is_array($show)) { //Verifico si se muestran varios campos
-                $opt = '';
-                $i = 0;
-                foreach ($show as $item) {
-                    if ($show[$i] != $slug) {
-                        if (isset($p->{$show[$i]})) {
-                            $opt .= ' - ' . htmlspecialchars($p->$item, ENT_COMPAT, APP_CHARSET); //&#8211;&#187;
-                            //$opt.= htmlspecialchars($p->$item, ENT_COMPAT, APP_CHARSET). ' - '; //&#8211;&#187;
-                        } else {
-                            $opt .= ' - ' . htmlspecialchars($show[$i], ENT_COMPAT, APP_CHARSET); //&#8211;&#187;
-                            //$opt.= htmlspecialchars($show[$i], ENT_COMPAT, APP_CHARSET). '   '; //&#8211;&#187;
-                        }
-                    }
-                    $i++;
-                }
-                $options .= '>' . trim($opt, ' ') . '</option>'; // caracter especial a mostrar &#8211;&#187;
+            $options .= ($show_value == $value) ? ' selected="selected"' : '';
+
+            if (is_array($show)) {
+                $opt = array_reduce(array_filter($show, function ($item) use ($slug) {
+                    return $item != $slug;
+                }), function ($carry, $item) use ($p) {
+                    $value = isset($p->$item) ? $p->$item : $item;
+                    return $carry . ($carry ? ' | ' : '') . htmlspecialchars($value, ENT_COMPAT, APP_CHARSET);
+                }, '');
+
+                $options .= '>' . $opt . '</option>';
             } else {
                 $options .= '>' . htmlspecialchars($p->$show, ENT_COMPAT, APP_CHARSET) . '</option>';
             }
@@ -762,20 +902,38 @@ class DwForm extends Form
     public static function select($field, $data = array(), $attrs = NULL, $value = NULL, $label = '', $help = '', $opt = NULL)
     {
         $attrs = self::_getAttrsClass($attrs, 'select');
-        if (empty($data)) {
-            $data = array('' => 'Select');
+
+        // Agregar la opción por defecto al inicio del array $data si no existe
+        if (!isset($data['']) && !isset($data['Seleccione...'])) {
+            $data = array('' => 'Seleccione...') + $data;
         }
+
         $input = self::getControls();
+
+        // Manejar el caso en que $value sea un array
+        if (is_array($value)) {
+            $value = isset($value[$field]) ? $value[$field] : '';
+        }
+
+        // Asegurarse de que $value sea una cadena
+        $value = (string)$value;
+
+        // Llamar a parent::select sin el parámetro adicional
         $input .= parent::select($field, $data, $attrs, $value);
+
         if (self::$_help_block) {
             $input .= self::help($help);
         }
+
         $input .= self::getControls();
+
         if (!self::$_help_block) {
             return $input . PHP_EOL;
         }
+
         //Verifico si tiene un label
         $label = ($label && self::$_show_label) ? self::label($label, $field, null, $attrs['class'])  : '';
+
         return '<div class="form-group">' . $label . $input . '</div>' . PHP_EOL;
     }
 
@@ -947,12 +1105,10 @@ class DwForm extends Form
             return '</fieldset>';
         }
         if (is_array($attrs)) {
-            $attrs = 'border p-2 ' . Tag::getAttrs($attrs);
-        } else {
-            $attrs = 'border p-2';
+            $attrs = Tag::getAttrs($attrs);
         }
         $i = false;
-        return "<fieldset $attrs><legend class='float-none w-auto block-header block-header-default'>$text";
+        return "<fieldset $attrs><legend>$text</legend>";
     }
 
     /**
@@ -964,9 +1120,7 @@ class DwForm extends Form
     public static function legend($text, $attrs = NULL)
     {
         if (is_array($attrs)) {
-            $attrs = 'float-none w-auto block-header block-header-default ' . Tag::getAttrs($attrs);
-        } else {
-            $attrs = 'float-none w-auto block-header block-header-default';
+            $attrs = Tag::getAttrs($attrs);
         }
         return "<legend $attrs>$text</legend>";
     }
@@ -980,7 +1134,6 @@ class DwForm extends Form
      */
     public static function upload($field, $attrs = null, $label = '')
     {
-        //DwUtils::print_r($field, $attrs, $label);
         //Tomo los nuevos atributos definidos en las clases
         $attrs = self::_getAttrsClass($attrs, 'upload');
         //Armo el input
@@ -1148,7 +1301,7 @@ class DwForm extends Form
      * @param string $icon
      * @return strig
      */
-    public static function cancel($redir = NULL, $title = '', $icon = 'fa-ban')
+    public static function cancel($redir = NULL, $title = 'Cancelar', $icon = 'fa-ban')
     {
         return DwButton::cancel($redir, $title, $icon);
     }

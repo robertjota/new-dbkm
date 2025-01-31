@@ -107,6 +107,12 @@ $url = $_SERVER['PATH_INFO'] ?? '/';
 //$url = $_GET['_url'] ?? '/';
 
 /**
+ * Carga los vendors
+ *
+ */
+require_once("../../vendor/autoload.php");
+
+/**
  * Carga el gestor de arranque
  * Por defecto el bootstrap del core.
  *

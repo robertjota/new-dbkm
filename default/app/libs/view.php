@@ -70,11 +70,6 @@ class View extends KumbiaView
         View::select(NULL, 'json');
     }
 
-    public static function json_especial()
-    {
-        View::select(NULL, 'json');
-    }
-
     /**
      * Método para mostrar el mensaje de actualizacion
      */

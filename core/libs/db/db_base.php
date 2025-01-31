@@ -6,17 +6,21 @@
  * LICENSE
  *
  * This source file is subject to the new BSD license that is bundled
- * with this package in the file LICENSE.
+ * with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://wiki.kumbiaphp.com/Licencia
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@kumbiaphp.com so we can send you a copy immediately.
  *
  * @category   Kumbia
  * @package    Db
- *
- * @copyright  Copyright (c) 2005 - 2023 KumbiaPHP Team (http://www.kumbiaphp.com)
- * @license    https://github.com/KumbiaPHP/KumbiaPHP/blob/master/LICENSE   New BSD License
+ * @copyright  Copyright (c) 2005 - 2017 Kumbia Team (http://www.kumbiaphp.com)
+ * @license    http://wiki.kumbiaphp.com/Licencia     New BSD License
  */
 
 /**
- * Clase principal de los adaptadores de base de datos de KumbiaPHP.
+ * Clase principal de los adaptadores de base de datos de KumbiaPHP
  *
  * Contiene metodos utiles y variables generales.
  *
@@ -27,39 +31,47 @@
  * en logs/ y $logger="nombre", crea un log con el nombre indicado.
  *
  * @category   Kumbia
+ * @package    Db
+ *
+ * @method int num_rows($result_query = '')
+ * @method int num_fields($result_query = '')
+ * @method int affected_rows()
+ * @method int insert_id()
+ * @method int last_insert_id(string $table = '', string $primary_key = '')
+ * @method void set_return_rows(bool $value)
+ * @method array describe_table(string $table, string $schema = '')
  */
 class DbBase
 {
     /**
-     * Indica si esta en modo debug o no.
+     * Indica si esta en modo debug o no
      *
-     * @var bool
+     * @var boolean
      */
     public $debug = false;
     /**
-     * Indica si debe loggear o no (tambien permite establecer el nombre del log).
+     * Indica si debe loggear o no (tambien permite establecer el nombre del log)
      *
      * @var mixed
      */
     public $logger = false;
     /**
-     * Última sentencia SQL enviada al Adaptador.
+     * Última sentencia SQL enviada al Adaptador
      *
      * @var string
      */
     protected $last_query;
 
     /**
-     * Hace un select de una forma mas corta, listo para usar en un foreach.
+     * Hace un select de una forma mas corta, listo para usar en un foreach
      *
      * @param string $table
      * @param string $where
      * @param string $fields
      * @param string $orderBy
-     *
      * @return array
      */
-    public function find($table, $where = '1=1', $fields = '*', $orderBy = '1')
+    public function find($table, $where = "1=1", $fields = "*", $orderBy = "1")
     {
         ActiveRecord::sql_item_sanitize($table);
         ActiveRecord::sql_sanitize($fields);
@@ -69,16 +81,14 @@ class DbBase
         while ($row = $this->fetch_array($q)) {
             $results[] = $row;
         }
-
         return $results;
     }
 
     /**
      * Realiza un query SQL y devuelve un array con los array resultados en forma
-     * indexada por numeros y asociativamente.
+     * indexada por numeros y asociativamente
      *
      * @param string $sql
-     *
      * @return array
      */
     public function in_query($sql)
@@ -90,16 +100,14 @@ class DbBase
                 $results[] = $row;
             }
         }
-
         return $results;
     }
 
     /**
      * Realiza un query SQL y devuelve un array con los array resultados en forma
-     * indexada por numeros y asociativamente (Alias para in_query).
+     * indexada por numeros y asociativamente (Alias para in_query)
      *
      * @param string $sql
-     *
      * @return array
      */
     public function fetch_all($sql)
@@ -109,104 +117,114 @@ class DbBase
 
     /**
      * Realiza un query SQL y devuelve un array con los array resultados en forma
-     * indexada asociativamente.
+     * indexada asociativamente
      *
      * @param string $sql
-     *
      * @return array
      */
     public function in_query_assoc($sql)
     {
         $q = $this->query($sql);
-        $results = [];
-        while ($row = $this->fetch_array($q, db::DB_ASSOC)) {
-            $results[] = $row;
+        $results = array();
+        if ($q) {
+            while ($row = $this->fetch_array($q, DbMySQLi::DB_ASSOC)) {
+                $results[] = $row;
+            }
         }
-
         return $results;
     }
 
     /**
      * Realiza un query SQL y devuelve un array con los array resultados en forma
-     * numerica.
+     * numerica
      *
      * @param string $sql
-     *
      * @return array
      */
     public function in_query_num($sql)
     {
         $q = $this->query($sql);
-        $results = [];
-        while ($row = $this->fetch_array($q, db::DB_NUM)) {
-            $results[] = $row;
+        $results = array();
+        if ($q) {
+            while ($row = $this->fetch_array($q, DbMySQLi::DB_NUM)) {
+                $results[] = $row;
+            }
         }
-
         return $results;
     }
 
     /**
-     * Devuelve un array del resultado de un select de un sólo registro.
+     * Devuelve un array del resultado de un select de un solo registro
      *
      * @param string $sql
-     *
      * @return array
      */
     public function fetch_one($sql)
     {
-        return $this->fetch_array($this->query($sql));
+        $q = $this->query($sql);
+        if ($q) {
+            if (strpos($sql, 'GROUP BY') == false) {
+                if ($this->num_rows($q) > 1) {
+                    Flash::warning("Una sentencia SQL: \"$sql\" retorno mas de una fila cuando se esperaba una sola");
+                }
+            }
+            return $this->fetch_array($q);
+        } else {
+            return array();
+        }
     }
 
     /**
-     * Realiza una inserción.
+     * Realiza una inserci&oacute;n
      *
      * @param string $table
-     * @param array  $values
-     * @param array  $fields
-     *
-     * @return bool
+     * @param array $values
+     * @param array $fields
+     * @return boolean
      */
-    public function insert($table, array $values, $fields = null)
+    public function insert($table, $values, $fields = null)
     {
-        if (!count($values)) {
-            throw new KumbiaException("Imposible realizar inserción en $table sin datos");
+        //$insert_sql = "";
+        if (is_array($values)) {
+            if (!count($values)) {
+                throw new KumbiaException("Imposible realizar inserci&oacute;n en $table sin datos");
+            }
+            if (is_array($fields)) {
+                $insert_sql = "INSERT INTO $table (" . join(",", $fields) . ") VALUES (" . join(",", $values) . ")";
+            } else {
+                $insert_sql = "INSERT INTO $table VALUES (" . join(",", $values) . ")";
+            }
+            return $this->query($insert_sql);
+        } else {
+            throw new KumbiaException('El segundo parametro para insert no es un Array');
         }
-        $insert_sql = "INSERT INTO $table VALUES (" . join(',', $values) . ')';
-
-        if (is_array($fields)) {
-            $insert_sql = "INSERT INTO $table (" . join(',', $fields) . ') VALUES (' . join(',', $values) . ')';
-        }
-
-        return $this->query($insert_sql);
     }
 
     /**
-     * Actualiza registros en una tabla.
+     * Actualiza registros en una tabla
      *
      * @param string $table
-     * @param array  $fields
-     * @param array  $values
+     * @param array $fields
+     * @param array $values
      * @param string $where_condition
-     *
-     * @return bool
+     * @return boolean
      */
-    public function update($table, array $fields, array $values, $where_condition = null)
+    public function update($table, $fields, $values, $where_condition = null)
     {
         $update_sql = "UPDATE $table SET ";
         if (count($fields) != count($values)) {
-            throw new KumbiaException('Los números de valores a actualizar no es el mismo de los campos');
+            throw new KumbiaException('Los n&uacute;mero de valores a actualizar no es el mismo de los campos');
         }
         $i = 0;
         $update_values = array();
         foreach ($fields as $field) {
             $update_values[] = $field . ' = ' . $values[$i];
-            ++$i;
+            $i++;
         }
         $update_sql .= join(',', $update_values);
         if ($where_condition != null) {
             $update_sql .= " WHERE $where_condition";
         }
-
         return $this->query($update_sql);
     }
 
@@ -220,13 +238,14 @@ class DbBase
     {
         if (trim($where_condition)) {
             return $this->query("DELETE FROM $table WHERE $where_condition");
+        } else {
+            return $this->query("DELETE FROM $table");
         }
-
-        return $this->query("DELETE FROM $table");
     }
 
     /**
-     * Inicia una transacci&oacute;n si es posible.
+     * Inicia una transacci&oacute;n si es posible
+     *
      */
     public function begin()
     {
@@ -234,7 +253,8 @@ class DbBase
     }
 
     /**
-     * Cancela una transacción si es posible.
+     * Cancela una transacci&oacute;n si es posible
+     *
      */
     public function rollback()
     {
@@ -242,7 +262,8 @@ class DbBase
     }
 
     /**
-     * Hace commit sobre una transacción si es posible.
+     * Hace commit sobre una transacci&oacute;n si es posible
+     *
      */
     public function commit()
     {
@@ -250,37 +271,69 @@ class DbBase
     }
 
     /**
-     * Agrega comillas o simples segun soporte el RBDM.
+     * Agrega comillas o simples segun soporte el RBDM
      *
      * @return string
      */
-    public static function add_quotes($value)
+    static public function add_quotes($value)
     {
         return "'" . addslashes($value) . "'";
     }
 
     /**
-     * Loggea las operaciones sobre la base de datos si estan habilitadas.
+     * Loggea las operaciones sobre la base de datos si estan habilitadas
      *
      * @param string $msg
      * @param string $type
      */
     protected function log($msg, $type)
     {
+
         if ($this->logger) {
             Logger::log($this->logger, $msg, $type);
         }
     }
 
     /**
-     * Muestra Mensajes de Debug en Pantalla si esta habilitado.
+     * Muestra Mensajes de Debug en Pantalla si esta habilitado
      *
      * @param string $sql
      */
     protected function debug($sql)
     {
-        if ($this->debug) {
-            Flash::info($sql);
+        $skipWords = ['DESCRIBE', 'menu', 'perfil', 'recurso'];
+
+        foreach ($skipWords as $word) {
+            if (strpos($sql, $word) !== false) {
+                return;
+            }
         }
+
+        $ip = '{' . Session::get('ip') . '}';
+        $usuario = '{' . Session::get('nombre') . ' ' . Session::get('apellido') . '}';
+        $sql = $sql . ' - ' . $usuario . ' - ' . $ip;
+
+        if ($this->debug && strlen($sql) > 0) {
+            Logger::debug($sql);
+        }
+
+        //dump($sql);
     }
+
+    /**
+     * Efectua operaciones SQL sobre la base de datos
+     * Este método lo extienden los adapters
+     * @param string $sql_query
+     * @return resource or false
+     */
+    public function query($sql) {}
+
+    /**
+     * Devuelve fila por fila el contenido de un select
+     * Este método lo extienden los adapters
+     * @param resource $resultQuery
+     * @param int $opt
+     * @return array
+     */
+    public function fetch_array($resultQuery = NULL, $opt = '') {}
 }
