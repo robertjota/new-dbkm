@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Filtro para texto en minúscula
  *
@@ -6,7 +7,8 @@
  * @package     Filters
  */
 
-class LowerFilter implements FilterInterface {
+class LowerFilter implements FilterInterface
+{
 
     /**
      * Ejecuta el filtro para los string en minúsculas
@@ -15,9 +17,11 @@ class LowerFilter implements FilterInterface {
      * @param array $options
      * @return string
      */
-    public static function execute($s, $options) {
+    public static function execute($s, $options)
+    {
+        if ($s === null) {
+            return '';
+        }
         return mb_strtolower($s, 'UTF-8');
-   }
-
+    }
 }
-?>

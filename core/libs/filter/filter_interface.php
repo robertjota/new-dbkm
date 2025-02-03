@@ -1,4 +1,5 @@
 <?php
+
 /**
  * KumbiaPHP web & app Framework
  *
@@ -31,4 +32,3 @@ interface FilterInterface
      */
     public static function execute($s, $options);
 }
-

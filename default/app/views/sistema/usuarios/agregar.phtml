@@ -1,125 +1,123 @@
-<div class="container">
-    <div class="card card-default mt-4 shadow">
-        <div class="card-body">
-
-            <div class="container">
-                <?= DwForm::openMultipart(); ?>
-                <div class="row gutters">
-                    <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 col-12">
-                        <div class="card h-100">
-                            <div class="card-body">
-                                <div class="account-settings">
-                                    <div class="user-profile">
-                                        <div class="user-avatar">
-                                            <div class="picture-profile text-center text-middle shadow-dark" style="margin: 5px auto 0px;">
-                                                <?= DwHtml::img("upload/personas/default.png", "$usuario->nombre $usuario->apellido", array('id' => 'img-usuario', 'style' => 'max-width: 200px;')); ?>
-                                            </div>
+<div class="content">
+    <div class="card block-rounded shadow">
+        <div class="card-body ">
+            <?= DwForm::openMultipart(); ?>
+            <div class="row gutters">
+                <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 col-12">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <div class="account-settings">
+                                <div class="user-profile">
+                                    <div class="user-avatar">
+                                        <div class="picture-profile text-center text-middle shadow-dark" style="margin: 5px auto 0px;">
+                                            <?= DwHtml::img("upload/personas/default.png", "$usuario->nombre $usuario->apellido", array('id' => 'img-usuario', 'style' => 'max-width: 200px;')); ?>
                                         </div>
                                     </div>
-                                    <?= Dwform::file('fotografia', array('class' => 'form-control', 'style' => 'display: none'), 'Cambiar Imágen') ?>
                                 </div>
-                                <div class="text-center">
-                                    <button type="button" class="btn btn-primary mt-3" onclick=" thisFileUpload()" id="btn-cambiar-foto"><i class="fa fa-camera mr-2"></i> Cambiar Imágen</button>
-                                </div>
+                                <?= Dwform::file('fotografia', array('class' => 'form-control', 'style' => 'display: none'), 'Cambiar Imágen') ?>
+                            </div>
+                            <div class="text-center">
+                                <button type="button" class="btn btn-primary mt-3" onclick=" thisFileUpload()" id="btn-cambiar-foto"><i class="fa fa-camera mr-2"></i> Cambiar Imágen</button>
                             </div>
                         </div>
                     </div>
-                    <div class="col-xl-9 col-lg-9 col-md-12 col-sm-12 col-12">
-                        <div class="card h-100">
-                            <div class="card-body">
-                                <div class="row gutters">
-                                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                                        <h5 class="mb-2 text-primary">Información personal</h5>
-                                    </div>
-                                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
-                                        <div class="form-group">
-                                            <?= DwForm::text('usuario.nombre', array('class' => 'input-required'), NULL, 'Nombre'); ?>
-                                        </div>
-                                    </div>
-                                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
-                                        <div class="form-group">
-                                            <?= DwForm::text('usuario.apellido', array('class' => 'input-required'), null, 'Apellido'); ?>
-                                        </div>
-                                    </div>
-                                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
-                                        <div class="form-group">
-                                            <?= DwForm::text('usuario.cedula', array('class' => 'mask_ci'), null, 'Identificación'); ?>
-                                        </div>
-                                    </div>
-                                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
-                                        <div class="form-group">
-                                            <?= DwForm::email('usuario.email', array('class' => 'input-email mask-email'), null, 'Correo Electronico'); ?>
-                                        </div>
-                                    </div>
-                                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
-                                        <div class="form-group">
-                                            <?= DwForm::text('usuario.telefono', array('class' => 'mask_phone'), null, 'Teléfono'); ?>
-                                        </div>
+                </div>
+                <div class="col-xl-9 col-lg-9 col-md-12 col-sm-12 col-12">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <div class="row gutters">
+                                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                                    <h5 class="mb-2 text-primary">Información personal</h5>
+                                </div>
+                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                    <div class="form-group">
+                                        <?= DwForm::text('usuario.nombre', array('class' => 'input-required'), NULL, 'Nombre'); ?>
                                     </div>
                                 </div>
-                                <div class="row gutters">
-                                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                                        <h5 class="mt-3 mb-2 text-primary">Información de la cuenta</h5>
-                                    </div>
-                                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
-                                        <div class="form-group">
-                                            <?= DwForm::text('usuario.login', array('class' => 'input-lower'), null, 'Usuario'); ?>
-                                        </div>
-                                    </div>
-                                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
-                                        <div class="form-group">
-                                            <?= DwForm::dbSelect('usuario.perfil_id', 'perfil', array('sistema/perfil', 'getListadoPerfil', Perfil::ACTIVO), NULL, array('class' => 'input-required'), '4', 'Perfil'); ?>
-                                        </div>
-                                    </div>
-                                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
-                                        <div class="form-group">
-                                            <?= DwForm::select('usuario.app_ajax', array('1' => 'On', '0' => 'Off'), array('class' => 'input-required'), '1', 'App con AJAX', 'Deshabilitar para conexiones lentas'); ?>
-                                        </div>
-                                    </div>
-                                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
-                                        <div class="form-group">
-                                            <?php if (Session::get('perfil_id') == 1) { ?>
-                                                <?= DwForm::select('usuario.tema', ['default' => 'default'], array('class' => 'input-required'), 'default', 'Tema'); ?>
-                                            <?php } else { ?>
-                                                <?= DwForm::select('usuario.tema', ['blue' => 'Azul', 'green' => 'Verde', 'yellow' => 'Amarillo', 'purple' => 'Violeta', 'black' => 'Negro'], array('class' => 'input-required'), null, 'Tema'); ?>
-                                            <?php } ?>
-                                        </div>
+                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                    <div class="form-group">
+                                        <?= DwForm::text('usuario.apellido', array('class' => 'input-required'), null, 'Apellido'); ?>
                                     </div>
                                 </div>
-                                <div class="row gutters">
-                                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                                        <h5 class="mt-3 mb-2 text-primary">Seguridad</h5>
-                                    </div>
-                                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
-                                        <div class="form-group">
-                                            <?= DwForm::pass('usuario.password', array('class' => 'input-password input-lower', 'autocomplete' => 'new-password'), '', 'Nueva contraseña'); ?>
-                                        </div>
-                                    </div>
-                                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
-                                        <div class="form-group">
-                                            <?= DwForm::pass('usuario.repassword', array('class' => 'input-repass input-lower', 'data-equalto' => 'usuario_password'), '', 'Repita la contraseña'); ?>
-                                        </div>
+                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                    <div class="form-group">
+                                        <?= DwForm::text('usuario.cedula', array('class' => 'mask_ci'), null, 'Identificación'); ?>
                                     </div>
                                 </div>
-                                <?= DwForm::hidden('usuario.fotografia', NULL, 'default.png'); ?>
-                                <hr class="hr-rjr">
-                                <div class="row gutters mb-3 mt-3">
-                                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                                        <div class="text-right">
-                                            <?= DwForm::send('Nuevo Usuario'); ?>
-                                            <?= DwForm::cancel(); ?>
-                                            <?= DwForm::focus('usuario.nombre'); ?>
-                                        </div>
+                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                    <div class="form-group">
+                                        <?= DwForm::email('usuario.email', array('class' => 'input-email mask-email'), null, 'Correo Electronico'); ?>
+                                    </div>
+                                </div>
+                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                    <div class="form-group">
+                                        <?= DwForm::text('usuario.telefono', array('class' => 'mask_phone'), null, 'Teléfono'); ?>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row gutters">
+                                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                                    <h5 class="mt-3 mb-2 text-primary">Información de la cuenta</h5>
+                                </div>
+                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                    <div class="form-group">
+                                        <?= DwForm::text('usuario.login', array('class' => 'input-lower'), null, 'Usuario'); ?>
+                                    </div>
+                                </div>
+                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                    <div class="form-group">
+                                        <?= DwForm::dbSelect('usuario.perfil_id', 'perfil', array('sistema/perfil', 'getListadoPerfil', Perfil::ACTIVO), NULL, array('class' => 'input-required'), '4', 'Perfil'); ?>
+                                    </div>
+                                </div>
+                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                    <div class="form-group">
+                                        <?= DwForm::select('usuario.app_ajax', array('1' => 'On', '0' => 'Off'), array('class' => 'input-required'), '1', 'App con AJAX', 'Deshabilitar para conexiones lentas'); ?>
+                                    </div>
+                                </div>
+                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                    <div class="form-group">
+                                        <?php if (Session::get('perfil_id') == 1) { ?>
+                                            <?= DwForm::select('usuario.tema', ['default' => 'default'], array('class' => 'input-required'), 'default', 'Tema'); ?>
+                                        <?php } else { ?>
+                                            <?= DwForm::select('usuario.tema', ['blue' => 'Azul', 'green' => 'Verde', 'yellow' => 'Amarillo', 'purple' => 'Violeta', 'black' => 'Negro'], array('class' => 'input-required'), null, 'Tema'); ?>
+                                        <?php } ?>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row gutters">
+                                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                                    <h5 class="mt-3 mb-2 text-primary">Seguridad</h5>
+                                </div>
+                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                    <div class="form-group">
+                                        <?= DwForm::pass('usuario.password', array('class' => 'input-password input-lower', 'autocomplete' => 'new-password'), '', 'Nueva contraseña'); ?>
+                                    </div>
+                                </div>
+                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                    <div class="form-group">
+                                        <?= DwForm::pass('usuario.repassword', array('class' => 'input-repass input-lower', 'data-equalto' => 'usuario_password'), '', 'Repita la contraseña'); ?>
+                                    </div>
+                                </div>
+                            </div>
+                            <?= DwForm::hidden('usuario.fotografia', NULL, 'default.png'); ?>
+                            <hr>
+                            <div class="row gutters mt-3">
+                                <div class="col-md-12">
+                                    <div class="text-end">
+                                        <?= DwForm::send('Nuevo Usuario'); ?>
+                                        <?= DwForm::cancel(); ?>
+                                        <?= DwForm::focus('usuario.nombre'); ?>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <?= DwForm::close(); ?>
-                <?php $tema = $usuario->tema; ?>
             </div>
+            <?= DwForm::close(); ?>
+            <?php $tema = $usuario->tema; ?>
         </div>
+
     </div>
 </div>
 

@@ -30,26 +30,6 @@ class UsuariosController extends BackendController
         Redirect::toAction('listar');
     }
 
-    /**
-     * Método para buscar
-     */
-    public function buscar($field = 'nombre', $value = 'none', $order = 'order.id.asc', $page = 1)
-    {
-        $page = (Filter::get($page, 'page') > 0) ? Filter::get($page, 'page') : 1;
-        $field = (Input::hasPost('field')) ? Input::post('field') : $field;
-        $value = (Input::hasPost('field')) ? Input::post('value') : $value;
-
-        $usuario = new Usuario();
-        $usuarios = $usuario->getAjaxUsuario($field, $value, $order, $page);
-        if (empty($usuarios->items)) {
-            Flash::info('No se han encontrado registros');
-        }
-        $this->usuarios = $usuarios;
-        $this->order = $order;
-        $this->field = $field;
-        $this->value = $value;
-        $this->page_title = 'Búsqueda de usuarios del sistema';
-    }
 
     /**
      * Método para listar
@@ -74,6 +54,9 @@ class UsuariosController extends BackendController
             Flash::valid('El usuario se ha creado correctamente.');
             return Redirect::toAction('listar');
         }
+
+        $usuario = new Usuario();
+        $this->usuario = $usuario;
         $this->page_title = 'Agregar usuario';
     }
 
@@ -139,7 +122,7 @@ class UsuariosController extends BackendController
         }
 
         if (Input::hasPost('estado_usuario')) {
-            if (Usuario::setEstadoUsuario($tipo, Input::post('estado_usuario'), array('usuario_id' => $usuario->id))) {
+            if (Usuario::setEstadoUsuario($tipo, Input::post('estado_usuario'), ['usuario_id' => $usuario->id])) {
                 ($tipo == 'reactivar') ? Flash::valid('El usuario se ha reactivado correctamente!') : Flash::valid('El usuario se ha bloqueado correctamente!');
                 return Redirect::toAction('listar');
             }
@@ -215,7 +198,7 @@ class UsuariosController extends BackendController
         }
         sleep(1); //Por la velocidad del script no permite que se actualize el archivo
         $this->data = $data;
-        View::json_especial();
+        View::json();
     }
 
     public function cambiarEstado($key)
@@ -242,7 +225,7 @@ class UsuariosController extends BackendController
                 }
             }
 
-            echo json_encode($response);
+            View::json($response);
         }
     }
 }

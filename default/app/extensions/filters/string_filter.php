@@ -19,6 +19,9 @@ class StringFilter implements FilterInterface
      */
     public static function execute($s, $options)
     {
+        if ($s === null) {
+            return '';
+        }
         $string = filter_var($s, FILTER_UNSAFE_RAW);
         $string = strip_tags((string) $string);
         $string = stripslashes((string) $string);

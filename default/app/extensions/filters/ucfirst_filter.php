@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Filtro para poner la primera letra en mayúscula
  *
@@ -6,7 +7,8 @@
  * @package     Filters
  */
 
-class UcfirstFilter implements FilterInterface {
+class UcfirstFilter implements FilterInterface
+{
 
     /**
      * Ejecuta el filtro para convertir a minúsculas incluyendo la Ñ y las tildes
@@ -16,10 +18,12 @@ class UcfirstFilter implements FilterInterface {
      * @return string
      */
 
-    public static function execute($s, $options) {
+    public static function execute($s, $options)
+    {
+        if ($s === null) {
+            return '';
+        }
         $string = mb_strtoupper(mb_substr($s, 0, 1, 'UTF-8'), 'UTF-8') . mb_strtolower(mb_substr($s, 1), 'UTF-8');
         return $string;
-   }
-
+    }
 }
-?>

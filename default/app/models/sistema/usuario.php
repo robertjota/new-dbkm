@@ -81,23 +81,26 @@ class Usuario extends ActiveRecord
                         Session::set('perfil', $usuario->perfil);
                         Session::set('email', $usuario->email);
                         Session::set('nombre', $usuario->nombre);
-                        Session::set('apellido', $usuario->apellido);
+                        Session::set('apellido', $usuario->apellido ?? '');
                         Session::set('usuario', $usuario->login);
                         Session::set('foto', $usuario->fotografia);
                         Session::set('perfil_id', $usuario->perfil_id);
-                        Session::set('estado_usuario', $usuario->estado);
+                        Session::set('estado_usuario', $usuario->estado ?? 1);
                         Session::set('usuario_id', $usuario->id);
                         //Registro el acceso
                         Acceso::setAcceso(Acceso::ENTRADA, $usuario->id);
-                        //Flash::info("¡ Bienvenido <strong>$usuario->nombre".' '."$usuario->apellido</strong> !.");
-                        Flash::info("¡ Bienvenido <strong>$usuario->nombre</strong> !.");
+                        if ($usuario->apellido != '') {
+                            Flash::info("¡ Bienvenido <strong>$usuario->nombre" . ' ' . "$usuario->apellido</strong> !.");
+                        } else {
+                            Flash::info("¡ Bienvenido <strong>$usuario->nombre</strong> !.");
+                        }
                         return TRUE;
                     } else {
 
                         Flash::error(DwAuth::getError());
                     }
                 } else {
-                    Flash::info('La llave de acceso ha caducado. <br />Por favor recarga la página');
+                    Flash::info('La llave de acceso ha caducado. <br>Por favor recarga la página');
                 }
             }
         } else {
@@ -204,8 +207,6 @@ class Usuario extends ActiveRecord
         $join   = 'INNER JOIN perfil ON perfil.id = usuario.perfil_id ';
         $conditions = "usuario.perfil_id != " . Perfil::SUPER_USUARIO; //Por el super usuario
         $conditions .= " AND usuario.id IS NOT NULL ";
-        $order = 'nombre ASC';
-
         $order = 'nombre ASC';
 
         return $this->find("columns: $columns", "join: $join", "conditions: $conditions", "order: $order");

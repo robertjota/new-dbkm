@@ -43,7 +43,7 @@ class DwButton
      */
     public static function reset($form = 'form-1', $formUpdate = FALSE, $icon = 'fa-undo')
     {
-        $title = (!$formUpdate) ? 'Clear form' : 'Restore default values';
+        $title = (!$formUpdate) ? 'Limpiar' : 'Resetear Formulario';
         $attrs = array();
         $attrs['class'] = 'btn-info';
         $attrs['title'] = $title;
@@ -61,7 +61,7 @@ class DwButton
     public static function cancel($redir = NULL, $title = '', $icon = 'fa-ban', $etq = 'CANCELAR')
     {
         $attrs = [];
-        $attrs['class'] = 'btn-default';
+        $attrs['class'] = 'btn-secondary';
         $attrs['title'] = empty($title) ? 'Cancelar' : $title;
         if (empty($redir)) {
             $attrs['onclick'] = 'history.back()';
@@ -81,7 +81,7 @@ class DwButton
     public static function back($redir = NULL, $title = '', $icon = 'fa-undo')
     {
         $attrs = array();
-        $attrs['class'] = 'btn-success';
+        $attrs['class'] = 'btn-warning';
         $attrs['rel'] = 'tooltip';
         $attrs['title'] = empty($title) ? 'ATRAS' : $title;
         if (empty($redir)) {
@@ -104,10 +104,10 @@ class DwButton
         $attrs = array();
         $attrs['class'] = 'btn-warning';
         $attrs['rel'] = 'tooltip';
-        $attrs['title'] = empty($title) ? "GO TO" : $title;
+        $attrs['title'] = empty($title) ? "IR A" : $title;
         if (empty($redir)) {
             $attrs['class'] .= ' btn-back';
-            return self::showButton($icon, $attrs, 'go to', 'button');
+            return self::showButton($icon, $attrs, 'ir a', 'button');
         } else {
             return DwHtml::button($redir, $etq, $attrs, $icon);
         }
@@ -191,7 +191,7 @@ class DwButton
      * @param string $text Texto a mostrar
      * @return type
      */
-    public static function submit($title = 'Guardar registro', $icon = 'fa-save', $attrs = NULL, $text = 'Save')
+    public static function submit($title = 'Guardar registro', $icon = 'fa-save', $attrs = NULL, $text = 'Guardar')
     {
         return self::save($title, $icon, $attrs, $text);
     }

@@ -15,20 +15,19 @@
                     <div class="block-options">
                         <?php echo DwHtml::button("sistema/usuarios/agregar/", 'Nuevo', NULL, 'fa-check-square'); ?>
                     </div>
-                    <button type="button" class="btn btn-primary js-swal-simple">Ejemplo</button>
                 </div>
                 <div class="block-content">
                     <div class="table-responsive mb-3">
                         <table id="tUsuarios" class="table table-bordered table-vcenter table-hover js-dataTable-buttons table-striped table-condensed table-responsive">
                             <thead>
                                 <tr>
-                                    <th>#</th>
-                                    <th class="col-hidden text-center" data-search="login" data-order="login">USUARIO</th>
-                                    <th class="text-center" data-search="nombre" data-order="nombre">NOMBRE</th>
-                                    <th class="col-hidden text-center" data-search="email" data-order="email">EMAIL</th>
-                                    <th class="col-hidden text-center" data-search="perfil" data-order="perfil">PERFIL</th>
-                                    <th class="col-hidden text-center" data-order="estado_usuario">ESTADO</th>
-                                    <th class=""></th>
+                                    <th class="text-center">#</th>
+                                    <th class="text-center">USUARIO</th>
+                                    <th class="text-center">NOMBRE</th>
+                                    <th class="text-center">EMAIL</th>
+                                    <th class="text-center">PERFIL</th>
+                                    <th class="text-center">ESTADO</th>
+                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -52,22 +51,15 @@
                                                     '<span class="badge bg-success">Activo</span>' :
                                                     '<span class="badge bg-danger">Bloqueado</span>'; ?>
                                             </button></td>
-                                        <td class="text-center" width="5%">
-                                            <div class="dropdown dropstart">
-                                                <a href="javascript:void(0)" class="text-muted" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                                                    <i class="fas fa-ellipsis-v fs-4"></i>
-                                                </a>
-                                                <ul class="dropdown-menu text-center" aria-labelledby="dropdownMenuButton">
-                                                    <li class="dropdown-item">
-                                                        <?php echo DwHtml::buttonTable('Ver usuario', "sistema/usuarios/ver/$key_shw/", NULL, 'info', 'fa-search'); ?>
-                                                        <?php if ($usuario->estado == Usuario::ACTIVO) { ?>
-                                                            <?php echo DwHtml::buttonTable('Bloquear usuario', "sistema/usuarios/estado/bloquear/$key_ina/", NULL, 'success', 'fa-flag'); ?>
-                                                        <?php } else { ?>
-                                                            <?php echo DwHtml::buttonTable('Reactivar usuario', "sistema/usuarios/estado/reactivar/$key_rea/", NULL, 'danger', 'fa-flag'); ?>
-                                                        <?php } ?>
-                                                    </li>
-                                                </ul>
-                                            </div>
+                                        <td class="text-center" width="10%" nowrap>
+
+                                            <?php echo DwHtml::buttonTable('Ver usuario', "sistema/usuarios/ver/$key_shw/", NULL, 'info', 'fa-search'); ?>
+                                            <?php if ($usuario->estado == Usuario::ACTIVO) { ?>
+                                                <?php echo DwHtml::buttonTable('Bloquear usuario', "sistema/usuarios/estado/bloquear/$key_ina/", NULL, 'success', 'fa-flag'); ?>
+                                            <?php } else { ?>
+                                                <?php echo DwHtml::buttonTable('Reactivar usuario', "sistema/usuarios/estado/reactivar/$key_rea/", NULL, 'danger', 'fa-flag'); ?>
+                                            <?php } ?>
+
                                         </td>
                                     </tr>
                                     <?php $counter++; ?>

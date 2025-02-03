@@ -14,11 +14,14 @@ class PageFilter implements FilterInterface {
      * @param string $s
      * @param array $options
      * @return string
-     */    
+     */
     public static function execute ($s, $options) {
+        if ($s === null) {
+            return '';
+        }
         $patron = '/[^0-9]/';
-        return preg_replace($patron, '', (string) $s);        
-    }    
+        return preg_replace($patron, '', (string) $s);
+    }
 
 }
 ?>
