@@ -34,7 +34,7 @@
                                 <?php $counter = 1; ?>
                                 <?php foreach ($usuarios ?? [] as $usuario) : ?>
                                     <?php $key_shw = Security::setKey($usuario->id, 'shw_usuario'); ?>
-                                    <?php $key_upt = Security::setKey($usuario->id, 'upt_usuario'); ?>
+                                    <?php $key_upd = Security::setKey($usuario->id, 'upd_usuario'); ?>
                                     <?php $key_ina = Security::setKey($usuario->id, 'bloquear_usuario'); ?>
                                     <?php $key_rea = Security::setKey($usuario->id, 'reactivar_usuario'); ?>
                                     <tr>
@@ -53,11 +53,11 @@
                                             </button></td>
                                         <td class="text-center" width="10%" nowrap>
 
-                                            <?php echo DwHtml::buttonTable('Ver usuario', "sistema/usuarios/ver/$key_shw/", NULL, 'info', 'fa-search'); ?>
+                                            <?php echo DwHtml::buttonTable('Editar usuario', "sistema/usuarios/editar/$key_upd/", NULL, 'outline-warning', 'fa-pencil'); ?>
                                             <?php if ($usuario->estado == Usuario::ACTIVO) { ?>
-                                                <?php echo DwHtml::buttonTable('Bloquear usuario', "sistema/usuarios/estado/bloquear/$key_ina/", NULL, 'success', 'fa-flag'); ?>
+                                                <?php echo DwHtml::buttonTable('Bloquear usuario', "sistema/usuarios/estado/bloquear/$key_ina/", NULL, 'outline-success', 'fa-flag'); ?>
                                             <?php } else { ?>
-                                                <?php echo DwHtml::buttonTable('Reactivar usuario', "sistema/usuarios/estado/reactivar/$key_rea/", NULL, 'danger', 'fa-flag'); ?>
+                                                <?php echo DwHtml::buttonTable('Reactivar usuario', "sistema/usuarios/estado/reactivar/$key_rea/", NULL, 'outline-danger', 'fa-flag'); ?>
                                             <?php } ?>
 
                                         </td>
