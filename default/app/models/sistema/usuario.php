@@ -8,7 +8,7 @@
  * @package     Models
  */
 
-Load::models('sistema/perfil', 'sistema/recurso', 'sistema/recurso_perfil', 'sistema/acceso');
+Load::models('sistema/estado_usuario', 'sistema/perfil', 'sistema/recurso', 'sistema/recurso_perfil', 'sistema/acceso');
 
 class Usuario extends ActiveRecord
 {
@@ -17,26 +17,12 @@ class Usuario extends ActiveRecord
     public $logger = FALSE;
 
     /**
-     * Constante para definir el perfil de Super Usuario
-     */
-    const SUPER_USUARIO = 1;
-
-    /**
-     * Constante para definir un usuario como activo
-     */
-    const ACTIVO = 1;
-
-    /**
-     * Constante para definir un usuario como inactivo
-     */
-    const BLOQUEADO = 2;
-
-    /**
      * Método para definir las relaciones y validaciones
      */
     protected function initialize()
     {
         $this->belongs_to('perfil');
+        $this->has_many('estado_usuario');
     }
 
     /**
@@ -45,7 +31,7 @@ class Usuario extends ActiveRecord
      */
     public static function getInnerEstado()
     {
-        return "INNER JOIN (SELECT usuario_id, estado_usuario, descripcion, estado_usuario_at FROM (SELECT * FROM estado_usuario ORDER BY estado_usuario.id DESC ) AS estado_usuario GROUP BY estado_usuario.usuario_id ) AS estado_usuario ON estado_usuario.usuario_id = usuario.id ";
+        return "INNER JOIN (SELECT usuario_id, estado_usuario, descripcion, estado_usuario_at FROM estado_usuario WHERE (usuario_id, estado_usuario_at) IN (SELECT usuario_id, MAX(estado_usuario_at) FROM estado_usuario GROUP BY usuario_id)) AS estado_usuario ON estado_usuario.usuario_id = usuario.id ";
     }
 
     /**
@@ -71,9 +57,9 @@ class Usuario extends ActiveRecord
 
                     if (DwAuth::login(array('login' => $user), array('password' => $pass), $mode)) {
                         $usuario = self::getUsuarioLogueado();
-                        if ($usuario->perfil_id != Perfil::SUPER_USUARIO && ($usuario->estado != Usuario::ACTIVO)) {
+                        if ($usuario->perfil_id != Perfil::SUPER_USUARIO && ($usuario->estado_usuario != EstadoUsuario::ACTIVO)) {
                             DwAuth::logout();
-                            Flash::error('Lo sentimos pero tu cuenta se encuentra inactiva. <br />Si esta información es incorrecta contacta al administrador del sistema.');
+                            Flash::error('Lo sentimos pero tu cuenta se encuentra inactiva. <br>Si esta información es incorrecta contacta al administrador del sistema.');
                             return false;
                         }
 
@@ -85,7 +71,7 @@ class Usuario extends ActiveRecord
                         Session::set('usuario', $usuario->login);
                         Session::set('foto', $usuario->fotografia);
                         Session::set('perfil_id', $usuario->perfil_id);
-                        Session::set('estado_usuario', $usuario->estado ?? 1);
+                        Session::set('estado_usuario', $usuario->estado_usuario);
                         Session::set('usuario_id', $usuario->id);
                         //Registro el acceso
                         Acceso::setAcceso(Acceso::ENTRADA, $usuario->id);
@@ -115,8 +101,9 @@ class Usuario extends ActiveRecord
      */
     public static function getUsuarioLogueado()
     {
-        $columns = 'usuario.*, perfil.perfil, perfil.plantilla';
+        $columns = 'usuario.*, perfil.perfil, estado_usuario.estado_usuario, perfil.plantilla';
         $join = "INNER JOIN perfil ON perfil.id = usuario.perfil_id ";
+        $join .= self::getInnerEstado();
         $conditions = "usuario.id = '" . Session::get('id') . "' ";
         $obj = new Usuario();
         return $obj->find_first("columns: $columns", "join: $join", "conditions: $conditions");
@@ -126,7 +113,7 @@ class Usuario extends ActiveRecord
     /**
      * Método para listar los usuarios por perfil
      */
-    public function getUsuarioPorPerfil($perfil, $order = 'order.nombre.asc')
+    public function getUsuarioPorPerfil($perfil, $order = 'id ASC')
     {
         $perfil = Filter::get($perfil, 'int');
         if (empty($perfil)) {
@@ -136,24 +123,7 @@ class Usuario extends ActiveRecord
         $join = 'INNER JOIN perfil ON perfil.id = usuario.perfil_id ';
         $conditions = "perfil.id = $perfil";
 
-        $order = $this->get_order($order, 'nombre', array(
-            'login' => array(
-                'ASC' => 'usuario.login ASC, usuario.nombre ASC',
-                'DESC' => 'usuario.login DESC, usuario.nombre DESC'
-            ),
-            'nombre' => array(
-                'ASC' => 'usuario.nombre ASC',
-                'DESC' => 'usuario.nombre DESC'
-            ),
-            'email' => array(
-                'ASC' => 'usuario.email ASC,  usuario.nombre ASC',
-                'DESC' => 'usuario.email DESC,  usuario.nombre DESC'
-            ),
-            'estado' => array(
-                'ASC' => 'usuario.estado ASC,  usuario.nombre ASC',
-                'DESC' => 'usuario.estado DESC,  usuario.nombre DESC'
-            )
-        ));
+        $order = $order ? $order : ' nombre ASC';
 
         return $this->find("columns: $columns", "join: $join", "conditions: $conditions", "order: $order");
     }
@@ -167,31 +137,15 @@ class Usuario extends ActiveRecord
         if (strlen($value) <= 2 or ($value == 'none')) {
             return NULL;
         }
-        $columns = 'usuario.*, perfil.perfil';
-        $join = 'INNER JOIN perfil ON perfil.id = usuario.perfil_id ';
+        $columns = 'usuario.*, perfil.perfil, estado_usuario.estado_usuario, estado_usuario.descripcion';
+        $join = self::getInnerEstado();
+        $join .= 'INNER JOIN perfil ON perfil.id = usuario.perfil_id ';
         $conditions = "usuario.perfil_id != " . Perfil::SUPER_USUARIO; //Por el super usuario
 
-        $order = $this->get_order($order, 'nombre', array(
-            'login' => array(
-                'ASC' => 'usuario.login ASC, usuario.nombre ASC',
-                'DESC' => 'usuario.login DESC, usuario.nombre DESC'
-            ),
-            'nombre' => array(
-                'ASC' => 'usuario.nombre ASC',
-                'DESC' => 'usuario.nombre DESC'
-            ),
-            'email' => array(
-                'ASC' => 'usuario.email ASC, usuario.nombre ASC',
-                'DESC' => 'usuario.email DESC, usuario.nombre DESC'
-            ),
-            'estado' => array(
-                'ASC' => 'usuario.estado ASC, usuario.nombre ASC',
-                'DESC' => 'usuario.estado DESC, usuario.nombre DESC'
-            )
-        ));
+        $order = $order ? $order : ' nombre ASC';
 
         //Defino los campos habilitados para la búsqueda
-        $fields = array('login', 'nombre', 'apellido', 'email', 'perfil', 'estado');
+        $fields = array('nombre', 'apellido', 'email', 'perfil', 'estado');
         if (!in_array($field, $fields)) {
             $field = 'nombre';
         }
@@ -203,8 +157,9 @@ class Usuario extends ActiveRecord
 
     public function getListadoUsuario()
     {
-        $columns = 'usuario.*, perfil.perfil ';
-        $join   = 'INNER JOIN perfil ON perfil.id = usuario.perfil_id ';
+        $columns = 'usuario.*, perfil.perfil,estado_usuario.estado_usuario, estado_usuario.descripcion ';
+        $join = self::getInnerEstado();
+        $join .= 'INNER JOIN perfil ON perfil.id = usuario.perfil_id ';
         $conditions = "usuario.perfil_id != " . Perfil::SUPER_USUARIO; //Por el super usuario
         $conditions .= " AND usuario.id IS NOT NULL ";
         $order = 'nombre ASC';
@@ -283,7 +238,7 @@ class Usuario extends ActiveRecord
     protected function before_save()
     {
         if (Session::get('perfil_id') != Perfil::SUPER_USUARIO) { //Solo el super usuario puede hacer esto
-            //Verifico las exclusiones de los nombres de usuarios del config.ini
+            //Verifico las exclusiones de los nombres de usuarios del config.php
             $exclusion = DwConfig::read('config', array('custom' => 'login_exclusion'));
             $exclusion = explode(',', $exclusion);
             if (!empty($exclusion)) {
@@ -309,7 +264,13 @@ class Usuario extends ActiveRecord
     /**
      * Callback que se ejecuta despues de insertar un usuario
      */
-    protected function after_create() {}
+    protected function after_create()
+    {
+        if (!EstadoUsuario::setEstadoUsuario('registrar', array('usuario_id' => $this->id, 'descripcion' => 'Activado por registro inicial'))) {
+            Flash::error('Se ha producido un error interno al activar el usuario. Por favor intenta nuevamente.');
+            return 'cancel';
+        }
+    }
 
     /**
      * Método para obtener la información de un usuario
@@ -322,32 +283,10 @@ class Usuario extends ActiveRecord
         if (!$usuario) {
             return NULL;
         }
-        $columns = 'usuario.*, perfil.perfil, perfil.plantilla';
-        $join = 'INNER JOIN perfil ON perfil.id = usuario.perfil_id ';
+        $columns = 'usuario.*, perfil.perfil, perfil.plantilla, estado_usuario.estado_usuario, estado_usuario.descripcion';
+        $join = self::getInnerEstado();
+        $join .= 'INNER JOIN perfil ON perfil.id = usuario.perfil_id ';
         $conditions = "usuario.id = $usuario";
         return $this->find_first("columns: $columns", "join: $join", "conditions: $conditions");
-    }
-
-    public static function setEstadoUsuario($accion, $data, $optData = NULL)
-    {
-        $accion = strtolower($accion);
-        $obj = new Usuario($data);
-        if ($optData) {
-            $obj->dump_result_self($optData);
-        }
-        //Verifico el estado actual
-        $estado = $obj->estado;
-
-        //Verifico las acciones
-        if ($accion == 'registrar') {
-            $obj->estado = self::ACTIVO;
-        } else if (($accion == 'bloquear') && (empty($estado) or $estado == self::ACTIVO)) {
-            $obj->estado = self::BLOQUEADO;
-        } else if (($accion == 'reactivar') && ($estado != self::ACTIVO)) {
-            $obj->estado = self::ACTIVO;
-        } else {
-            return FALSE;
-        }
-        return $obj->save($obj->estado);
     }
 }

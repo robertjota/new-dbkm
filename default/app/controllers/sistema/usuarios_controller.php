@@ -113,16 +113,17 @@ class UsuariosController extends BackendController
             return Redirect::toAction('listar');
         }
 
-        if ($tipo == 'reactivar' && $usuario->estado == Usuario::ACTIVO) {
+        if ($tipo == 'reactivar' && $usuario->estado_usuario == EstadoUsuario::ACTIVO) {
             Flash::info('El usuario ya se encuentra activo.');
             return Redirect::toAction('listar');
-        } else if ($tipo == 'bloquear' && $usuario->usuario == Usuario::BLOQUEADO) {
+        } else if ($tipo == 'bloquear' && $usuario->estado_usuario == EstadoUsuario::BLOQUEADO) {
             Flash::info('El usuario ya se encuentra bloqueado.');
             return Redirect::toAction('listar');
         }
 
         if (Input::hasPost('estado_usuario')) {
-            if (Usuario::setEstadoUsuario($tipo, Input::post('estado_usuario'), ['usuario_id' => $usuario->id])) {
+            $data = Input::post('estado_usuario');
+            if (EstadoUsuario::setEstadoUsuario($tipo, $data, ['usuario_id' => $usuario->id])) {
                 ($tipo == 'reactivar') ? Flash::valid('El usuario se ha reactivado correctamente!') : Flash::valid('El usuario se ha bloqueado correctamente!');
                 return Redirect::toAction('listar');
             }
@@ -158,6 +159,30 @@ class UsuariosController extends BackendController
         $this->page_title = 'Información del usuario';
     }
 
+    /**
+     * Método para ver los estados
+     */
+    public function estados($key, $page = 'page.1')
+    {
+        if (!$id = Security::getKey($key, 'shw_estados', 'int')) {
+            return Redirect::toAction('listar');
+        }
+
+        $usuario = new Usuario();
+        if (!$usuario->getInformacionUsuario($id)) {
+            Flash::error('Lo sentimos, no se pudo configurar la información del usuario');
+            return Redirect::toAction('listar');
+        }
+
+        $page = (Filter::get($page, 'page') > 0) ? Filter::get($page, 'page') : 1;
+
+        $estado = new EstadoUsuario();
+        $this->estados  = $estado->getListadoEstadoUsuario($usuario->id, $page);
+        $this->key      = $key;
+        $this->usuario  = $usuario;
+
+        $this->page_title = 'Seguimiento a estados del usuario';
+    }
 
     /**
      * Método para ver los accesos

@@ -1,85 +1,93 @@
 <?php View::flash(); ?>
+<!-- DataTables CSS -->
+<link rel="stylesheet" href="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-bs5/css/dataTables.bootstrap5.min.css">
+<link rel="stylesheet" href="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-buttons-bs5/css/buttons.bootstrap5.min.css">
+<link rel="stylesheet" href="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-responsive-bs5/css/responsive.bootstrap5.min.css">
+<!-- END DataTables CSS -->
 
-<div class="container shell-view">
-
-    <?php View::process($page_module, $page_title, $set_title); ?>
-
-    <?php View::partial('subnav/usuario/principal', FALSE, array('id'=>$usuario->id)); ?>
-
-    <?php echo DwForm::open(); ?>
-
-        <div class="row">
-            <div class="col-md-4 text-right visible-xs visible-sm">
-                <div class="col-md-6 profile-picture text-center text-middle shadow-dark" style="margin-top: 5px">
-                    <?php echo DwHtml::img("upload/personas/$usuario->fotografia", $usuario->nombre.' '.$usuario->apellido, array('id'=>'img-persona')); ?>
-                </div>
-            </div>
+<div class="content">
+    <div class="card block-rounded shadow">
+        <div class="card-header text-end">
+            <?= DwButton::back('sistema/usuarios/listar', 'Atras', 'fa-undo', 'Atras'); ?>
+            <?= DwHtml::button("sistema/usuarios/accesos/" . Security::setKey($usuario->id, 'shw_accesos'), 'Accesos', array('class' => 'btn-info'), 'fa-exchange'); ?>
+            <?= DwHtml::button("sistema/usuarios/editar/" . Security::setKey($usuario->id, 'upd_usuario'), 'Editar', array('class' => 'btn-info'), 'fa-pencil'); ?>
         </div>
+        <div class="card-body ">
 
-        <div class="row">
-            <div class="col-md-8">
-                <div class="row">
-                    <div class="col-md-6">
-                        <?php echo DwForm::text('usuario.nombre', array('class'=>' input-readonly'), $usuario->nombre, 'Nombre'); ?>
+            <?= DwForm::open(); ?>
+            <div class="row">
+                <div class="col-md-9">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <?= DwForm::text('usuario.nombre', array('class' => ' input-readonly'), $usuario->nombre, 'Nombre'); ?>
+                        </div>
+                        <div class="col-md-6">
+                            <?= DwForm::text('usuario.apellido', array('class' => ' input-readonly'), $usuario->apellido, 'Apellido'); ?>
+                        </div>
                     </div>
-                    <div class="col-md-6">
-                        <?php echo DwForm::text('usuario.apellido', array('class'=>' input-readonly'), $usuario->apellido, 'Apellido'); ?>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <?= DwForm::email('usuario.email', array('class' => ' input-readonly'), $usuario->email, 'Email'); ?>
+                        </div>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <?php echo DwForm::email('usuario.email', array('class'=>' input-readonly'), $usuario->email, 'Email'); ?>
+
+                <div class="col-md-3 text-center hidden-xs hidden-sm">
+                    <div class="shadow-dark" style="margin-top: 5px">
+                        <?= DwHtml::img("upload/personas/$usuario->fotografia", $usuario->nombre . ' ' . $usuario->apellido, array('id' => 'img-persona', 'style' => 'max-width: 150px;')); ?>
                     </div>
                 </div>
             </div>
+            <?= DwForm::close(); ?>
 
-            <div class="col-md-4 text-right hidden-xs hidden-sm">
-                <div class="col-md-6 profile-picture text-center text-middle shadow-dark" style="margin-top: 5px">
-                    <?php echo DwHtml::img("upload/personas/$usuario->fotografia", $usuario->nombre.' '.$usuario->apellido, array('id'=>'img-persona')); ?>
+            <hr>
+
+            <div class="content">
+                <div class="table-responsive mb-3">
+                    <table id="tEstados" class="table table-bordered table-hover table-striped table-condensed table-responsive js-dataTable-full">
+                        <thead>
+                            <tr>
+                                <th>NUM</th>
+                                <th>FECHA</th>
+                                <th>DESCRIPCION</th>
+                                <th>ESTADO</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php $counter = 1 ?>
+                            <?php if ($estados) { ?>
+                                <?php foreach ($estados as $estado): ?>
+                                    <tr>
+                                        <td><?= $counter; ?></td>
+                                        <td><?= date("d-m-Y", strtotime($estado->estado_usuario_at)); ?></td>
+                                        <td><?= $estado->descripcion; ?></td>
+                                        <td><?= ($estado->estado_usuario == EstadoUsuario::ACTIVO) ? '<span class="label label-success" title="' . $usuario->descripcion . '" rel="tooltip">Activo</span>' : '<span class="label label-danger" title="' . $usuario->descripcion . '" rel="tooltip">Bloqueado</span>';; ?></td>
+                                    </tr>
+                                    <?php $counter++; ?>
+                                <?php endforeach; ?>
+                            <?php } ?>
+                        </tbody>
+                    </table>
                 </div>
-            </div>
-        </div>
-
-    <?php echo DwForm::close(); ?>
-
-    <hr />
-
-    <div class="container-overflow">
-
-        <table class="table table-bordered table-hover table-striped table-condensed table-responsive">
-            <thead>
-                <tr>
-                    <th>NUM</th>
-                    <th>FECHA</th>
-                    <th>DESCRIPCION</th>
-                    <th>ESTADO</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php if($estados->items) { ?>
-                <?php foreach($estados->items as $estado): ?>
-                <tr>
-                    <td><?php echo $estados->counter; ?></td>
-                    <td><?php echo $estado->estado_usuario_at; ?></td>
-                    <td><?php echo $estado->descripcion; ?></td>
-                    <td><?php echo ($estado->estado_usuario == EstadoUsuario::ACTIVO) ? '<span class="label label-success" title="'.$usuario->descripcion.'" rel="tooltip">Activo</span>' : '<span class="label label-danger" title="'.$usuario->descripcion.'" rel="tooltip">Bloqueado</span>'; ; ?></td>
-                </tr>
-                <?php $estados->counter++; ?>
-                <?php endforeach; ?>
-                <?php } ?>
-            </tbody>
-        </table>
-
-        <?php View::partial('paginators/default', FALSE, array('page'=>$estados, 'url'=>"sistema/usuarios/estados/$key/")); ?>
-
-    </div>
-
-    <div class="row">
-        <div class="form-actions">
-            <div class="text-left">
-                <?php echo DwButton::back(); ?>
             </div>
         </div>
     </div>
+    <?php SectionManager::start('scripts') ?>
+    <!-- DataTables JS Plugins -->
+    <script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-bs5/js/dataTables.bootstrap5.min.js"></script>
+    <script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-responsive-bs5/js/responsive.bootstrap5.min.js"></script>
+    <script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-buttons/dataTables.buttons.min.js"></script>
+    <script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-buttons-bs5/js/buttons.bootstrap5.min.js"></script>
+    <script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-buttons-jszip/jszip.min.js"></script>
+    <script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-buttons-pdfmake/pdfmake.min.js"></script>
+    <script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-buttons-pdfmake/vfs_fonts.js"></script>
+    <script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-buttons/buttons.print.min.js"></script>
+    <script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-buttons/buttons.html5.min.js"></script>
 
-</div>
+    <!-- DataTables JS Code -->
+    <script src="<?= PUBLIC_PATH ?>template/coreui/assets/_js/pages/be_tables_datatables.js"></script>
+    <script src="<?= PUBLIC_PATH ?>template/coreui/assets/_js/pages/be_comp_dialogs.js"></script>
+
+    <?php SectionManager::end('scripts') ?>

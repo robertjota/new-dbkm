@@ -1,10 +1,16 @@
 <?php View::flash(); ?>
+<!-- DataTables CSS -->
+<link rel="stylesheet" href="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-bs5/css/dataTables.bootstrap5.min.css">
+<link rel="stylesheet" href="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-buttons-bs5/css/buttons.bootstrap5.min.css">
+<link rel="stylesheet" href="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-responsive-bs5/css/responsive.bootstrap5.min.css">
+<!-- END DataTables CSS -->
 
 <div class="content">
     <div class="card block-rounded shadow">
         <div class="card-header text-end">
+            <?= DwButton::back('sistema/usuarios/listar', 'Atras', 'fa-undo', 'Atras'); ?>
+            <?= DwHtml::button("sistema/usuarios/estados/" . Security::setKey($usuario->id, 'shw_estados'), 'Estados', array('class' => 'btn-info'), 'fa-exchange'); ?>
             <?= DwHtml::button("sistema/usuarios/editar/" . Security::setKey($usuario->id, 'upd_usuario'), 'Editar', array('class' => 'btn-info'), 'fa-pencil'); ?>
-            <?= DwHtml::button("sistema/usuarios/accesos/" . Security::setKey($usuario->id, 'shw_accesos'), 'Accesos', array('class' => 'btn-info'), 'fa-exchange'); ?>
         </div>
         <div class="card-body ">
             <?php echo DwForm::open(); ?>
@@ -28,51 +34,63 @@
 
                 <div class="col-md-3 text-center hidden-xs hidden-sm">
                     <div class="shadow-dark" style="margin-top: 5px">
-                        <?php echo DwHtml::img("upload/personas/$usuario->fotografia", $usuario->nombre . ' ' . $usuario->apellido, array('id' => 'img-persona')); ?>
+                        <?php echo DwHtml::img("upload/personas/$usuario->fotografia", $usuario->nombre . ' ' . $usuario->apellido, array('id' => 'img-persona', 'style' => 'max-width: 150px;')); ?>
                     </div>
                 </div>
             </div>
 
             <?php echo DwForm::close(); ?>
 
-            <hr />
+            <hr>
 
-            <div class="container-overflow">
-
-                <table class="table table-bordered table-hover table-striped table-condensed table-responsive">
-                    <thead>
-                        <tr>
-                            <th>NUM</th>
-                            <th>FECHA</th>
-                            <th>IP</th>
-                            <th>TIPO</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php if ($accesos->items) { ?>
-                            <?php foreach ($accesos->items as $acceso): ?>
-                                <tr>
-                                    <td><?php echo $accesos->counter; ?></td>
-                                    <td><?php echo date("Y-m-d", strtotime($acceso->acceso_at)); ?></td>
-                                    <td><?php echo date("H:i:s", strtotime($acceso->acceso_at)); ?></td>
-                                    <td><?php echo $acceso->ip; ?></td>
-                                    <td><?php echo ($acceso->tipo_acceso == Acceso::ENTRADA) ? '<span class="label label-success">Entrada</span>' : '<span class="label label-danger">Salida</span>';; ?></td>
-                                </tr>
-                                <?php $accesos->counter++; ?>
-                            <?php endforeach; ?>
-                        <?php } ?>
-                    </tbody>
-                </table>
-
-
-            </div>
-
-            <div class="row">
-                <div class="form-actions">
-                    <div class="text-left">
-                        <?php echo DwButton::back(); ?>
-                    </div>
+            <div class="content">
+                <div class="table-responsive mb-3">
+                    <table id="tAccesos" class="table table-bordered table-hover table-striped table-condensed table-responsive js-dataTable-full">
+                        <thead>
+                            <tr>
+                                <th>NUM</th>
+                                <th>FECHA</th>
+                                <th>HORA</th>
+                                <th>IP</th>
+                                <th>TIPO</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php if ($accesos->items) { ?>
+                                <?php foreach ($accesos->items as $acceso): ?>
+                                    <tr>
+                                        <td><?php echo $accesos->counter; ?></td>
+                                        <td><?php echo date("Y-m-d", strtotime($acceso->acceso_at)); ?></td>
+                                        <td><?php echo date("H:i:s", strtotime($acceso->acceso_at)); ?></td>
+                                        <td><?php echo $acceso->ip; ?></td>
+                                        <td><?php echo ($acceso->tipo_acceso == Acceso::ENTRADA) ? '<span class="label label-success">Entrada</span>' : '<span class="label label-danger">Salida</span>';; ?></td>
+                                    </tr>
+                                    <?php $accesos->counter++; ?>
+                                <?php endforeach; ?>
+                            <?php } ?>
+                        </tbody>
+                    </table>
                 </div>
             </div>
-
         </div>
+    </div>
+
+    <?php SectionManager::start('scripts') ?>
+    <!-- DataTables JS Plugins -->
+    <script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-bs5/js/dataTables.bootstrap5.min.js"></script>
+    <script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-responsive-bs5/js/responsive.bootstrap5.min.js"></script>
+    <script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-buttons/dataTables.buttons.min.js"></script>
+    <script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-buttons-bs5/js/buttons.bootstrap5.min.js"></script>
+    <script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-buttons-jszip/jszip.min.js"></script>
+    <script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-buttons-pdfmake/pdfmake.min.js"></script>
+    <script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-buttons-pdfmake/vfs_fonts.js"></script>
+    <script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-buttons/buttons.print.min.js"></script>
+    <script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-buttons/buttons.html5.min.js"></script>
+
+    <!-- DataTables JS Code -->
+    <script src="<?= PUBLIC_PATH ?>template/coreui/assets/_js/pages/be_tables_datatables.js"></script>
+    <script src="<?= PUBLIC_PATH ?>template/coreui/assets/_js/pages/be_comp_dialogs.js"></script>
+
+    <?php SectionManager::end('scripts') ?>

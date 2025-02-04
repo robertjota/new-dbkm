@@ -53,6 +53,7 @@ class LoginController extends BackendController
                 return Redirect::to('admin');
             } else {
                 //Se soluciona lo de la llave de seguridad
+                Flash::error('Los datos introducidos no son correctos.');
                 return Redirect::toAction('entrar/', 3);
             }
         } else if (DwAuth::isLogged()) {
@@ -67,12 +68,13 @@ class LoginController extends BackendController
      */
     public function salir($js = '')
     {
+        View::select('entrar');
         if (Usuario::setSession('close')) {
             Flash::valid("La sesión ha sido cerrada correctamente.");
         }
         if (!empty($js)) {
             Flash::info('Activa el uso de JavaScript en su navegador para poder continuar.');
         }
-        return Redirect::toAction('entrar/');
+        return Redirect::toAction('entrar/', 3);
     }
 }

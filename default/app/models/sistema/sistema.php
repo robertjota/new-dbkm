@@ -204,7 +204,7 @@ class Sistema
                 $contador++;
             }
         }
-        $result = DwUtils::orderArray($new_log, 'item', TRUE);
+        $result = DwUtils::orderArray($new_log, 'item');
         if ($page > 0) {
             //Pagino el array
             $paginate = new DwPaginate();

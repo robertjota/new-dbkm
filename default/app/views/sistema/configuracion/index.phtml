@@ -1,9 +1,4 @@
 <?php View::flash(); ?>
-<!-- DataTables CSS -->
-<link rel="stylesheet" href="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-bs5/css/dataTables.bootstrap5.min.css">
-<link rel="stylesheet" href="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-buttons-bs5/css/buttons.bootstrap5.min.css">
-<link rel="stylesheet" href="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-responsive-bs5/css/responsive.bootstrap5.min.css">
-<!-- END DataTables CSS -->
 
 <!-- Page Content -->
 <div class="content">
@@ -106,21 +101,19 @@
                                 <div id="append-config"></div>
                                 <p>Los campos creados se definirán automáticamente al cargar el aplicativo y se almacenarán en el config.ini</p>
                                 <p>Para eliminar una variable puede colocar el valor "delete-var" en el input.</p>
-
                             </fieldset>
-
                         </div>
                     </div>
-
-                    <div class="row">
+                    <hr>
+                    <div class="row mb-3 text-end">
                         <div class="form-actions">
                             <?php echo DwForm::send('Guardar configuración'); ?>
                             <?php echo DwForm::cancel(); ?>
                         </div>
                     </div>
-
-
                     <?php echo DwForm::close(); ?>
-
-
                 </div>
+            </div>
+        </div>
+    </div>
+</div>

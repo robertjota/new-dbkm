@@ -45,16 +45,16 @@
                                         <td><?php echo $usuario->perfil; ?></td>
                                         <td class="text-center"><button class="status-toggle"
                                                 data-user-id="<?php echo $usuario->id; ?>"
-                                                data-status="<?php echo $usuario->estado; ?>"
+                                                data-status="<?php echo $usuario->estado_usuario; ?>"
                                                 data-key="<?php echo Security::setKey($usuario->id, 'change_status'); ?>">
-                                                <?= ($usuario->estado == Usuario::ACTIVO) ?
+                                                <?= ($usuario->estado_usuario == EstadoUsuario::ACTIVO) ?
                                                     '<span class="badge bg-success">Activo</span>' :
                                                     '<span class="badge bg-danger">Bloqueado</span>'; ?>
                                             </button></td>
                                         <td class="text-center" width="10%" nowrap>
 
                                             <?php echo DwHtml::buttonTable('Editar usuario', "sistema/usuarios/editar/$key_upd/", NULL, 'outline-warning', 'fa-pencil'); ?>
-                                            <?php if ($usuario->estado == Usuario::ACTIVO) { ?>
+                                            <?php if ($usuario->estado_usuario == EstadoUsuario::ACTIVO) { ?>
                                                 <?php echo DwHtml::buttonTable('Bloquear usuario', "sistema/usuarios/estado/bloquear/$key_ina/", NULL, 'outline-success', 'fa-flag'); ?>
                                             <?php } else { ?>
                                                 <?php echo DwHtml::buttonTable('Reactivar usuario', "sistema/usuarios/estado/reactivar/$key_rea/", NULL, 'outline-danger', 'fa-flag'); ?>
@@ -91,7 +91,5 @@
 <!-- DataTables JS Code -->
 <script src="<?= PUBLIC_PATH ?>template/coreui/assets/_js/pages/be_tables_datatables.js"></script>
 <script src="<?= PUBLIC_PATH ?>template/coreui/assets/_js/pages/be_comp_dialogs.js"></script>
-
-<script src="<?= PUBLIC_PATH ?>javascript/listar.js"></script>
 
 <?php SectionManager::end('scripts') ?>

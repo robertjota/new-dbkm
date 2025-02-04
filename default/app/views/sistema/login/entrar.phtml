@@ -1,32 +1,6 @@
 <?php View::flash(); ?>
 
-<script type="text/javascript">
-    function onSend() {
-        var bValid = true;
-        var login = $("#login");
-        var pass = $("#password");
-        bValid = bValid && checkLength(login, 4, 0, "El usuario");
-        if (bValid) {
-            removeError(login);
-        }
-        bValid = bValid && checkLength(pass, 4, 0, "La contraseña");
-        if (bValid) {
-            removeError(login);
-        }
-        bValid = bValid && checkRegexp(login, /^([A-ZÑ0-9])+$/i, "El usuario debe tener caracteres alfanuméricos.");
-        if (bValid) {
-            removeError(login);
-        }
-        bValid = bValid && checkRegexp(pass, /^([A-ZÑ0-9\.\-\#\?\_])+$/i, "La contraseña debe tener caracteres [A-Z]-[0-9]-[#?.-]");
-        if (bValid) {
-            removeError(pass);
-        }
-        return bValid;
-    }
-</script>
-
-
-<?php echo DwForm::open('sistema/login/entrar/', '', ['class' => 'no-ajax form-validate', 'id' => 'formulario', 'before-send' => 'onSend();']) ?>
+<?php echo DwForm::open('sistema/login/entrar/', '', ['class' => 'js-validation-signin', 'id' => 'formulario']) ?>
 <?php echo DwForm::focus('login'); ?>
 
 <div class="py-3">
