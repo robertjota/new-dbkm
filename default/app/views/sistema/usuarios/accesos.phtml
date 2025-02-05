@@ -8,8 +8,8 @@
 <div class="content">
     <div class="card block-rounded shadow">
         <div class="card-header text-end">
-            <?= DwButton::back('sistema/usuarios/listar', 'Atras', 'fa-undo', 'Atras'); ?>
-            <?= DwHtml::button("sistema/usuarios/estados/" . Security::setKey($usuario->id, 'shw_estados'), 'Estados', array('class' => 'btn-info'), 'fa-exchange'); ?>
+            <?= DwButton::back('sistema/usuarios/listar', 'Listar', 'fa-undo', 'Listar'); ?>
+            <?= DwHtml::button("sistema/usuarios/estados/" . Security::setKey($usuario->id, 'shw_estados'), 'Estado', array('class' => 'btn-info'), 'fa-check-square'); ?>
             <?= DwHtml::button("sistema/usuarios/editar/" . Security::setKey($usuario->id, 'upd_usuario'), 'Editar', array('class' => 'btn-info'), 'fa-pencil'); ?>
         </div>
         <div class="card-body ">
@@ -56,16 +56,17 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <?php if ($accesos->items) { ?>
-                                <?php foreach ($accesos->items as $acceso): ?>
+                            <?php $counter = 1; ?>
+                            <?php if ($accesos) { ?>
+                                <?php foreach ($accesos as $acceso): ?>
                                     <tr>
-                                        <td><?php echo $accesos->counter; ?></td>
+                                        <td><?php echo $counter; ?></td>
                                         <td><?php echo date("Y-m-d", strtotime($acceso->acceso_at)); ?></td>
                                         <td><?php echo date("H:i:s", strtotime($acceso->acceso_at)); ?></td>
                                         <td><?php echo $acceso->ip; ?></td>
-                                        <td><?php echo ($acceso->tipo_acceso == Acceso::ENTRADA) ? '<span class="label label-success">Entrada</span>' : '<span class="label label-danger">Salida</span>';; ?></td>
+                                        <td class="text-center"><?php echo ($acceso->tipo_acceso == Acceso::ENTRADA) ? '<span class="badge text-bg-success">Entrada</span>' : '<span class="badge text-bg-danger">Salida</span>'; ?></td>
                                     </tr>
-                                    <?php $accesos->counter++; ?>
+                                    <?php $counter++; ?>
                                 <?php endforeach; ?>
                             <?php } ?>
                         </tbody>

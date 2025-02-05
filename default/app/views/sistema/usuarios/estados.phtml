@@ -8,7 +8,7 @@
 <div class="content">
     <div class="card block-rounded shadow">
         <div class="card-header text-end">
-            <?= DwButton::back('sistema/usuarios/listar', 'Atras', 'fa-undo', 'Atras'); ?>
+            <?= DwButton::back('sistema/usuarios/listar', 'Listar', 'fa-undo', 'Listar'); ?>
             <?= DwHtml::button("sistema/usuarios/accesos/" . Security::setKey($usuario->id, 'shw_accesos'), 'Accesos', array('class' => 'btn-info'), 'fa-exchange'); ?>
             <?= DwHtml::button("sistema/usuarios/editar/" . Security::setKey($usuario->id, 'upd_usuario'), 'Editar', array('class' => 'btn-info'), 'fa-pencil'); ?>
         </div>
@@ -61,7 +61,7 @@
                                         <td><?= $counter; ?></td>
                                         <td><?= date("d-m-Y", strtotime($estado->estado_usuario_at)); ?></td>
                                         <td><?= $estado->descripcion; ?></td>
-                                        <td><?= ($estado->estado_usuario == EstadoUsuario::ACTIVO) ? '<span class="label label-success" title="' . $usuario->descripcion . '" rel="tooltip">Activo</span>' : '<span class="label label-danger" title="' . $usuario->descripcion . '" rel="tooltip">Bloqueado</span>';; ?></td>
+                                        <td><?= ($estado->estado_usuario == EstadoUsuario::ACTIVO) ? '<span class="badge text-bg-success" title="' . $usuario->descripcion . '" rel="tooltip">Activo</span>' : '<span class="badge text-bg-danger" title="' . $usuario->descripcion . '" rel="tooltip">Bloqueado</span>';; ?></td>
                                     </tr>
                                     <?php $counter++; ?>
                                 <?php endforeach; ?>

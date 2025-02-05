@@ -20,8 +20,8 @@
                 </div>
                 <div class="block-content">
                     <div class="table-responsive mb-3">
-                        <table id="tUsuarios" class="table table-bordered table-vcenter table-hover js-dataTable-buttons table-striped table-condensed table-responsive">
-                            <thead>
+                        <table id="tUsuarios" class="table table-bordered table-vcenter table-hover js-dataTable-full table-striped table-condensed table-responsive">
+                            <thead class="bg-gray">
                                 <tr>
                                     <th class="text-center">#</th>
                                     <th class="text-center">USUARIO</th>
@@ -54,12 +54,11 @@
                                                     '<span class="badge bg-danger">Bloqueado</span>'; ?>
                                             </button></td>
                                         <td class="text-center" width="10%" nowrap>
-
-                                            <?php echo DwHtml::buttonTable('Editar usuario', "sistema/usuarios/editar/$key_upd/", NULL, 'outline-warning', 'fa-pencil'); ?>
+                                            <?php echo DwHtml::buttonTable('Editar usuario', "sistema/usuarios/editar/$key_upd/", NULL, 'warning', 'fa-pencil'); ?>
                                             <?php if ($usuario->estado_usuario == EstadoUsuario::ACTIVO) { ?>
-                                                <?php echo DwHtml::buttonTable('Bloquear usuario', "sistema/usuarios/estado/bloquear/$key_ina/", NULL, 'outline-success', 'fa-flag'); ?>
+                                                <?php echo DwHtml::buttonTable('Bloquear usuario', "sistema/usuarios/estado/bloquear/$key_ina/", NULL, 'success', 'fa-flag'); ?>
                                             <?php } else { ?>
-                                                <?php echo DwHtml::buttonTable('Reactivar usuario', "sistema/usuarios/estado/reactivar/$key_rea/", NULL, 'outline-danger', 'fa-flag'); ?>
+                                                <?php echo DwHtml::buttonTable('Reactivar usuario', "sistema/usuarios/estado/reactivar/$key_rea/", NULL, 'danger', 'fa-flag'); ?>
                                             <?php } ?>
 
                                         </td>

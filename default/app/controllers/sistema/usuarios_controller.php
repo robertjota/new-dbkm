@@ -199,10 +199,8 @@ class UsuariosController extends BackendController
             return Redirect::toAction('listar');
         }
 
-        $page = (Filter::get($page, 'page') > 0) ? Filter::get($page, 'page') : 1;
-
         $acceso = new Acceso();
-        $this->accesos = $acceso->getListadoAcceso($usuario->id, 'todos', 'order.fecha.desc', $page);
+        $this->accesos = $acceso->getListadoAcceso($usuario->id, 'todos', 'fecha DESC');
         $this->key = $key;
         $this->usuario = $usuario;
 

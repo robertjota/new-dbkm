@@ -1,9 +1,12 @@
 <?php View::flash(); ?>
+
+<?php SectionManager::start('styles') ?>
 <!-- DataTables CSS -->
 <link rel="stylesheet" href="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-bs5/css/dataTables.bootstrap5.min.css">
 <link rel="stylesheet" href="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-buttons-bs5/css/buttons.bootstrap5.min.css">
 <link rel="stylesheet" href="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-responsive-bs5/css/responsive.bootstrap5.min.css">
 <!-- END DataTables CSS -->
+<?php SectionManager::end('styles') ?>
 
 <!-- Page Content -->
 <div class="content">
@@ -12,7 +15,7 @@
             <div class="block">
                 <div class="block-content">
                     <div class="table-responsive mb-3">
-                        <table class="table table-bordered table-striped table-vcenter js-dataTable-buttons table-hover table-condensed">
+                        <table class="table table-bordered table-striped table-vcenter js-dataTable-full table-hover table-condensed">
                             <thead>
                                 <tr>
                                     <th class="text-center">#</th>
@@ -25,9 +28,9 @@
                             </thead>
                             <tbody>
                                 <?php $counter = 1; ?>
-                                <?php foreach ($accesos->items ?? [] as $acceso) : ?>
+                                <?php foreach ($accesos ?? [] as $acceso) : ?>
                                     <tr>
-                                        <td class="text-center"><?php echo $counter; ?></td>
+                                        <td class="text-center"><?= $counter; ?></td>
                                         <td><?php echo date("d-m-Y", strtotime($acceso->acceso_at)); ?></td>
                                         <td><?php echo date("H:i:s", strtotime($acceso->acceso_at)); ?></td>
                                         <td><?php echo $acceso->nombre . " " . $acceso->apellido; ?></td>
@@ -46,6 +49,7 @@
 </div>
 <!-- END Page Content -->
 
+<?php SectionManager::start('scripts') ?>
 <!-- DataTables JS Plugins -->
 <script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables/jquery.dataTables.min.js"></script>
 <script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-bs5/js/dataTables.bootstrap5.min.js"></script>
@@ -61,3 +65,5 @@
 
 <!-- DataTables JS Code -->
 <script src="<?= PUBLIC_PATH ?>template/coreui/assets/_js/pages/be_tables_datatables.js"></script>
+
+<?php SectionManager::end('scripts') ?>

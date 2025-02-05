@@ -1,9 +1,12 @@
 <?php View::flash(); ?>
+
+<?php SectionManager::start('styles') ?>
 <!-- DataTables CSS -->
 <link rel="stylesheet" href="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-bs5/css/dataTables.bootstrap5.min.css">
 <link rel="stylesheet" href="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-buttons-bs5/css/buttons.bootstrap5.min.css">
 <link rel="stylesheet" href="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-responsive-bs5/css/responsive.bootstrap5.min.css">
 <!-- END DataTables CSS -->
+<?php SectionManager::end('styles') ?>
 
 <!-- Page Content -->
 <div class="content">
@@ -18,9 +21,9 @@
                 </div>
                 <div class="block-content">
                     <div class="table-responsive mb-3">
-                        <table class="table table-bordered table-striped table-vcenter js-dataTable-simple table-hover table-condensed">
+                        <table class="table table-bordered table-striped table-vcenter js-dataTable-full table-hover table-condensed">
                             <thead>
-                                <tr>
+                                <tr class="bg-gray">
                                     <th class="text-center">#</th>
                                     <th class="text-center">PERFIL</th>
                                     <th class="text-center">PLANTILLA</th>
@@ -42,23 +45,15 @@
                                         <td class="text-center"><?php echo $perfil->plantilla; ?></td>
                                         <td class="text-center"><?php echo $perfil->usuarios; ?></td>
                                         <td class="text-center"><?php echo ($perfil->estado == Perfil::ACTIVO) ? '<span class="badge text-bg-success">Activo</span>' : '<span class="badge text-bg-danger">Inactivo</span>'; ?></td>
-                                        <td class="text-center" width="5%">
-                                            <div class="dropdown dropstart">
-                                                <a href="javascript:void(0)" class="text-muted" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                                                    <i class="fas fa-ellipsis-v fs-4"></i>
-                                                </a>
-                                                <ul class="dropdown-menu text-center" aria-labelledby="dropdownMenuButton">
-                                                    <li class="dropdown-item">
-                                                        <?php echo DwHtml::buttonTable('Ver perfil', "sistema/perfiles/ver/$key_show/", null, 'info', 'fa-search'); ?>
-                                                        <?php echo DwHtml::buttonTable('Modificar perfil', "sistema/perfiles/editar/$key_upd/", null, 'warning', 'fa-edit'); ?>
-                                                        <?php if ($perfil->estado == Perfil::ACTIVO) { ?>
-                                                            <?php echo DwHtml::buttonTable('Inactivar perfil', "sistema/perfiles/estado/inactivar/$key_inac/", null, 'success', 'fa-flag'); ?>
-                                                        <?php } else { ?>
-                                                            <?php echo DwHtml::buttonTable('Reactivar perfil', "sistema/perfiles/estado/reactivar/$key_reac/", null, 'danger', 'fa-flag'); ?>
-                                                        <?php } ?>
-                                                    </li>
-                                                </ul>
-                                            </div>
+                                        <td class="text-center" width="10%" nowrap>
+                                            <?php echo DwHtml::buttonTable('Ver perfil', "sistema/perfiles/ver/$key_show/", null, 'info', 'fa-search'); ?>
+                                            <?php echo DwHtml::buttonTable('Modificar perfil', "sistema/perfiles/editar/$key_upd/", null, 'warning', 'fa-edit'); ?>
+                                            <?php if ($perfil->estado == Perfil::ACTIVO) { ?>
+                                                <?php echo DwHtml::buttonTable('Inactivar perfil', "sistema/perfiles/estado/inactivar/$key_inac/", null, 'success', 'fa-flag'); ?>
+                                            <?php } else { ?>
+                                                <?php echo DwHtml::buttonTable('Reactivar perfil', "sistema/perfiles/estado/reactivar/$key_reac/", null, 'danger', 'fa-flag'); ?>
+                                            <?php } ?>
+
                                         </td>
                                     </tr>
                                     <?php $counter++; ?>
@@ -73,6 +68,7 @@
 </div>
 <!-- END Page Content -->
 
+<?php SectionManager::start('scripts') ?>
 <!-- DataTables JS Plugins -->
 <script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables/jquery.dataTables.min.js"></script>
 <script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-bs5/js/dataTables.bootstrap5.min.js"></script>
@@ -88,3 +84,5 @@
 
 <!-- DataTables JS Code -->
 <script src="<?= PUBLIC_PATH ?>template/coreui/assets/_js/pages/be_tables_datatables.js"></script>
+
+<?php SectionManager::end('scripts') ?>

@@ -37,7 +37,7 @@ class PerfilesController extends BackendController
     /**
      * Método para listar
      */
-    public function listar($order = 'order.perfil.asc')
+    public function listar($order = 'order.perfil ASC')
     {
         $perfiles = new Perfil();
         $this->perfiles = $perfiles->getListadoPerfil('todos', $order);
@@ -116,9 +116,8 @@ class PerfilesController extends BackendController
     /**
      * Método para ver
      */
-    public function ver($key, $order = 'order.perfil.asc', $page = 'page.1')
+    public function ver($key, $order = 'perfil ASC')
     {
-        $page = (Filter::get($page, 'page') > 0) ? Filter::get($page, 'page') : 1;
         if (!$id = Security::getKey($key, 'show_perfil', 'int')) {
             return Redirect::toAction('listar');
         }
@@ -131,7 +130,7 @@ class PerfilesController extends BackendController
 
         //DwUtils::print_r();
         $usuario = new Usuario();
-        $this->usuarios = $usuario->getUsuarioPorPerfil($perfil->id, $order, $page);
+        $this->usuarios = $usuario->getUsuarioPorPerfil($perfil->id, $order);
         $this->perfil = $perfil;
         $this->order = $order;
         $this->page_title = 'Información del Perfil';

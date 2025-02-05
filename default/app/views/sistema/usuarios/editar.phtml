@@ -3,7 +3,7 @@
 <div class="content">
     <div class="card block-rounded shadow">
         <div class="card-header text-end">
-            <?= DwHtml::button("sistema/usuarios/estados/" . Security::setKey($usuario->id, 'shw_estados'), 'Estados', array('class' => 'btn-info'), 'fa-check-square-o'); ?>
+            <?= DwHtml::button("sistema/usuarios/estados/" . Security::setKey($usuario->id, 'shw_estados'), 'Estado', array('class' => 'btn-info'), 'fa-check-square'); ?>
             <?= DwHtml::button("sistema/usuarios/accesos/" . Security::setKey($usuario->id, 'shw_accesos'), 'Accesos', array('class' => 'btn-info'), 'fa-exchange'); ?>
         </div>
         <div class="card-body ">
@@ -112,7 +112,7 @@
                                 <div class="col-md-12">
                                     <div class="text-end">
                                         <?= DwForm::send('Nuevo Usuario'); ?>
-                                        <?= DwForm::cancel(); ?>
+                                        <?= DwForm::cancel('sistema/usuarios'); ?>
                                         <?= DwForm::focus('usuario.nombre'); ?>
                                     </div>
                                 </div>

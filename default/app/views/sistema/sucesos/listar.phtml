@@ -1,9 +1,12 @@
 <?php View::flash(); ?>
+
+<?php SectionManager::start('styles') ?>
 <!-- DataTables CSS -->
 <link rel="stylesheet" href="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-bs5/css/dataTables.bootstrap5.min.css">
 <link rel="stylesheet" href="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-buttons-bs5/css/buttons.bootstrap5.min.css">
 <link rel="stylesheet" href="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-responsive-bs5/css/responsive.bootstrap5.min.css">
 <!-- END DataTables CSS -->
+<?php SectionManager::end('styles') ?>
 
 <!-- Page Content -->
 <div class="content">
@@ -13,12 +16,12 @@
                 <div class="block-header pt-3">
                     <h3 class="block-title"></h3>
                     <div class="block-options">
-                        <?= DwHtml::button("sistema/sucesos/", 'volver', ['class' => 'btn-secondary'], 'fa-undo', APP_AJAX); ?>
+                        <?= DwHtml::button("sistema/sucesos/", 'volver', null, 'fa-undo', APP_AJAX); ?>
                     </div>
                 </div>
                 <div class="block-content">
                     <div class="table-responsive mb-3">
-                        <table class="table table-bordered table-vcenter table-hover js-dataTable-buttons table-striped table-condensed table-responsive">
+                        <table class="table table-bordered table-vcenter table-hover js-dataTable-full table-striped table-condensed table-responsive">
                             <thead>
                                 <tr>
                                     <th width="5%">#</th>
@@ -59,6 +62,8 @@
     </div>
 </div>
 <!-- END Page Content -->
+
+<?php SectionManager::start('scripts') ?>
 <!-- DataTables JS Plugins -->
 <script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables/jquery.dataTables.min.js"></script>
 <script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-bs5/js/dataTables.bootstrap5.min.js"></script>
@@ -74,3 +79,5 @@
 
 <!-- DataTables JS Code -->
 <script src="<?= PUBLIC_PATH ?>template/coreui/assets/_js/pages/be_tables_datatables.js"></script>
+
+<?php SectionManager::end('scripts') ?>

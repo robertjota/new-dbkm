@@ -1,9 +1,12 @@
 <?php View::flash(); ?>
+
+<?php SectionManager::start('styles') ?>
 <!-- DataTables CSS -->
 <link rel="stylesheet" href="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-bs5/css/dataTables.bootstrap5.min.css">
 <link rel="stylesheet" href="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-buttons-bs5/css/buttons.bootstrap5.min.css">
 <link rel="stylesheet" href="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-responsive-bs5/css/responsive.bootstrap5.min.css">
 <!-- END DataTables CSS -->
+<?php SectionManager::end('styles') ?>
 
 <!-- Page Content -->
 <div class="content">
@@ -49,8 +52,8 @@
 
                 <?php $items = $menu->getMenusPorPadre($menu->id, Menu::ACTIVO); ?>
                 <div class="table-responsive mb-3">
-                  <table class="table table-bordered table-striped table-vcenter js-dataTable-simple table-hover table-condensed">
-                    <thead>
+                  <table class="table table-bordered table-striped table-vcenter js-dataTable-full table-hover table-condensed">
+                    <thead class="bg-gray">
                       <tr>
                         <th class="text-center">#</th>
                         <th class="text-center">POS</th>
@@ -61,7 +64,7 @@
                         <th class="text-center" class="col-collapse">ICO</th>
                         <!-- <th class="text-center">VIS</th> -->
                         <th class="text-center">ESTADO</th>
-                        <th class="text-center"></th>
+                        <th class="text-center">accion</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -83,7 +86,7 @@
                             </a>
                             <ul class="dropdown-menu text-center" aria-labelledby="dropdownMenuButton">
                               <li class="dropdown-item">
-                                <?= DwHtml::buttonTable('Modificar menú', "sistema/menus/editar/$key_upd/", ['class' => 'btn-sm'], 'warning', 'fa-edit'); ?>
+                                <?= DwHtml::buttonTable('Modificar menú', "sistema/menus/editar/$key_upd/", null, 'warning', 'fa-edit'); ?>
 
                                 <?php if ($menu->activo == Menu::ACTIVO) { ?>
                                   <?= DwHtml::buttonTable('Bloquear menú', "sistema/menus/estado/inactivar/$key_ina/", null, 'success', 'fa-flag'); ?>
@@ -125,13 +128,13 @@
                                 </a>
                                 <ul class="dropdown-menu text-center" aria-labelledby="dropdownMenuButton">
                                   <li class="dropdown-item">
-                                    <?= DwHtml::buttonTable('Modificar menú', "sistema/menus/editar/$key_upd/", ['class' => 'btn-sm'], 'warning', 'fa-edit'); ?>
+                                    <?= DwHtml::buttonTable('Modificar menú', "sistema/menus/editar/$key_upd/", null, 'warning', 'fa-edit'); ?>
                                     <?php if ($row->activo == Menu::ACTIVO) { ?>
-                                      <?= DwHtml::buttonTable('Bloquear menú', "sistema/menus/estado/inactivar/$key_ina/", ['class' => 'btn-sm'], 'success', 'fa-flag'); ?>
+                                      <?= DwHtml::buttonTable('Bloquear menú', "sistema/menus/estado/inactivar/$key_ina/", null, 'success', 'fa-flag'); ?>
                                     <?php } else { ?>
-                                      <?= DwHtml::buttonTable('Reactivar menú', "sistema/menus/estado/reactivar/$key_rea/", ['class' => 'btn-sm'], 'danger', 'fa-flag'); ?>
+                                      <?= DwHtml::buttonTable('Reactivar menú', "sistema/menus/estado/reactivar/$key_rea/", null, 'danger', 'fa-flag'); ?>
                                     <?php } ?>
-                                    <?= DwHtml::buttonTable('Eliminar menú', "sistema/menus/eliminar/$key_del/", array('class' => 'js-confirm btn-sm', 'confirm-title' => 'Eliminar menú', 'confirm-body' => 'Está seguro de eliminar este menú? <br />Recuerda que esta operación no se puede reversar.'), 'danger', 'fa-trash'); ?>
+                                    <?= DwHtml::buttonTable('Eliminar menú', "sistema/menus/eliminar/$key_del/", array('class' => 'js-confirm', 'confirm-title' => 'Eliminar menú', 'confirm-body' => 'Está seguro de eliminar este menú? <br />Recuerda que esta operación no se puede reversar.'), 'danger', 'fa-trash'); ?>
                                   </li>
                                 </ul>
                               </div>
@@ -239,6 +242,7 @@
 </div>
 <!-- END Page Content -->
 
+<?php SectionManager::start('scripts') ?>
 <!-- DataTables JS Plugins -->
 <script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables/jquery.dataTables.min.js"></script>
 <script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-bs5/js/dataTables.bootstrap5.min.js"></script>
@@ -254,3 +258,5 @@
 
 <!-- DataTables JS Code -->
 <script src="<?= PUBLIC_PATH ?>template/coreui/assets/_js/pages/be_tables_datatables.js"></script>
+
+<?php SectionManager::end('scripts') ?>

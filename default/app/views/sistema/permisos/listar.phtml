@@ -1,9 +1,12 @@
 <?php View::flash(); ?>
+
+<?php SectionManager::start('styles') ?>
 <!-- DataTables CSS -->
 <link rel="stylesheet" href="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-bs5/css/dataTables.bootstrap5.min.css">
 <link rel="stylesheet" href="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-buttons-bs5/css/buttons.bootstrap5.min.css">
 <link rel="stylesheet" href="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-responsive-bs5/css/responsive.bootstrap5.min.css">
 <!-- END DataTables CSS -->
+<?php SectionManager::end('styles') ?>
 
 <!-- Page Content -->
 <div class="content">
@@ -40,7 +43,7 @@
                                 <?php $recurso = $modulo->getRecursosPorModulo($modulo->modulo, $order); ?>
                                 <div class="table-responsive mb-3">
                                     <table class="table table-bordered table-striped table-vcenter js-dataTable-simple table-hover table-condensed">
-                                        <thead>
+                                        <thead class="bg-gray">
                                             <tr>
                                                 <th rowspan="2" class="text-middle text-center">RECURSO</th>
                                                 <th rowspan="2" class="text-middle text-center">DESCRIPCION</th>
@@ -100,6 +103,7 @@
 </div>
 <!-- END Page Content -->
 
+<?php SectionManager::start('scripts') ?>
 <!-- DataTables JS Plugins -->
 <script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables/jquery.dataTables.min.js"></script>
 <script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-bs5/js/dataTables.bootstrap5.min.js"></script>
@@ -115,3 +119,5 @@
 
 <!-- DataTables JS Code -->
 <script src="<?= PUBLIC_PATH ?>template/coreui/assets/_js/pages/be_tables_datatables.js"></script>
+
+<?php SectionManager::end('scripts') ?>
