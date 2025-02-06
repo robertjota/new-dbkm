@@ -1,0 +1,51 @@
+<?php View::flash(); ?>
+<?= Tag::js('datatables_buttons').PHP_EOL; ?>
+
+<div class="container shell-view">
+
+    <?php View::process($page_module, $page_title, $set_title); ?>
+
+    <div class="container">
+        <div class="btn-actions">
+            <?= DwHtml::button("%carpeta%/%Controller%/agregar/", 'Nuevo', NULL, 'fa-check-square-o'); ?>
+            <?= DwButton::back("dashboard/",'Volver al Dashboard','fa-undo','Dashboard'); ?>
+        </div>
+        <div class="panel panel-default mt-4 shadow">
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="table-responsive">
+                            <table id="datatable" class="table table-bordered table-hover table-striped table-condensed table-responsive">
+                                <thead class="bg-light-blue">
+                                    <tr>
+                                        <th class="text-center col-sm-1">NUM</th>
+                                        %columnListHead%
+                                        <th nowrap class="text-center col-sm-2">ACCIONES</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php $counter = 1; ?>
+                                    <?php foreach($%lcaseModels% as $%lcaseModel%) { ?>
+                                        <?php $key_upd = Security::setKey($%lcaseModel%->id, 'upd_%lcaseModel%'); ?>
+                                        <?php $key_del = Security::setKey($%lcaseModel%->id, 'del_%lcaseModel%'); ?>
+                                        <?php $key_shw = Security::setKey($%lcaseModel%->id, 'shw_%lcaseModel%'); ?>
+                                        <tr>
+                                            <td class="text-center"><?= $counter; ?></td>
+                                            %columnListBody%
+                                            <td class="text-center" nowrap width="15%">
+                                                <?= DwHtml::buttonTable('Ver', "%carpeta%/%Controller%/ver/$key_shw/", null, 'info', 'fa-eye'); ?>
+                                                <?= DwHtml::buttonTable('Editar', "%carpeta%/%Controller%/editar/$key_upd/", null, 'warning', 'fa-edit'); ?>
+                                                <?= DwHtml::buttonTableSA('Eliminar', "%carpeta%/%Controller%/eliminar/$key_del/", array('class'=>'js-confirm', 'msg-nombre'=>"$%lcaseModel%->nombre",'msg-title'=>'Eliminar Registro', 'msg'=>'¿Está seguro de eliminar este registro? <br>¡Recuerda que esta operación no se puede reversar.!'), 'danger', 'fa-trash'); ?>
+                                            </td>
+                                        </tr>
+                                        <?php $counter++; ?>
+                                    <?php }; ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

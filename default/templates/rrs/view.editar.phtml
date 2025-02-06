@@ -1,0 +1,6 @@
+<?php View::flash(); ?>
+<?= Tag::js('sel2').PHP_EOL; ?>
+<div class="container shell-view">
+    <?php View::process($page_module, $page_title, $set_title); ?>
+    <?php View::partial('%carpeta%/%Controller%/form', FALSE, []); ?>
+</div>

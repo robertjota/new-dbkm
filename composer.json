@@ -8,6 +8,7 @@
     "name": "kumbia/framework",
     "require": {
         "php": ">=8.0",
+        "consolidation/robo": "^5.1",
         "symfony/var-dumper": "^7.2"
     },
     "require-dev": {

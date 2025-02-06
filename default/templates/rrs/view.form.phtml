@@ -1,0 +1,27 @@
+<div class="container">
+    <div class="panel panel-default mt-4 shadow">
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <?= DwForm::open(); ?>
+                    %formContent%
+                    <!-- BOTONES DE ACCION -->
+                    <hr class="hr-rjr">
+                    <div class="row py-2 px-4 mt-4">
+                        <div class="col-sm-12 text-left">
+                            <?php if (!empty($ver)) { ?>
+                                <?= DwButton::back("%carpeta%/%Controller%/listar"); ?>
+                            <?php } else { ?>
+                                <?= DwForm::send('Guardar'); ?>
+                                <?= DwButton::back("%carpeta%/%Controller%/listar"); ?>
+                                <?= DwForm::focus('%lcaseModel%.%First_Field%'); ?>
+                            <?php } ?>
+                        </div>
+                    </div>
+                    <!-- FIN BOTONES DE ACCION -->
+                    <?= DwForm::close(); ?>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

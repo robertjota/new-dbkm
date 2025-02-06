@@ -65,33 +65,6 @@ class ProductosController extends BackendController
         $this->page_title = 'Actualizar Productoes';
     }
 
-    /**
-     * Método para editar
-     */
-    public function editar_porcentaje($key)
-    {
-        if (!$id = Security::getKey($key, 'upd_producto', 'int')) {
-            Flash::error('Lo sentimos, Error de Seguridad');
-            return Redirect::toAction('listar_porcentaje');
-        }
-
-        if (!$producto = (new Producto())->find_first($id)) {
-            Flash::error('Lo sentimos, no se pudo configurar la información de registro');
-            return Redirect::toAction('listar_porcentaje');
-        }
-
-        if (Input::hasPost('producto')) {
-            if ($producto->setProducto('update', Input::post('producto'), array('id' => $id))) {
-                Flash::valid('¡El registro ha sido actualizado con éxito!');
-            } else {
-                Flash::error('Lo sentimos, la información de registro no se pudo actualizar');
-            }
-            return Redirect::toAction('listar_porcentaje');
-        }
-
-        $this->producto = $producto;
-        $this->page_title = 'Actualizar Porcentaje de las Productoes';
-    }
 
     /**
      * Método para ver
