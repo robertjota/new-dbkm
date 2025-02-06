@@ -156,8 +156,13 @@
   <?php SectionManager::yield('scripts') ?>
 
   <!-- Script personalizados -->
-  <?= Tag::js('rjr/sweet-alert-config') ?>
-  <?= Tag::js('rjr/alert_helpers') ?>
+  <?= Tag::js('rjr/sweet-alert-config') . PHP_EOL;  ?>
+  <?= Tag::js('rjr/alert_helpers') . PHP_EOL;  ?>
+  <?= Tag::js('jquery/jquery.kumbiaphp') . PHP_EOL; ?>
+  <?= Tag::js('jquery/jquery.keyfilter') . PHP_EOL; ?>
+  <?= Tag::js('jquery/jquery.kgrid') . PHP_EOL; ?>
+  <?= Tag::js('jquery/jquery.kload') . PHP_EOL; ?>
+  <?= Tag::js('validador') . PHP_EOL; ?>
 
   <!-- CODIGO PARA CERRAR SESION -->
   <script type="text/javascript">

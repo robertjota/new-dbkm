@@ -11,28 +11,23 @@
 <div class="content">
     <div class="row">
         <div class="col-md-12">
-            <div class="block">
-                <div class="block-header pt-3">
-                    <h3 class="block-title"></h3>
-                    <div class="block-options">
-                        <button type="button" class="btn btn-primary">
-                            Crear Producto
-                        </button>
-                    </div>
+            <div class="card">
+                <div class="card-header text-end">
+                    <?= DwHtml::button("admin/productos/agregar/", 'Nuevo', ['class' => 'btn-primary'], 'fa-check')  ?>
                 </div>
-                <div class="block-content">
+                <div class="card-body">
                     <div class="table-responsive">
-                        <table id="tProductos" class="table table-bordered table-vcenter table-hover js-dataTable-buttons table-striped table-condensed table-responsive">
+                        <table id="tProductos" class="table table-bordered table-vcenter table-hover js-dataTable-full table-striped table-condensed table-responsive">
                             <thead>
                                 <tr>
-                                    <th class="text-center" style="width: 80px;">#</th>
-                                    <th>codigo</th>
-                                    <th>nombre</th>
-                                    <th>categoria</th>
-                                    <th>unidad</th>
-                                    <th>existencia</th>
-                                    <th>costo</th>
-                                    <th class="text-center" style="width: 100px;">Acciones</th>
+                                    <th class="text-center" width="5%">#</th>
+                                    <th class="text-center">codigo</th>
+                                    <th class="text-center">nombre</th>
+                                    <th class="text-center">categoria</th>
+                                    <th class="text-center">unidad</th>
+                                    <th class="text-center">existencia</th>
+                                    <th class="text-center">costo</th>
+                                    <th class="text-center"></th>
                                 </tr>
                             </thead>
                             <tbody class="table-group-divider">
@@ -52,15 +47,10 @@
                                         <td><?= $producto->getUnidad()->nombre ?></td>
                                         <td class="text-center"><?= $producto->existencia ?></td>
                                         <td class="text-end"><?= $producto->costo ?></td>
-                                        <td class="text-center">
-                                            <div class="btn-group">
-                                                <a type="button" class="btn btn-sm btn-alt-secondary" href="<?= PUBLIC_PATH ?>admin/productos/editar/<?= $key_upd ?>" data-bs-toggle="tooltip" title="Editar">
-                                                    <i class="fa fa-pencil-alt"></i>
-                                                </a>
-                                                <a type="button" class="btn btn-sm btn-alt-secondary js-sweetalert" data-bs-toggle="tooltip" title="ELiminar" msg-nombre="<?= $producto->nombre ?>" href="<?= PUBLIC_PATH ?>admin/productos/eliminar/<?= $key_del ?>" msg-title='Eliminar Registro' msg='¿Está seguro de eliminar este registro? <br>¡Recuerda que esta operación no se puede reversar.!'>
-                                                    <i class="fa fa-trash"></i>
-                                                </a>
-                                            </div>
+                                        <td class="text-center" width="10%" nowrap>
+                                            <?= DwHtml::buttonTable('Ver', "admin/productos/ver/$key_shw/", null, 'info', 'fa-eye'); ?>
+                                            <?= DwHtml::buttonTable('Editar', "admin/productos/editar/$key_upd/", null, 'warning', 'fa-edit'); ?>
+                                            <?= DwHtml::buttonTableSA('Eliminar', "admin/productos/eliminar/$key_del/", array('class' => 'js-confirm', 'msg-nombre' => "$producto->nombre", 'msg-title' => 'Eliminar Registro', 'msg' => '¿Está seguro de eliminar este registro? <br/>¡Recuerda que esta operación no se puede reversar.!'), 'danger', 'fa-trash'); ?>
                                         </td>
                                     </tr>
                                 <?php } ?>

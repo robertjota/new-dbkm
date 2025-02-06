@@ -42,4 +42,5 @@ function alertConfirm(message, callback) {
             callback();
         }
     });
+
 }
