@@ -30,13 +30,11 @@ class RecursosController extends BackendController
     /**
      * Método para listar
      */
-    public function listar($order = 'order.controlador.asc', $page = 'page.1')
+    public function listar()
     {
-        $page = (Filter::get($page, 'page') > 0) ? Filter::get($page, 'page') : 1;
         $recurso = new Recurso();
 
-        $this->recursos = $recurso->getListadoRecursoPorModulo('todos', $order, $page);
-        $this->order = $order;
+        $this->recursos = $recurso->getListadoRecursoPorModulo();
         $this->page_title = 'Listado de recursos del sistema';
     }
 

@@ -107,7 +107,7 @@ class Backup extends ActiveRecord
     {
         $backup = new Backup($data);
 
-        $backup->archivo = "backup-" . ($backup->count() + 1) . ".zip"; // Cambia la extensión a .zip
+        $backup->archivo = "backup-" . ($backup->count() + 1) . ".sql.zip"; // Cambia la extensión a .zip
         $backup->usuario_id = Session::get('id');
 
         if (!$backup->create()) {
