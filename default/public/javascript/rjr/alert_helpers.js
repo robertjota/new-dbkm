@@ -30,7 +30,7 @@ function alertWarning(message) {
 function alertConfirm(message, callback) {
     Swal.fire({
         title: '¿Está seguro?',
-        text: message,
+        html: message,
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
@@ -39,7 +39,7 @@ function alertConfirm(message, callback) {
         cancelButtonText: 'Cancelar'
     }).then((result) => {
         if (result.isConfirmed) {
-            callback();
+          callback();
         }
     });
 
