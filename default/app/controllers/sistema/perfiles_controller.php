@@ -64,7 +64,7 @@ class PerfilesController extends BackendController
      */
     public function editar($key)
     {
-        if (!$id = Security::getKey($key, 'upd_perfil', 'int')) {
+        if (!$id = DwSecurity::getKey($key, 'upd_perfil', 'int')) {
             return Redirect::toAction('listar');
         }
 
@@ -90,7 +90,7 @@ class PerfilesController extends BackendController
      */
     public function estado($tipo, $key)
     {
-        if (!$id = Security::getKey($key, $tipo . '_perfil', 'int')) {
+        if (!$id = DwSecurity::getKey($key, $tipo . '_perfil', 'int')) {
             return Redirect::toAction('listar');
         }
 
@@ -118,7 +118,7 @@ class PerfilesController extends BackendController
      */
     public function ver($key, $order = 'perfil ASC')
     {
-        if (!$id = Security::getKey($key, 'show_perfil', 'int')) {
+        if (!$id = DwSecurity::getKey($key, 'show_perfil', 'int')) {
             return Redirect::toAction('listar');
         }
 

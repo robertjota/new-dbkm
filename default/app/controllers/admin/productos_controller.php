@@ -42,7 +42,7 @@ class ProductosController extends BackendController
      */
     public function editar($key)
     {
-        if (!$id = Security::getKey($key, 'upd_producto', 'int')) {
+        if (!$id = DwSecurity::getKey($key, 'upd_producto', 'int')) {
             Flash::error('Lo sentimos, Error de Seguridad');
             return Redirect::toAction('listar');
         }
@@ -71,7 +71,7 @@ class ProductosController extends BackendController
      */
     public function ver($key)
     {
-        if (!$id = Security::getKey($key, 'shw_producto', 'int')) {
+        if (!$id = DwSecurity::getKey($key, 'shw_producto', 'int')) {
             return Redirect::toAction('listar');
         }
 
@@ -88,7 +88,7 @@ class ProductosController extends BackendController
      */
     public function eliminar($key)
     {
-        if (!$id = Security::getKey($key, 'del_producto', 'int')) {
+        if (!$id = DwSecurity::getKey($key, 'del_producto', 'int')) {
             Flash::error('Lo sentimos, Error de Seguridad');
             return Redirect::toAction('listar');
         }

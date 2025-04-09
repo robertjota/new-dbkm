@@ -3,10 +3,10 @@
 <script type="text/javascript">
     $(function() {
         $('table').kgrid({
-            form_to         : $.KumbiaPHP.publicPath+'sistema/backups/buscar/',
-            form_open       : ['<?php echo $field; ?>', '<?php echo $value; ?>'],
-            order_to        : $.KumbiaPHP.publicPath+'sistema/backups/buscar/<?php echo $field; ?>/<?php echo $value; ?>/',
-            order_attr      : '<?php echo (APP_AJAX) ? 'class="js-link js-spinner"' : ''; ?>'
+            form_to: $.KumbiaPHP.publicPath + 'sistema/backups/buscar/',
+            form_open: ['<?php echo $field; ?>', '<?php echo $value; ?>'],
+            order_to: $.KumbiaPHP.publicPath + 'sistema/backups/buscar/<?php echo $field; ?>/<?php echo $value; ?>/',
+            order_attr: '<?php echo (APP_AJAX) ? 'class="js-link js-spinner"' : ''; ?>'
         });
     });
 </script>
@@ -19,7 +19,7 @@
         <div class="row">
             <div class="btn-actions">
                 <?php echo DwHtml::button("sistema/backups/crear/", 'crear', NULL, 'fa-check-square-o', APP_AJAX); ?>
-                <?php echo DwHtml::button("sistema/backups/listar/", 'filtro', array('class'=>'btn-danger'), 'fa-ban', APP_AJAX); ?>
+                <?php echo DwHtml::button("sistema/backups/listar/", 'filtro', array('class' => 'btn-danger'), 'fa-ban', APP_AJAX); ?>
             </div>
         </div>
     </div>
@@ -40,20 +40,20 @@
                 </tr>
             </thead>
             <tbody>
-                <?php foreach($backups->items as $backup): ?>
-                    <?php $key_res = Security::setKey($backup->id, 'restaurar_backup'); ?>
-                    <?php $key_dwn = Security::setKey($backup->id, 'descargar_backup'); ?>
+                <?php foreach ($backups->items as $backup): ?>
+                    <?php $key_res = DwSecurity::setKey($backup->id, 'restaurar_backup'); ?>
+                    <?php $key_dwn = DwSecurity::setKey($backup->id, 'descargar_backup'); ?>
                     <tr data-backup-description="<?php echo $backup->denominacion; ?>" data-backup-file="<?php echo $backup->archivo; ?>" data-backup-datetime="<?php echo $backup->backup_at; ?>">
                         <td><?php echo $backups->counter; ?></td>
-                        <td><?php echo ($field=='fecha') ? DwUtils::resaltar($value, date("Y-m-d", strtotime($backup->backup_at))) : date("Y-m-d", strtotime($backup->backup_at)); ?></td>
+                        <td><?php echo ($field == 'fecha') ? DwUtils::resaltar($value, date("Y-m-d", strtotime($backup->backup_at))) : date("Y-m-d", strtotime($backup->backup_at)); ?></td>
                         <td><?php echo date("H:i:s", strtotime($backup->backup_at)); ?></td>
-                        <td><?php echo ($field=='denominacion') ? DwUtils::resaltar($value, $backup->denominacion) : $backup->denominacion; ?></td>
-                        <td><?php echo $backup->nombre.' '.$backup->apellido; ?></td>
+                        <td><?php echo ($field == 'denominacion') ? DwUtils::resaltar($value, $backup->denominacion) : $backup->denominacion; ?></td>
+                        <td><?php echo $backup->nombre . ' ' . $backup->apellido; ?></td>
                         <td><?php echo $backup->tamano; ?></td>
                         <td><?php echo $backup->archivo; ?></td>
                         <td class="btn-actions">
-                            <?php echo DwHtml::buttonTable('Descargar backup', "sistema/backups/descargar/$key_dwn/", array('class'=>'no-ajax', 'target'=>'_blank'), 'info', 'fa-download'); ?>
-                            <?php echo DwHtml::buttonTable('Restarurar sistema', "#", array('class'=>'js-confirm', 'data-to'=>PUBLIC_PATH."sistema/backups/restaurar/$key_res/", 'msg-title'=>'Restaurar sistema', 'msg'=>'Está seguro de querer restaurar el sistema con esta copia de seguridad?', 'on-confirm'=>'backupRestore'), 'danger', 'fa-warning'); ?>
+                            <?php echo DwHtml::buttonTable('Descargar backup', "sistema/backups/descargar/$key_dwn/", array('class' => 'no-ajax', 'target' => '_blank'), 'info', 'fa-download'); ?>
+                            <?php echo DwHtml::buttonTable('Restarurar sistema', "#", array('class' => 'js-confirm', 'data-to' => PUBLIC_PATH . "sistema/backups/restaurar/$key_res/", 'msg-title' => 'Restaurar sistema', 'msg' => 'Está seguro de querer restaurar el sistema con esta copia de seguridad?', 'on-confirm' => 'backupRestore'), 'danger', 'fa-warning'); ?>
                         </td>
                     </tr>
                     <?php $backups->counter++; ?>
@@ -63,6 +63,6 @@
 
     </div>
 
-    <?php View::partial('paginators/default', false, array('page'=>$backups, 'url'=>"sistema/backups/buscar/$field/$value/$order/")); ?>
+    <?php View::partial('paginators/default', false, array('page' => $backups, 'url' => "sistema/backups/buscar/$field/$value/$order/")); ?>
 
 </div>

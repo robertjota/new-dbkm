@@ -43,10 +43,10 @@
               <?php if ($menu->visibilidad != Menu::BACKEND) { ?>
                 <?php continue; ?>
               <?php } ?>
-              <?php $key_upd = Security::setKey($menu->id, 'upd_menu'); ?>
-              <?php $key_ina = Security::setKey($menu->id, 'inactivar_menu'); ?>
-              <?php $key_rea = Security::setKey($menu->id, 'reactivar_menu'); ?>
-              <?php $key_del = Security::setKey($menu->id, 'eliminar_menu'); ?>
+              <?php $key_upd = DwSecurity::setKey($menu->id, 'upd_menu'); ?>
+              <?php $key_ina = DwSecurity::setKey($menu->id, 'inactivar_menu'); ?>
+              <?php $key_rea = DwSecurity::setKey($menu->id, 'reactivar_menu'); ?>
+              <?php $key_del = DwSecurity::setKey($menu->id, 'eliminar_menu'); ?>
 
               <div class="tab-pane fade show <?= ($counter == 1) ? 'active' : ''; ?>" id="<?= 'nav-' . strtolower($menu->menu); ?>" role="tabpanel" aria-labelledby="<?= 'nav-' . strtolower($menu->menu) . '-tab'; ?>" tabindex="0">
 
@@ -105,10 +105,10 @@
                         <?php $counter2 = 1; ?>
                         <?php foreach ($items as $row) : ?>
 
-                          <?php $key_upd = Security::setKey($row->id, 'upd_menu'); ?>
-                          <?php $key_ina = Security::setKey($row->id, 'inactivar_menu'); ?>
-                          <?php $key_rea = Security::setKey($row->id, 'reactivar_menu'); ?>
-                          <?php $key_del = Security::setKey($row->id, 'eliminar_menu'); ?>
+                          <?php $key_upd = DwSecurity::setKey($row->id, 'upd_menu'); ?>
+                          <?php $key_ina = DwSecurity::setKey($row->id, 'inactivar_menu'); ?>
+                          <?php $key_rea = DwSecurity::setKey($row->id, 'reactivar_menu'); ?>
+                          <?php $key_del = DwSecurity::setKey($row->id, 'eliminar_menu'); ?>
 
                           <tr>
                             <td nowrap class="text-center"><?= $counter2; ?></td>
@@ -150,10 +150,10 @@
 
                             <?php $counter3 = 1; ?>
                             <?php foreach ($hijos as $hijo) : ?>
-                              <?php $key_upd = Security::setKey($hijo->id, 'upd_menu'); ?>
-                              <?php $key_ina = Security::setKey($hijo->id, 'inactivar_menu'); ?>
-                              <?php $key_rea = Security::setKey($hijo->id, 'reactivar_menu'); ?>
-                              <?php $key_del = Security::setKey($hijo->id, 'eliminar_menu'); ?>
+                              <?php $key_upd = DwSecurity::setKey($hijo->id, 'upd_menu'); ?>
+                              <?php $key_ina = DwSecurity::setKey($hijo->id, 'inactivar_menu'); ?>
+                              <?php $key_rea = DwSecurity::setKey($hijo->id, 'reactivar_menu'); ?>
+                              <?php $key_del = DwSecurity::setKey($hijo->id, 'eliminar_menu'); ?>
                               <tr>
                                 <td nowrap class="text-center"><?= $counter2 . '-' . $counter3; ?></td>
                                 <td class="text-center"><?= $hijo->posicion; ?></td>
@@ -184,10 +184,10 @@
 
                                 <?php $counter4 = 1; ?>
                                 <?php foreach ($nietos as $nieto) : ?>
-                                  <?php $key_upd = Security::setKey($nieto->id, 'upd_menu'); ?>
-                                  <?php $key_ina = Security::setKey($nieto->id, 'inactivar_menu'); ?>
-                                  <?php $key_rea = Security::setKey($nieto->id, 'reactivar_menu'); ?>
-                                  <?php $key_del = Security::setKey($nieto->id, 'eliminar_menu'); ?>
+                                  <?php $key_upd = DwSecurity::setKey($nieto->id, 'upd_menu'); ?>
+                                  <?php $key_ina = DwSecurity::setKey($nieto->id, 'inactivar_menu'); ?>
+                                  <?php $key_rea = DwSecurity::setKey($nieto->id, 'reactivar_menu'); ?>
+                                  <?php $key_del = DwSecurity::setKey($nieto->id, 'eliminar_menu'); ?>
                                   <tr>
                                     <td nowrap class="text-center"><?= $counter2 . '-' . $counter3 . '-' . $counter4; ?></td>
                                     <td class="text-center"><?= $nieto->posicion; ?></td>

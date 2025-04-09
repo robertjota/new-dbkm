@@ -38,7 +38,7 @@ class MantenimientoController extends BackendController
      */
     public function desfragmentar($key)
     {
-        if (!$tabla = Security::getKey($key, 'desfragmentar')) {
+        if (!$tabla = DwSecurity::getKey($key, 'desfragmentar')) {
             return Redirect::toAction('index');
         }
         try {
@@ -59,7 +59,7 @@ class MantenimientoController extends BackendController
      */
     public function cache($key)
     {
-        if (!$tabla = Security::getKey($key, 'cache')) {
+        if (!$tabla = DwSecurity::getKey($key, 'cache')) {
             return Redirect::toAction('index');
         }
         try {
@@ -80,7 +80,7 @@ class MantenimientoController extends BackendController
      */
     public function reparar($key)
     {
-        if (!$tabla = Security::getKey($key, 'reparar')) {
+        if (!$tabla = DwSecurity::getKey($key, 'reparar')) {
             return Redirect::toAction('index');
         }
         try {
@@ -101,7 +101,7 @@ class MantenimientoController extends BackendController
      */
     public function optimizar($key)
     {
-        if (!$tabla = Security::getKey($key, 'optimizar')) {
+        if (!$tabla = DwSecurity::getKey($key, 'optimizar')) {
             return Redirect::toAction('index');
         }
         try {

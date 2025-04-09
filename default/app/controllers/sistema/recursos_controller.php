@@ -57,7 +57,7 @@ class RecursosController extends BackendController
      */
     public function editar($key)
     {
-        if (!$id = Security::getKey($key, 'upd_recurso', 'int')) {
+        if (!$id = DwSecurity::getKey($key, 'upd_recurso', 'int')) {
             return Redirect::toAction('listar');
         }
 
@@ -88,7 +88,7 @@ class RecursosController extends BackendController
      */
     public function estado($tipo, $key)
     {
-        if (!$id = Security::getKey($key, $tipo . '_recurso', 'int')) {
+        if (!$id = DwSecurity::getKey($key, $tipo . '_recurso', 'int')) {
             return Redirect::toAction('listar');
         }
 
@@ -120,7 +120,7 @@ class RecursosController extends BackendController
      */
     public function eliminar($key)
     {
-        if (!$id = Security::getKey($key, 'eliminar_recurso', 'int')) {
+        if (!$id = DwSecurity::getKey($key, 'eliminar_recurso', 'int')) {
             return Redirect::toAction('listar');
         }
 

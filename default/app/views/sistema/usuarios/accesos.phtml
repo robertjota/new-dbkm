@@ -9,8 +9,8 @@
     <div class="card block-rounded shadow">
         <div class="card-header text-end">
             <?= DwButton::back('sistema/usuarios/listar', 'Listar', 'fa-undo', 'Listar'); ?>
-            <?= DwHtml::button("sistema/usuarios/estados/" . Security::setKey($usuario->id, 'shw_estados'), 'Estado', array('class' => 'btn-info'), 'fa-check-square'); ?>
-            <?= DwHtml::button("sistema/usuarios/editar/" . Security::setKey($usuario->id, 'upd_usuario'), 'Editar', array('class' => 'btn-info'), 'fa-pencil'); ?>
+            <?= DwHtml::button("sistema/usuarios/estados/" . DwSecurity::setKey($usuario->id, 'shw_estados'), 'Estado', array('class' => 'btn-info'), 'fa-check-square'); ?>
+            <?= DwHtml::button("sistema/usuarios/editar/" . DwSecurity::setKey($usuario->id, 'upd_usuario'), 'Editar', array('class' => 'btn-info'), 'fa-pencil'); ?>
         </div>
         <div class="card-body ">
             <?php echo DwForm::open(); ?>

@@ -61,6 +61,12 @@ function kumbia_autoload($class)
         include CORE_PATH . "libs/$sclass/$sclass.php";
         return;
     }
+    if (is_file(APP_PATH . "extensions/helpers/$sclass.php")) {
+        return include APP_PATH . "extensions/helpers/$sclass.php";
+    }
+    if (is_file(CORE_PATH . "extensions/helpers/$sclass.php")) {
+        return include CORE_PATH . "extensions/helpers/$sclass.php";
+    }
     // Perhaps is PEAR,  zend framework 1, ...
     kumbia_autoload_vendor($class);
 }

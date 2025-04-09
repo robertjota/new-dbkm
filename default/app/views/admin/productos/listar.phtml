@@ -34,9 +34,9 @@
                                 <?php $count = 1;
                                 ?>
                                 <?php foreach ($productos as $producto) { ?>
-                                    <?php $key_upd = Security::setKey($producto->id, 'upd_producto'); ?>
-                                    <?php $key_del = Security::setKey($producto->id, 'del_producto'); ?>
-                                    <?php $key_shw = Security::setKey($producto->id, 'shw_producto'); ?>
+                                    <?php $key_upd = DwSecurity::setKey($producto->id, 'upd_producto'); ?>
+                                    <?php $key_del = DwSecurity::setKey($producto->id, 'del_producto'); ?>
+                                    <?php $key_shw = DwSecurity::setKey($producto->id, 'shw_producto'); ?>
                                     <tr>
                                         <td class="text-center">
                                             <?= $count++ ?>
