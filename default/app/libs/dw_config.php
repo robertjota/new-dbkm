@@ -12,7 +12,7 @@ class DwConfig
 {
 
     /**
-     * Método que se utiliza para leer un .php
+     * Método que se utiliza para leer un .php y convertirlo en constantes (como .env)
      * @param type $file Nombre del archivo (sin el .php);
      * @param type $source
      */
@@ -21,6 +21,10 @@ class DwConfig
         $config = Config::read($file, $force);
 
         if (is_array($config)) {
+            //Primera pasada: definir constantes
+            self::defineConstants($config);
+            
+            //Segunda pasada: preparar valores para retorno
             foreach ($config as $seccion => &$filas) {
                 if (is_array($filas)) {
                     foreach ($filas as $variable => &$valor) {
@@ -44,6 +48,33 @@ class DwConfig
         }
 
         return $config;
+    }
+    
+    /**
+     * Define todas las constantes del config (como .env)
+     */
+    private static function defineConstants($config)
+    {
+        if (is_array($config)) {
+            foreach ($config as $seccion => $filas) {
+                if (is_array($filas)) {
+                    foreach ($filas as $variable => $valor) {
+                        // Nombre de constante en MAYÚSCULAS
+                        $constName = strtoupper($variable);
+                        
+                        // Convertir valores On/Off a boolean
+                        if (is_string($valor) && in_array($valor, ['On', 'Off'])) {
+                            $valor = ($valor === 'On');
+                        }
+                        
+                        // Definir solo si no existe
+                        if (!defined($constName)) {
+                            define($constName, $valor);
+                        }
+                    }
+                }
+            }
+        }
     }
 
     /**

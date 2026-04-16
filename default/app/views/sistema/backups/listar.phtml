@@ -32,8 +32,8 @@
                             </thead>
                             <tbody>
                                 <?php foreach ($backups->items as $backup): ?>
-                                    <?php $key_res = Security::setKey($backup->id, 'restaurar_backup'); ?>
-                                    <?php $key_dwn = Security::setKey($backup->id, 'descargar_backup'); ?>
+                                    <?php $key_res = DwSecurity::setKey($backup->id, 'restaurar_backup'); ?>
+                                    <?php $key_dwn = DwSecurity::setKey($backup->id, 'descargar_backup'); ?>
 
                                     <tr data-backup-description="<?= $backup->denominacion; ?>" data-backup-file="<?= $backup->archivo; ?>" data-backup-datetime="<?= $backup->backup_at; ?>">
                                         <td class="text-center"><?= $backups->counter; ?></td>

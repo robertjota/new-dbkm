@@ -1,0 +1,60 @@
+<?php View::flash(); ?>
+
+<!-- Page Content -->
+<div class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="block">
+                <div class="block-content">
+                    <?php echo DwForm::openAjax(); ?>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <?php echo DwForm::text('producto.codigo', ['class' => 'input-required'], $producto->codigo ?? '', 'Código'); ?>
+                        </div>
+                        <div class="col-md-6">
+                            <?php echo DwForm::text('producto.nombre', ['class' => 'input-required'], $producto->nombre ?? '', 'Nombre'); ?>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <?php echo DwForm::dbSelect('producto.categoria_id', 'nombre', array('administracion/categoria', 'find'), NULL, array('class' => 'input-required'), $producto->categoria_id ?? NULL, 'Categoría'); ?>
+                        </div>
+                        <div class="col-md-6">
+                            <?php echo DwForm::dbSelect('producto.unidad_id', 'nombre', array('administracion/unidad', 'find'), NULL, array('class' => 'input-required'), $producto->unidad_id ?? NULL, 'Unidad'); ?>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <?php echo DwForm::number('producto.existencia', ['class' => 'input-required'], $producto->existencia ?? 0, 'Existencia'); ?>
+                        </div>
+                        <div class="col-md-6">
+                            <?php echo DwForm::number('producto.costo', ['class' => 'input-required'], $producto->costo ?? 0.00, 'Costo'); ?>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <?php echo DwForm::textarea('producto.descripcion', [], $producto->descripcion ?? '', 'Descripción'); ?>
+                        </div>
+                    </div>
+
+                    <?php echo DwForm::hidden('producto.id', null, $producto->id); ?>
+
+                    <div class="row mb-3 mt-3">
+                        <div class="form-actions">
+                            <div class="text-left">
+                                <?php echo DwForm::send("Actualizar"); ?>
+                                <?php echo DwForm::cancel(); ?>
+                            </div>
+                        </div>
+                    </div>
+                    <?php echo DwForm::close(); ?>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END Page Content -->

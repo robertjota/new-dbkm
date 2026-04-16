@@ -26,9 +26,9 @@
                                 <tbody>
                                     <?php $counter = 1; ?>
                                     <?php foreach($%lcaseModels% as $%lcaseModel%) { ?>
-                                        <?php $key_upd = Security::setKey($%lcaseModel%->id, 'upd_%lcaseModel%'); ?>
-                                        <?php $key_del = Security::setKey($%lcaseModel%->id, 'del_%lcaseModel%'); ?>
-                                        <?php $key_shw = Security::setKey($%lcaseModel%->id, 'shw_%lcaseModel%'); ?>
+                                        <?php $key_upd = DwSecurity::setKey($%lcaseModel%->id, 'upd_%lcaseModel%'); ?>
+                                        <?php $key_del = DwSecurity::setKey($%lcaseModel%->id, 'del_%lcaseModel%'); ?>
+                                        <?php $key_shw = DwSecurity::setKey($%lcaseModel%->id, 'shw_%lcaseModel%'); ?>
                                         <tr>
                                             <td class="text-center"><?= $counter; ?></td>
                                             %columnListBody%

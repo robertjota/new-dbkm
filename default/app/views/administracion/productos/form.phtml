@@ -1,0 +1,7 @@
+<?php echo DwForm::text('producto.codigo', ['class' => 'input-required'], NULL, 'Código'); ?>
+<?php echo DwForm::text('producto.nombre', ['class' => 'input-required'], NULL, 'Nombre'); ?>
+<?php echo DwForm::dbSelect('producto.categoria_id', 'nombre', array('administracion/categoria', 'find'), NULL, array('class' => 'input-required'), NULL, 'Categoría'); ?>
+<?php echo DwForm::dbSelect('producto.unidad_id', 'nombre', array('administracion/unidad', 'find'), NULL, array('class' => 'input-required'), NULL, 'Unidad'); ?>
+<?php echo DwForm::text('producto.descripcion', [], NULL, 'Descripción'); ?>
+<?php echo DwForm::number('producto.existencia', ['class' => 'input-required'], 0, 'Existencia'); ?>
+<?php echo DwForm::number('producto.costo', ['class' => 'input-required'], 0.00, 'Costo'); ?>

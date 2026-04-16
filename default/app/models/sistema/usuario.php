@@ -53,40 +53,34 @@ class Usuario extends ActiveRecord
             if (DwAuth::isLogged()) {
                 return TRUE;
             } else {
-                if (DwForm::isValidToken()) { //Si el formulario es válido
-
-                    if (DwAuth::login(array('login' => $user), array('password' => $pass), $mode)) {
-                        $usuario = self::getUsuarioLogueado();
-                        if ($usuario->perfil_id != Perfil::SUPER_USUARIO && ($usuario->estado_usuario != EstadoUsuario::ACTIVO)) {
-                            DwAuth::logout();
-                            Flash::error('Lo sentimos pero tu cuenta se encuentra inactiva. <br>Si esta información es incorrecta contacta al administrador del sistema.');
-                            return false;
-                        }
-
-                        Session::set("ip", DwUtils::getIp());
-                        Session::set('perfil', $usuario->perfil);
-                        Session::set('email', $usuario->email);
-                        Session::set('nombre', $usuario->nombre);
-                        Session::set('apellido', $usuario->apellido ?? '');
-                        Session::set('usuario', $usuario->login);
-                        Session::set('foto', $usuario->fotografia);
-                        Session::set('perfil_id', $usuario->perfil_id);
-                        Session::set('estado_usuario', $usuario->estado_usuario);
-                        Session::set('usuario_id', $usuario->id);
-                        //Registro el acceso
-                        Acceso::setAcceso(Acceso::ENTRADA, $usuario->id);
-                        if ($usuario->apellido != '') {
-                            Flash::info("¡ Bienvenido <strong>$usuario->nombre" . ' ' . "$usuario->apellido</strong> !.");
-                        } else {
-                            Flash::info("¡ Bienvenido <strong>$usuario->nombre</strong> !.");
-                        }
-                        return TRUE;
-                    } else {
-
-                        Flash::error(DwAuth::getError());
+                if (DwAuth::login(array('login' => $user), array('password' => $pass), $mode)) {
+                    $usuario = self::getUsuarioLogueado();
+                    if ($usuario->perfil_id != Perfil::SUPER_USUARIO && ($usuario->estado_usuario != EstadoUsuario::ACTIVO)) {
+                        DwAuth::logout();
+                        Flash::error('Lo sentimos pero tu cuenta se encuentra inactiva. <br>Si esta información es incorrecta contacta al administrador del sistema.');
+                        return false;
                     }
+
+                    Session::set("ip", DwUtils::getIp());
+                    Session::set('perfil', $usuario->perfil);
+                    Session::set('email', $usuario->email);
+                    Session::set('nombre', $usuario->nombre);
+                    Session::set('apellido', $usuario->apellido ?? '');
+                    Session::set('usuario', $usuario->login);
+                    Session::set('foto', $usuario->fotografia);
+                    Session::set('perfil_id', $usuario->perfil_id);
+                    Session::set('estado_usuario', $usuario->estado_usuario);
+                    Session::set('usuario_id', $usuario->id);
+                    //Registro el acceso
+                    Acceso::setAcceso(Acceso::ENTRADA, $usuario->id);
+                    if ($usuario->apellido != '') {
+                        Flash::info("¡ Bienvenido <strong>$usuario->nombre" . ' ' . "$usuario->apellido</strong> !.");
+                    } else {
+                        Flash::info("¡ Bienvenido <strong>$usuario->nombre</strong> !.");
+                    }
+                    return TRUE;
                 } else {
-                    Flash::info('La llave de acceso ha caducado. <br>Por favor recarga la página');
+                    Flash::error(DwAuth::getError());
                 }
             }
         } else {
@@ -190,8 +184,7 @@ class Usuario extends ActiveRecord
                     Flash::error("Indica la nueva contraseña");
                     return false;
                 }
-                $obj->oldpassword = sha1($obj->oldpassword);
-                if ($obj->oldpassword !== $old->password) {
+                if (!password_verify($obj->oldpassword, $old->password)) {
                     Flash::error("La contraseña anterior no coincide con la registrada. Verifica los datos e intente nuevamente");
                     return false;
                 }
@@ -203,12 +196,12 @@ class Usuario extends ActiveRecord
                 Flash::error("Indica la contraseña para el inicio de sesión");
                 return false;
             }
-            $obj->password = sha1($obj->password);
-            $obj->repassword = sha1($obj->repassword);
             if ($obj->password !== $obj->repassword) {
                 Flash::error('Las contraseñas no coinciden. Verifica los datos e intenta nuevamente.');
                 return 'cancel';
             }
+            $obj->password = password_hash($obj->password, PASSWORD_BCRYPT);
+            $obj->repassword = password_hash($obj->repassword, PASSWORD_BCRYPT);
         } else {
             if (isset($obj->id)) { //Mantengo la contraseña anterior
                 $obj->password = $old->password;

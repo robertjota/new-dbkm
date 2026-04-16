@@ -69,7 +69,7 @@ class BackupsController extends BackendController
         }
 
         try {
-            $id = Security::getKey($key, 'restaurar_backup', 'int');
+            $id = DwSecurity::getKey($key, 'restaurar_backup', 'int');
             $backup = $this->backup->restoreBackup($id);
             Flash::valid('Sistema restaurado desde: ' . $backup->archivo);
         } catch (Exception $e) {
@@ -84,7 +84,7 @@ class BackupsController extends BackendController
      */
     public function descargar($key = '')
     {
-        if (!$id = Security::getKey($key, 'descargar_backup', 'int')) {
+        if (!$id = DwSecurity::getKey($key, 'descargar_backup', 'int')) {
             return Redirect::toAction('listar');
         }
 

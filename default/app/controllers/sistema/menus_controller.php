@@ -64,7 +64,7 @@ class MenusController extends BackendController
      */
     public function editar($key)
     {
-        if (!$id = Security::getKey($key, 'upd_menu', 'int')) {
+        if (!$id = DwSecurity::getKey($key, 'upd_menu', 'int')) {
             return Redirect::toAction('listar');
         }
 
@@ -99,7 +99,7 @@ class MenusController extends BackendController
      */
     public function estado($tipo, $key)
     {
-        if (!$id = Security::getKey($key, $tipo . '_menu', 'int')) {
+        if (!$id = DwSecurity::getKey($key, $tipo . '_menu', 'int')) {
             return Redirect::toAction('listar');
         }
 
@@ -131,7 +131,7 @@ class MenusController extends BackendController
      */
     public function eliminar($key)
     {
-        if (!$id = Security::getKey($key, 'eliminar_menu', 'int')) {
+        if (!$id = DwSecurity::getKey($key, 'eliminar_menu', 'int')) {
             return Redirect::toAction('listar');
         }
 

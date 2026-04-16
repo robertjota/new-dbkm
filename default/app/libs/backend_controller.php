@@ -17,6 +17,7 @@ require_once CORE_PATH . 'kumbia/controller.php';
  */
 
 require_once APP_PATH . 'extensions/helpers/dw_form.php';
+require_once APP_PATH . 'extensions/helpers/dw_response.php';
 
 //Cargo el método para crear variables tipo define del config
 DwConfig::load();
@@ -50,15 +51,24 @@ class BackendController extends Controller
      */
     protected $_time_request;
 
+    /**
+     * Indica si la respuesta debe ser JSON
+     */
+    protected $ajax_mode = FALSE;
+
 
     final protected function initialize()
     {
+        // Verificar si es una petición AJAX y APP_AJAX está habilitado
+        if (Input::isAjax() && APP_AJAX) {
+            $this->ajax_mode = TRUE;
+            View::template(NULL);
+        }
 
         /**
          * Si el método de entrada es ajax, el tipo de respuesta es sólo la vista
          */
         if (Input::isAjax()) {
-            View::template(null);
             if (!empty($_POST)) {
                 Session::set('change_url', TRUE);
             }
@@ -70,6 +80,9 @@ class BackendController extends Controller
         if (!DwAuth::isLogged()) {
             //Verifico que no genere una redirección infinita
             if (($this->controller_name != 'login') && ($this->action_name != 'entrar' && $this->action_name != 'salir')) {
+                if ($this->ajax_mode) {
+                    DwResponse::sendError('No has iniciado sesión o ha caducado.');
+                }
                 Flash::warning('No has iniciado sesión o ha caducado.');
                 //Verifico que no sea una ventana emergente
                 if ($this->module_name == 'reporte') {
@@ -83,8 +96,10 @@ class BackendController extends Controller
 
             $acl = new DwAcl(); //Cargo los permisos y templates
             if (!$acl->check(Session::get('perfil_id'))) {
+                if ($this->ajax_mode) {
+                    DwResponse::sendError('No posee privilegios para ejecutar esta acción.');
+                }
                 Flash::error('<b>Usted no posee privilegios para ejecutar esta Acción</b>');
-                //Flash::error('Tu no posees privilegios para acceder a <b>' . Router::get('route') . '</b>');
                 if (Input::isAjax()) {
                     View::ajax();
                     header('http/1.1 403 forbidden'); //Agrego la cabecera de forbidden
@@ -94,11 +109,14 @@ class BackendController extends Controller
                 return FALSE;
             }
 
-            if (APP_UPDATE && (Session::get('perfil_id') != Perfil::SUPER_USUARIO)) { //Solo el super usuario puede hacer todo
+            if (defined('APP_UPDATE') && APP_UPDATE && (Session::get('perfil_id') != Perfil::SUPER_USUARIO)) { //Solo el super usuario puede hacer todo
                 if ($this->module_name != 'dashboard' && $this->controller_name != 'index') {
                     $msj = 'Estamos en labores de actualización y mantenimiento.';
                     $msj .= '<br>';
                     $msj .= 'El servicio se reanudará dentro de ' . APP_UPDATE_TIME;
+                    if ($this->ajax_mode) {
+                        DwResponse::sendError($msj);
+                    }
                     if (Input::isAjax()) {
                         View::appUpdate();
                     } else {
@@ -124,5 +142,31 @@ class BackendController extends Controller
         if ($this->set_title && Input::isAjax()) {
             $this->set_title = TRUE;
         }
+    }
+
+    /**
+     * Método para responder en formato JSON
+     *
+     * @param array $response
+     */
+    protected function jsonResponse($response)
+    {
+        if ($this->ajax_mode) {
+            DwResponse::send($response);
+        }
+    }
+
+    /**
+     * Redirección compatible con AJAX
+     *
+     * @param string $action
+     */
+    protected function ajaxRedirect($action)
+    {
+        $action = trim($action, '/') . '/';
+        if ($this->ajax_mode) {
+            DwResponse::sendSuccess('Redireccionando...', null, PUBLIC_PATH . $action);
+        }
+        Redirect::to($action);
     }
 }

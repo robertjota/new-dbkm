@@ -106,8 +106,7 @@ class Backup extends ActiveRecord
     public function createBackup($data)
     {
         $backup = new Backup($data);
-
-        $backup->archivo = "backup-" . ($backup->count() + 1) . ".sql.zip"; // Cambia la extensión a .zip
+        $backup->archivo = "backup-" . ($backup->count() + 1) . ".sql.zip";
         $backup->usuario_id = Session::get('id');
 
         if (!$backup->create()) {
@@ -121,37 +120,69 @@ class Backup extends ActiveRecord
         }
 
         $file = $this->backupPath . $backup->archivo;
-
         $config = $this->getDatabaseConfig();
-        // Exportar la base de datos a un archivo SQL temporal
         $tempSqlFile = $this->backupPath . "temp_backup.sql";
-        $exec = "mysqldump -h {$config['host']} -u {$config['username']} --password={$config['password']} --opt --default-character-set=latin1 {$config['name']} > $tempSqlFile";
-        system($exec, $resultado);
 
-        if ($resultado) {
-            Flash::error('Error al exportar la base de datos. Verifica las credenciales de la base de datos.');
+        try {
+            $pdo = new PDO(
+                "mysql:host={$config['host']};dbname={$config['name']}",
+                $config['username'],
+                $config['password']
+            );
+
+            $tables = $pdo->query('SHOW TABLES')->fetchAll(PDO::FETCH_COLUMN);
+
+            $sql = "SET FOREIGN_KEY_CHECKS=0;\n\n";
+
+            foreach ($tables as $table) {
+                // Get create table syntax
+                $stmt = $pdo->query("SHOW CREATE TABLE `$table`");
+                $row = $stmt->fetch(PDO::FETCH_ASSOC);
+                $sql .= $row['Create Table'] . ";\n\n";
+
+                // Get table data
+                $rows = $pdo->query("SELECT * FROM `$table`")->fetchAll(PDO::FETCH_ASSOC);
+                if (count($rows) > 0) {
+                    $sql .= "INSERT INTO `$table` VALUES ";
+                    $values = [];
+                    foreach ($rows as $row) {
+                        $rowValues = array_map(function ($value) use ($pdo) {
+                            if ($value === null) return 'NULL';
+                            return $pdo->quote($value);
+                        }, $row);
+                        $values[] = "(" . implode(',', $rowValues) . ")";
+                    }
+                    $sql .= implode(",\n", $values) . ";\n\n";
+                }
+            }
+
+            $sql .= "SET FOREIGN_KEY_CHECKS=1;";
+
+            file_put_contents($tempSqlFile, $sql);
+
+            $zip = new ZipArchive();
+            if ($zip->open($file, ZipArchive::CREATE) === TRUE) {
+                $zip->addFile($tempSqlFile, "backup.sql");
+                $zip->close();
+                unlink($tempSqlFile);
+            } else {
+                Flash::error('Error al crear el archivo ZIP.');
+                return false;
+            }
+
+            $tamano = filesize($file);
+            $clase = array(" Bytes", " KB", " MB", " GB", " TB");
+            $backup->tamano = round($tamano / pow(1024, ($i = floor(log($tamano, 1024)))), 2) . $clase[$i];
+            $backup->update();
+
+            Flash::valid('Backup creado correctamente: ' . $backup->archivo);
+            return $backup;
+        } catch (PDOException $e) {
+            Flash::error('Error en la base de datos: ' . $e->getMessage());
             return false;
         }
-
-        // Comprimir el archivo SQL en un archivo ZIP
-        $zip = new ZipArchive();
-        if ($zip->open($file, ZipArchive::CREATE) === TRUE) {
-            $zip->addFile($tempSqlFile, "backup.sql");
-            $zip->close();
-            unlink($tempSqlFile); // Eliminar el archivo SQL temporal
-        } else {
-            Flash::error('Error al crear el archivo ZIP. Verifica que la extensión ZipArchive esté habilitada en PHP.');
-            return false;
-        }
-
-        $tamano = filesize($file);
-        $clase = array(" Bytes", " KB", " MB", " GB", " TB");
-        $backup->tamano = round($tamano / pow(1024, ($i = floor(log($tamano, 1024)))), 2) . $clase[$i];
-        $backup->update();
-
-        Flash::valid('Backup creado correctamente: ' . $backup->archivo);
-        return $backup;
     }
+
 
     /**
      * Método para restaurar un backup

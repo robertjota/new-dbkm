@@ -2,14 +2,16 @@
     "config": {
         "sort-packages": true
     },
-    "description": "The KumbiaPHP framework.",
+    "description": "DBKM - Admin Panel para KumbiaPHP Framework v2.0",
     "homepage": "https://kumbiaphp.com",
     "license": "BSD-3-Clause",
-    "name": "kumbia/framework",
+    "name": "dbkm/admin-panel",
     "require": {
         "php": ">=8.0",
         "consolidation/robo": "^5.1",
-        "symfony/var-dumper": "^7.2"
+        "dompdf/dompdf": "^3.1",
+        "phpoffice/phpspreadsheet": "^5.5",
+        "symfony/var-dumper": "^8.0"
     },
     "require-dev": {
         "mockery/mockery": "^1",

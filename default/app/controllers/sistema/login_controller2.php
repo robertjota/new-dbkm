@@ -20,35 +20,44 @@ class LoginController extends Controller
                 Flash::error("Por favor, introduce tu contraseña");
             } else {
 
-                $usuario = $login["usuario"];
-                // en la base de datos el password esta encriptado con md5, desde php se realiza la conversion
-                $pwd = md5($login["password"]);
+                $loginUser = $login["usuario"];
+                $usuario = new Usuario();
+                if ($usuario->find_first("login = '$loginUser' AND estado = 'A'")) {
+                    $hash = $usuario->password;
+                    $valid = false;
+                    
+                    // Check if it's bcrypt (starts with $2a$, $2b$, $2y$ or $2x$) - 60 chars
+                    if (strlen($hash) === 60 && strpos($hash, '$2') === 0) {
+                        $valid = password_verify($login["password"], $hash);
+                    } 
+                    // Check if it's SHA1 (40 hex chars) - legacy
+                    elseif (strlen($hash) === 40 && ctype_xdigit($hash)) {
+                        if (sha1($login["password"]) === $hash) {
+                            $usuario->password = password_hash($login["password"], PASSWORD_BCRYPT);
+                            $usuario->update();
+                            $valid = true;
+                        }
+                    }
+                    // Check for argon2 or other modern hashes
+                    elseif (strpos($hash, '$argon') !== false) {
+                        $valid = password_verify($login["password"], $hash);
+                    }
+                    
+                    if ($valid) {
+                        $perfil = new Perfil();
+                        $perfil->find_first($usuario->perfil_id);
 
-                // seteamos las variables de sesion
-                Session::set("usuario", $usuario);
-                Session::set("password", $pwd);
-                // seteamos las variables de sesion
-
-                // iniciamos el Auth, el modelo se llama Usuario, asi como la tabla
-                $auth = new Auth("model", "class: Usuario", "usuario: " . $usuario, "password: " . $pwd);
-                if ($auth->authenticate()) {
-                    $usuario_data = (new Usuario())->find_first("usuario = '$usuario' AND password = '$pwd'");
-                    $perfil = (new Perfil())->find_first("id = '$usuario_data->perfil_id'");
-
-                    // seteamos las variables de sesion
-                    Session::set("id", $usuario_data->id);
-                    Session::set("nombre", $usuario_data->nombre);
-                    Session::set("email", $usuario_data->email);
-                    Session::set("perfil_id", $usuario_data->perfil_id);
-                    Session::set("perfil", $perfil->perfil);
-                    Session::set("imagen", $usuario_data->img_usuario);
-                    // Si el usuario es valido, lo mandamos al index
-                    // de la aplicacion ya logueado
-                    Redirect::to("/admin");
-                    return false;
-                } else {
-                    Flash::error("Credenciales inválidas");
+                        Session::set("id", $usuario->id);
+                        Session::set("nombre", $usuario->nombre);
+                        Session::set("email", $usuario->email);
+                        Session::set("perfil_id", $usuario->perfil_id);
+                        Session::set("perfil", $perfil->perfil);
+                        Session::set("imagen", $usuario->fotografia);
+                        Redirect::to("/admin");
+                        return false;
+                    }
                 }
+                Flash::error("Credenciales inválidas");
             }
         }
     }

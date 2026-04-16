@@ -1,0 +1,34 @@
+<?php View::flash(); ?>
+
+<!-- Page Content -->
+<div class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="block">
+                <div class="block-content">
+                    <?php echo DwForm::openAjax(); ?>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <?php echo DwForm::text('unidad.nombre', ['class' => 'input-required'], $unidad->nombre ?? '', 'Nombre'); ?>
+                        </div>
+                    </div>
+
+
+                    <?php echo DwForm::hidden('unidad.id', null, $unidad->id); ?>
+
+                    <div class="row mb-3 mt-3">
+                        <div class="form-actions">
+                            <div class="text-left">
+                                <?php echo DwForm::send("Actualizar"); ?>
+                                <?php echo DwForm::cancel(); ?>
+                            </div>
+                        </div>
+                    </div>
+                    <?php echo DwForm::close(); ?>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END Page Content -->

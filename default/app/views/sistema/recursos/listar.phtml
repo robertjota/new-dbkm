@@ -36,9 +36,14 @@
                     <div class="tab-content" id="nav-TabContent">
                         <?php $counter = 1; ?>
                         <?php foreach ($recursos ?? [] as $modulo): ?>
-                            <div class="tab-pane fade show <?php echo ($counter == 1) ? 'active' : ''; ?>" id="<?= 'nav-' . strtolower($modulo->modulo); ?>">
+                            <?php $moduloNombre = is_object($modulo) ? $modulo->modulo : $modulo; ?>
+                            <div class="tab-pane fade show <?php echo ($counter == 1) ? 'active' : ''; ?>" id="<?= 'nav-' . strtolower($moduloNombre); ?>">
 
-                                <?php $recurso = $modulo->getRecursosPorModulo($modulo->modulo, $order); ?>
+<<<<<<< Updated upstream
+                                <?php $recurso = $modulo->getRecursosPorModulo($modulo->modulo); ?>
+=======
+                                <?php $recurso = Recurso::getRecursosPorModuloStatic($moduloNombre, $order ?? 'controlador'); ?>
+>>>>>>> Stashed changes
 
                                 <div class="table-responsive mb-3">
                                     <table class="table table-bordered table-striped table-vcenter js-dataTable-simple table-hover table-condensed">
@@ -56,10 +61,10 @@
                                             <?php if ($recurso) { ?>
                                                 <?php $counter2 = 1; ?>
                                                 <?php foreach ($recurso as $row): ?>
-                                                    <?php $key_upd = Security::setKey($row->id, 'upd_recurso'); ?>
-                                                    <?php $key_ina = Security::setKey($row->id, 'inactivar_recurso'); ?>
-                                                    <?php $key_rea = Security::setKey($row->id, 'reactivar_recurso'); ?>
-                                                    <?php $key_del = Security::setKey($row->id, 'eliminar_recurso'); ?>
+                                                    <?php $key_upd = DwSecurity::setKey($row->id, 'upd_recurso'); ?>
+                                                    <?php $key_ina = DwSecurity::setKey($row->id, 'inactivar_recurso'); ?>
+                                                    <?php $key_rea = DwSecurity::setKey($row->id, 'reactivar_recurso'); ?>
+                                                    <?php $key_del = DwSecurity::setKey($row->id, 'eliminar_recurso'); ?>
                                                     <tr>
                                                         <td class="text-center"><?php echo $counter2; ?></td>
                                                         <td class="text-left"><?php echo empty($row->controlador) ? '' : $row->controlador; ?></td>
@@ -80,11 +85,11 @@
                                                                         <?php } else { ?>
                                                                             <?php echo DwHtml::buttonTable('Modificar recurso', "sistema/recursos/editar/$key_upd/", null, 'warning', 'fa-edit'); ?>
                                                                             <?php if ($row->activo == Recurso::ACTIVO) { ?>
-                                                                                <?php echo DwHtml::buttonTable('Bloquear recurso', "sistema/recursos/estado/inactivar/$key_ina/", null, 'success', 'fa-flag'); ?>
+                                                                                <?php echo DwHtml::buttonTableSA('Bloquear recurso', "sistema/recursos/estado/inactivar/$key_ina/", ['msg-title' => 'Bloquear recurso', 'msg' => 'Está seguro de bloquear este recurso?'], 'success', 'fa-flag'); ?>
                                                                             <?php } else { ?>
-                                                                                <?php echo DwHtml::buttonTable('Reactivar recurso', "sistema/recursos/estado/reactivar/$key_rea/", null, 'danger', 'fa-flag'); ?>
+                                                                                <?php echo DwHtml::buttonTableSA('Reactivar recurso', "sistema/recursos/estado/reactivar/$key_rea/", ['msg-title' => 'Reactivar recurso', 'msg' => 'Está seguro de reactivar este recurso?'], 'danger', 'fa-flag'); ?>
                                                                             <?php } ?>
-                                                                            <?php echo DwHtml::buttonTable('Eliminar recurso', "sistema/recursos/eliminar/$key_del/", array('class' => 'js-confirm', 'msg-title' => 'Eliminar recurso', 'msg' => 'Está seguro de eliminar este recurso? <br />Recuerda que esta operación no se puede reversar.'), 'danger', 'fa-trash'); ?>
+                                                                            <?php echo DwHtml::buttonTableSA('Eliminar recurso', "sistema/recursos/eliminar/$key_del/", array('class' => 'js-confirm', 'msg-title' => 'Eliminar recurso', 'msg' => 'Está seguro de eliminar este recurso? <br />Recuerda que esta operación no se puede reversar.'), 'danger', 'fa-trash'); ?>
                                                                         <?php } ?>
                                                                     </li>
                                                                 </ul>

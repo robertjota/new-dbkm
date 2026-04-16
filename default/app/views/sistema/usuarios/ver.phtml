@@ -4,7 +4,7 @@
     <div class="card block-rounded shadow">
         <div class="card-header">
             <?php View::partial('subnav/usuario/principal', FALSE, array('id' => $usuario->id)); ?>
-            <?= DwHtml::link("sistema/usuarios/accesos/" . Security::setKey($id, 'shw_accesos'), 'Accesos', array('class' => ''), 'fa-exchange'); ?>
+            <?= DwHtml::link("sistema/usuarios/accesos/" . DwSecurity::setKey($id, 'shw_accesos'), 'Accesos', array('class' => ''), 'fa-exchange'); ?>
         </div>
         <div class="card-body">
             <?= DwForm::openMultipart(); ?>

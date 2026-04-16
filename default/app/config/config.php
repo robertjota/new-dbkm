@@ -2,8 +2,8 @@
 
 return [
     'application' => [
-        'name' => 'KUMBIAPHP',
-        'base_url' => 'https://kumbiaphp.test/',
+        'name' => 'DBKM 2026',
+        'base_url' => 'https://kumbiaphp.atumedida-hosting.com/',
         'production' => 'Off',
         'database' => 'development',
         'dbdate' => 'YYYY-MM-DD',
@@ -23,7 +23,7 @@ return [
         'app_logger' => 'On',
         'app_local' => 'On',
         'app_ajax' => 'On',
-        'datagrid' => 30,
+        'datagrid' => 20,
         'login_exclusion' => 'root, admin',
         'type_reports' => 'html.printer',
         'timezone' => 'America/Caracas',

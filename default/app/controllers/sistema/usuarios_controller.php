@@ -65,7 +65,7 @@ class UsuariosController extends BackendController
      */
     public function editar($key)
     {
-        if (!$id = Security::getKey($key, 'upd_usuario', 'int')) {
+        if (!$id = DwSecurity::getKey($key, 'upd_usuario', 'int')) {
             Flash::error('Error de Seguridad para Editar el Usuario');
             return Redirect::toAction('listar');
         }
@@ -97,7 +97,7 @@ class UsuariosController extends BackendController
      */
     public function estado($tipo, $key)
     {
-        if (!$id = Security::getKey($key, $tipo . '_usuario', 'int')) {
+        if (!$id = DwSecurity::getKey($key, $tipo . '_usuario', 'int')) {
             return Redirect::toAction('listar');
         }
 
@@ -138,7 +138,7 @@ class UsuariosController extends BackendController
      */
     public function ver($key)
     {
-        if (!$id = Security::getKey($key, 'shw_usuario', 'int')) {
+        if (!$id = DwSecurity::getKey($key, 'shw_usuario', 'int')) {
             return Redirect::toAction('listar');
         }
 
@@ -164,7 +164,7 @@ class UsuariosController extends BackendController
      */
     public function estados($key, $page = 'page.1')
     {
-        if (!$id = Security::getKey($key, 'shw_estados', 'int')) {
+        if (!$id = DwSecurity::getKey($key, 'shw_estados', 'int')) {
             return Redirect::toAction('listar');
         }
 
@@ -189,7 +189,7 @@ class UsuariosController extends BackendController
      */
     public function accesos($key, $page = 'page.1')
     {
-        if (!$id = Security::getKey($key, 'shw_accesos', 'int')) {
+        if (!$id = DwSecurity::getKey($key, 'shw_accesos', 'int')) {
             return Redirect::toAction('listar');
         }
 
@@ -229,7 +229,7 @@ class UsuariosController extends BackendController
         View::select(null);
 
         if (Input::isAjax()) {
-            $id = Security::getKey($key, 'change_status');
+            $id = DwSecurity::getKey($key, 'change_status');
             $estado = Input::post('estado');
 
             $usuario = new Usuario();

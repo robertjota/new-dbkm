@@ -3,8 +3,8 @@
 <div class="content">
     <div class="card block-rounded shadow">
         <div class="card-header text-end">
-            <?= DwHtml::button("sistema/usuarios/estados/" . Security::setKey($usuario->id, 'shw_estados'), 'Estado', array('class' => 'btn-info'), 'fa-check-square'); ?>
-            <?= DwHtml::button("sistema/usuarios/accesos/" . Security::setKey($usuario->id, 'shw_accesos'), 'Accesos', array('class' => 'btn-info'), 'fa-exchange'); ?>
+            <?= DwHtml::button("sistema/usuarios/estados/" . DwSecurity::setKey($usuario->id, 'shw_estados'), 'Estado', array('class' => 'btn-info'), 'fa-check-square'); ?>
+            <?= DwHtml::button("sistema/usuarios/accesos/" . DwSecurity::setKey($usuario->id, 'shw_accesos'), 'Accesos', array('class' => 'btn-info'), 'fa-exchange'); ?>
         </div>
         <div class="card-body ">
             <?= DwForm::openMultipart(); ?>

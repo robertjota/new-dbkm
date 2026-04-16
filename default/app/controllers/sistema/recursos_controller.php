@@ -30,11 +30,12 @@ class RecursosController extends BackendController
     /**
      * Método para listar
      */
-    public function listar()
+    public function listar($order = 'controlador')
     {
         $recurso = new Recurso();
 
-        $this->recursos = $recurso->getListadoRecursoPorModulo();
+        $this->recursos = $recurso->getListadoRecursoPorModulo('todos', $order);
+        $this->order = $order;
         $this->page_title = 'Listado de recursos del sistema';
     }
 
@@ -57,7 +58,7 @@ class RecursosController extends BackendController
      */
     public function editar($key)
     {
-        if (!$id = Security::getKey($key, 'upd_recurso', 'int')) {
+        if (!$id = DwSecurity::getKey($key, 'upd_recurso', 'int')) {
             return Redirect::toAction('listar');
         }
 
@@ -88,7 +89,7 @@ class RecursosController extends BackendController
      */
     public function estado($tipo, $key)
     {
-        if (!$id = Security::getKey($key, $tipo . '_recurso', 'int')) {
+        if (!$id = DwSecurity::getKey($key, $tipo . '_recurso', 'int')) {
             return Redirect::toAction('listar');
         }
 
@@ -120,7 +121,7 @@ class RecursosController extends BackendController
      */
     public function eliminar($key)
     {
-        if (!$id = Security::getKey($key, 'eliminar_recurso', 'int')) {
+        if (!$id = DwSecurity::getKey($key, 'eliminar_recurso', 'int')) {
             return Redirect::toAction('listar');
         }
 

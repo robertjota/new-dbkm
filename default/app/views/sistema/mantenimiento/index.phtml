@@ -30,18 +30,18 @@
             </thead>
             <tbody>
                 <?php $counter = 1; ?>
-                <?php foreach($tablas as $tabla): ?>
-                    <?php $key_optim = Security::setKey($tabla['Name'], 'optimizar'); ?>
-                    <?php $key_desfr = Security::setKey($tabla['Name'], 'desfragmentar'); ?>
-                    <?php $key_cache = Security::setKey($tabla['Name'], 'cache'); ?>
-                    <?php $key_repar = Security::setKey($tabla['Name'], 'reparar'); ?>
+                <?php foreach ($tablas as $tabla): ?>
+                    <?php $key_optim = DwSecurity::setKey($tabla['Name'], 'optimizar'); ?>
+                    <?php $key_desfr = DwSecurity::setKey($tabla['Name'], 'desfragmentar'); ?>
+                    <?php $key_cache = DwSecurity::setKey($tabla['Name'], 'cache'); ?>
+                    <?php $key_repar = DwSecurity::setKey($tabla['Name'], 'reparar'); ?>
                     <tr>
                         <td><?php echo $counter; ?></td>
                         <td><?php echo ucwords(str_replace('_', ' ', $tabla['Name'])); ?></td>
                         <td>
                             <?php $comment = explode(';', $tabla['Comment']); ?>
                             <?php $comment = $comment[0]; ?>
-                            <?php echo (preg_match('/InnoDB/i', $comment) OR preg_match('/MYISAM/i', $comment)) ? '' : $comment; ?>
+                            <?php echo (preg_match('/InnoDB/i', $comment) or preg_match('/MYISAM/i', $comment)) ? '' : $comment; ?>
                         </td>
                         <td><?php echo $tabla['Engine']; ?></td>
                         <td><?php echo $tabla['Auto_increment']; ?></td>
@@ -49,7 +49,7 @@
                         <td><?php echo $tabla['Data_length']; ?></td>
                         <td><?php echo $tabla['Data_free']; ?></td>
                         <td><?php echo $tabla['Msg_type']; ?></td>
-                        <td><?php echo ($tabla['Msg_text'] == 'OK') ? '<span class="label label-success">'.$tabla['Msg_text'].'</span>' : '<span class="label label-important">'.$tabla['Msg_text'].'</span>'; ?></td>
+                        <td><?php echo ($tabla['Msg_text'] == 'OK') ? '<span class="label label-success">' . $tabla['Msg_text'] . '</span>' : '<span class="label label-important">' . $tabla['Msg_text'] . '</span>'; ?></td>
                         <td class="text-center">
                             <?php echo DwHtml::buttonTable('Optimizar tabla', "sistema/mantenimiento/optimizar/$key_optim/", NULL, 'info', 'fa-magic', TRUE); ?>
                         </td>

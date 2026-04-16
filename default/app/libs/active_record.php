@@ -30,6 +30,9 @@ abstract class ActiveRecord extends KumbiaActiveRecord
      */
     protected function get_order($s, $default, $resource = array())
     {
+        if ($s === null || $s === '') {
+            return $default;
+        }
         $s = explode('.', $s);
         $column = (empty($s[1])) ? $default : Filter::get($s[1], 'string');
         $type = (empty($s[2])) ? NULL : strtoupper($s[2]);
@@ -53,6 +56,7 @@ abstract class ActiveRecord extends KumbiaActiveRecord
      */
     public function paginated()
     {
+        require_once CORE_PATH . 'libs/kumbia_active_record/behaviors/paginate.php';
         $args = func_get_args();
         array_unshift($args, $this);
         require_once APP_PATH . 'libs/dw_paginate.php';
@@ -66,6 +70,7 @@ abstract class ActiveRecord extends KumbiaActiveRecord
      */
     public function paginated_by_sql($sql)
     {
+        require_once CORE_PATH . 'libs/kumbia_active_record/behaviors/paginate.php';
         $args = func_get_args();
         array_unshift($args, $this);
         require_once APP_PATH . 'libs/dw_paginate.php';

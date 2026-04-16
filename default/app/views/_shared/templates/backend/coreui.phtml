@@ -119,17 +119,19 @@
         <div class="d-flex flex-column flex-md-row justify-content-md-between align-items-md-center py-2 text-center text-md-start">
           <div class="flex-grow-1 mb-1 mb-md-0">
             <h1 class="h3 fw-bold mb-2">
-              <?php echo $page_module ?? 'Sin Módulo'; ?>
+              <?php echo $page_module ?? 'Sin Módulo'; ?>
             </h1>
             <h2 class="h6 fw-medium fw-medium text-muted mb-0">
-              <?php echo $page_title ?? 'Sin Título'; ?>
+              <?php echo $page_title ?? 'Sin Título'; ?>
             </h2>
           </div>
         </div>
       </div>
       <!-- END Hero -->
 
-      <?php View::content() ?>
+      <div id="shell-content">
+        <?php View::content() ?>
+      </div>
     </main>
     <!-- END Main Container -->
 
@@ -139,18 +141,12 @@
   </div>
   <!-- END Page Container -->
 
-  <!--
-        OneUI JS
-
-        Core libraries and functionality
-        webpack is putting everything together at <?= PUBLIC_PATH ?>template/coreui/assets/_js/main/app.js
-    -->
-
-  <!-- jQuery (required for Bootstrap's JavaScript plugins) -->
+  <!-- Spinner for AJAX loading -->
+  <div id="loading-content" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1050;"></div>
+  <div id="spinner" style="display: none; position: fixed; top: 50%; left: 50%; width: 80px; height: 80px; margin-left: -40px; margin-top: -40px; z-index: 1051;"></div>
 
   <!-- Page JS Plugins -->
   <script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/sweetalert2/sweetalert2.min.js"></script>
-
 
   <!-- Page JS Code -->
   <?php SectionManager::yield('scripts') ?>
@@ -159,10 +155,10 @@
   <?= Tag::js('rjr/sweet-alert-config') . PHP_EOL;  ?>
   <?= Tag::js('rjr/alert_helpers') . PHP_EOL;  ?>
   <?= Tag::js('rjr/auto-logout') . PHP_EOL;  ?>
-  <?//= Tag::js('jquery/jquery.kumbiaphp') . PHP_EOL; ?>
+  <?= Tag::js('jquery/jquery.kumbiaphp') . PHP_EOL; ?>
+  <?= Tag::js('jquery/jquery.spin') . PHP_EOL; ?>
   <?= Tag::js('jquery/jquery.keyfilter') . PHP_EOL; ?>
-  <?//= Tag::js('jquery/jquery.kgrid') . PHP_EOL; ?>
-  <?//= Tag::js('jquery/jquery.kload') . PHP_EOL; ?>
+  <?= Tag::js('jquery/jquery.kload') . PHP_EOL; ?>
   <?= Tag::js('validador') . PHP_EOL; ?>
 
   <!-- CODIGO PARA CERRAR SESION -->
@@ -170,17 +166,14 @@
     var autoLogoutTimer;
     resetTimer();
     $(document).on('mouseover mousedown touchstart click keydown mousewheel DDMouseScroll wheel scroll', document, function(e) {
-      //console.log(e.type); // Descomentar esta linea para revisar cuales eventos ocurren
       resetTimer();
-    }); // resetTimer es usado para el conteo del tiempo para el logout
+    });
     function resetTimer() {
       clearTimeout(autoLogoutTimer)
-      autoLogoutTimer = setTimeout(idleLogout, 600000) // 1000 = 1 segundo / 300000 = 5 minutos (tiempo de inactividad)
+      autoLogoutTimer = setTimeout(idleLogout, 600000)
     }
-    // idleLogout es usado redirigir al logout cuando se acaba el tiempo
     function idleLogout() {
-
-      window.location.href = "<?php echo PUBLIC_PATH; ?>logout"; // redireccion para hacer logout
+      window.location.href = "<?php echo PUBLIC_PATH; ?>logout";
     }
   </script>
 </body>

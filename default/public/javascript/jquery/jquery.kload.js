@@ -11,178 +11,324 @@
      * Opciones por defecto
      */
     var defaults = {
-        change_url       : true, //Indica si cambia la url por la url de la petición
-        async            : false, //Indica si la petición es asíncrona
-        timeout          : 45000, //Tiempo de espera
-        spinner          : true, //Indica si muestra el sppiner al cargar
-        append_data      : false, //Indica si carga con html o append la data
-        msj              : true, //Indica si muestra alertas
-        response         : 'html', //Método de respuesta que se espera
-        capa            : 'shell-content', //Capa a actualizar
-        method          : 'GET', //Método a utilizar
-        data            : null  //Data o parámetros a enviar
+        change_url       : true,
+        async            : false,
+        timeout          : 45000,
+        spinner          : true,
+        append_data      : false,
+        msj              : true,
+        response         : 'html',
+        capa            : 'shell-content',
+        method          : 'GET',
+        data            : null
     };
+
+    /**
+     * Función ltrim
+     */
+    function ltrim(str, char) {
+        if (typeof str !== 'string') return str;
+        if (!char) char = ' ';
+        return str.replace(new RegExp('^' + char + '+'), '');
+    }
+
+    /**
+     * Función rtrim
+     */
+    function rtrim(str, char) {
+        if (typeof str !== 'string') return str;
+        if (!char) char = ' ';
+        return str.replace(new RegExp(char + '+$'), '');
+    }
+
+    /**
+     * Función que actualiza la url con pushState
+     */
+    function updateUrl(url) {
+        var publicPath = '/';
+        
+        // Limpiar la URL - quitar double slashes y trailing slashes inconsistentes
+        url = url.replace(/\/+/g, '/');
+        
+        // Si la URL ya tiene un formato correcto, usarla directamente
+        if(publicPath != '/') {
+            url = url.split(publicPath);
+            url = (url.length > 1) ? url[1] : url[0];
+        } else  {
+            url = ltrim(url, '/');
+        }
+        
+        // Ensure URL starts with /
+        if (url.charAt(0) !== '/') {
+            url = '/' + url;
+        }
+        
+        if(typeof window.history.pushState == 'function') {
+            history.pushState({ path: url }, url, url);
+        } else {
+            window.location.hash = "#!/"+url;
+        }
+        return true;
+    }
 
     /**
      * Objeto para el load
      */
     $.kload = function(options) {
-        //Variable de éxito (solo para peticiones no asíncronas)
         var request = false;
-        //Extiendo las opciones
         var opt = $.extend(true, defaults, options);
 
-        //Verifico si muestra el spiner
         if(opt.spinner==true){
             jsSpinner('show');
         }
 
-        //Realizo la petición
         $.ajax({
-            type: opt.method, url: opt.url, timeout: opt.timeout, async: opt.async, dataType: opt.response, data: opt.data,
+            type: opt.method, 
+            url: opt.url, 
+            timeout: opt.timeout, 
+            async: opt.async, 
+            dataType: opt.response, 
+            data: opt.data,
             beforeSend: function(data) {
                 $("[rel=tooltip]").tooltip('hide');
-            },
-            error: function (xhr, text, err) {
-                var response = xhr.statusCode().status+" "+xhr.statusCode().statusText;
-                if(opt.msg==true) {
-                    try {
-                        $('#error-ajax').html(response);
-                        if($('#info-error-ajax').size() > 0) {
-                             $('#info-error-ajax').html(xhr.responseText);
-                        }
-                        errorAjax();
-                    } catch(e) {
-                        alert('Oops! Se ha producido un error en la carga\nDetalle del error: '+response);
-                    }
-                }
-                request = false;
             }
-        }).success(function() {
+        }).done(function(data) {
             if(opt.change_url == true) {
                 updateUrl(opt.url);
             }
-        }).done(function(data) {
             if(opt.response == 'html') {
-                //Verifico si carga la data o la adhiere
+                // Guardar el estado de DataTables antes de reemplazar el contenido
+                var dtPage = 0;
+                var dtOrder = [[0, 'asc']];
+                
+                if (typeof $.fn.DataTable !== 'undefined') {
+                    $('table[id^="t"]').each(function() {
+                        var tableId = '#' + this.id;
+                        if ($.fn.DataTable.isDataTable(tableId)) {
+                            var dt = $(tableId).DataTable();
+                            dtPage = dt.page();
+                            dtOrder = dt.order();
+                        }
+                    });
+                }
+                
+                // Insertar el contenido
                 (opt.append_data==true) ? $("#"+opt.capa).append(data) : $("#"+opt.capa).html(data);
+                
+                // Ejecutar scripts inline del contenido cargado
+                $("#"+opt.capa).find('script').each(function() {
+                    try {
+                        eval(this.textContent);
+                    } catch(e) {
+                        console.log('Error executing script:', e);
+                    }
+                });
+                
+                // Restaurar el estado de DataTables
+                if (typeof $.fn.DataTable !== 'undefined') {
+                    $('table[id^="t"]').each(function() {
+                        var tableId = '#' + this.id;
+                        if ($.fn.DataTable.isDataTable(tableId)) {
+                            var dt = $(tableId).DataTable();
+                            // Verificar que la página sea válida
+                            if (dtPage < dt.page.info().pages) {
+                                dt.page(dtPage).draw(false);
+                            }
+                            dt.order(dtOrder).draw(false);
+                        }
+                    });
+                }
+                
                 $("[rel=tooltip]").tooltip();                
-                if(opt.capa == 'shell-content') {
+                
+                // Solo hacer scroll al inicio si no es una página de lista
+                var isListPage = opt.url && opt.url.indexOf('listar') > -1;
+                if(opt.capa == 'shell-content' && !isListPage) {
                     $("html, body").animate({scrollTop: 0}, 500);
                 }
                 request = true;
-                // Enlazar DatePicker
-                $.KumbiaPHP.bindDatePicker();
-                // Enlazar Uploads
-                $.KumbiaPHP.bindFileUpload();                
-                //Validate
-                $.validateForm.initialize();
+                
+                // Enlazar DatePicker si existe
+                if (typeof $.Kumbia !== 'undefined') {
+                    $.Kumbia.bindDatePicker();
+                    $.Kumbia.bindFileUpload();
+                } else if (typeof $.KumbiaPHP !== 'undefined') {
+                    $.KumbiaPHP.bindDatePicker();
+                    $.KumbiaPHP.bindFileUpload();
+                }
+                
+                // Validate form si existe
+                if (typeof $.validateForm !== 'undefined') {
+                    $.validateForm.initialize();
+                }
+                
+                // Re-initialize DataTables if present
+                if (typeof $.fn.DataTable !== 'undefined') {
+                    $('table[id^="t"]').each(function() {
+                        var tableId = '#' + this.id;
+                        if ($.fn.DataTable.isDataTable(tableId)) {
+                            $(tableId).DataTable().destroy();
+                        }
+                        $(tableId).DataTable({
+                            language: {
+                                url: "https://cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json"
+                            },
+                            order: [[0, "asc"]],
+                            columnDefs: [
+                                { targets: [-1], orderable: false, className: "text-center" }
+                            ]
+                        });
+                    });
+                }
             } else {
                 request = data;
             }
+        }).fail(function (xhr, text, err) {
+            var response = xhr.status+" "+xhr.statusText;
+            if(opt.msg==true) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Oops! Se ha producido un error en la carga'
+                });
+            }
+            request = false;
+        }).always(function() {
+            if(opt.spinner==true) {
+                jsSpinner('hide');
+            }
         });
 
-        //Oculto el spinner si está habilitado
-        if(opt.spinner==true) {
-            jsSpinner('hide');
-        }
-
-        //Reestablesco las opciones iniciales
         defaults.response = 'html';
         defaults.method = 'GET';
         defaults.data = null;
         defaults.spinner = true;
 
-        //Retorno la variable de éxito
-        //Si la petición no es asíncrona retornará un boolean o el tipo de respuesta indicado (json)
         return request;
     };
+
+    /**
+     * Envía formulario con reload simple
+     */
+    $.kpost = function(options) {
+        var opt = $.extend({
+            spinner: true,
+            method: 'POST',
+            data: null
+        }, options);
+
+        try {
+            if(opt.spinner){
+                jsSpinner('show');
+            }
+
+            $.ajax({
+                type: opt.method,
+                url: opt.url,
+                data: opt.data,
+                // No especificar dataType para que jQuery detecte automáticamente
+                beforeSend: function(xhr) {
+                    xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+                }
+            }).done(function(response) {
+                if(opt.spinner){
+                    jsSpinner('hide');
+                }
+                
+                // Intentar parsear como JSON
+                var jsonResponse = null;
+                var isJson = false;
+                
+                if (typeof response === 'object' && response !== null) {
+                    jsonResponse = response;
+                    isJson = true;
+                } else if (typeof response === 'string') {
+                    try {
+                        jsonResponse = JSON.parse(response);
+                        isJson = true;
+                    } catch(e) {
+                        // No es JSON
+                    }
+                }
+                
+                // Si es JSON, manejar como respuesta JSON
+                if (isJson && jsonResponse) {
+                    if (jsonResponse.status === 'success') {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Éxito',
+                            text: jsonResponse.message || 'Operación completada',
+                            timer: 2000,
+                            showConfirmButton: false
+                        }).then(function() {
+                            // Cargar URL de lista si existe
+                            if (jsonResponse.url) {
+                                $.kload({ url: jsonResponse.url, spinner: true, change_url: true });
+                            } else {
+                                location.reload();
+                            }
+                        });
+                    } else if (jsonResponse.status === 'validation') {
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Validación',
+                            html: jsonResponse.message + '<br>' + (jsonResponse.errors ? Object.values(jsonResponse.errors).join('<br>') : '')
+                        });
+                    } else if (jsonResponse.status === 'error') {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: jsonResponse.message
+                        });
+                    }
+                    return;
+                }
+                
+                // Si no es JSON o es HTML, manejar como HTML
+                var responseText = typeof response === 'string' ? response.toLowerCase() : '';
+                
+                if (responseText.indexOf('flash-error') > -1 || responseText.indexOf('alert-danger') > -1) {
+                    $("#shell-content").html(response);
+                    $("#shell-content").find('script').each(function() {
+                        try { eval(this.textContent); } catch(e) {}
+                    });
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Hubo un error al procesar la solicitud'
+                    });
+                } else if (responseText.indexOf('flash-valid') > -1 || responseText.indexOf('alert-success') > -1) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Éxito',
+                        text: 'Operación completada correctamente',
+                        timer: 1500,
+                        showConfirmButton: false
+                    }).then(function() {
+                        location.reload();
+                    });
+                } else {
+                    $("#shell-content").html(response);
+                    $("#shell-content").find('script').each(function() {
+                        try { eval(this.textContent); } catch(e) {}
+                    });
+                }
+            }).fail(function(xhr) {
+                if(opt.spinner){
+                    jsSpinner('hide');
+                }
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Error de conexión: ' + xhr.status
+                });
+            });
+        } catch(e) {
+            console.error('kpost error:', e);
+            if(opt.spinner){
+                jsSpinner('hide');
+            }
+            alert('Error: ' + e.message);
+        }
+    };
 })(jQuery);
-
-
-/** Muestra/Oculta el spinner **/
-function jsSpinner(action, target) {
-    if(target==null) {
-        target='spinner';
-    }
-    if(action=='show') {
-        $("#spinner").attr('style','top: 50%; left:50%; margin-left:-50px; margin-top:-50px;');
-        $("#shell-load").addClass('spinner-blur');
-        $("#loading-content").show();
-        $("#"+target).show().spin('large', 'white');
-    } else {
-        $("#loading-content").hide();
-        $("#shell-load").removeClass('spinner-blur');
-        $("#"+target).hide().spin(false);
-    }
-}
-
-/**
-* Función que actualiza la url con popstate, hashbang o normal
-*/
-function updateUrl(url) {
-    /** Se quita el public path de la url */
-    if($.KumbiaPHP.publicPath != '/') {
-        url = url.split($.KumbiaPHP.publicPath);
-        url = (url.length > 1) ? url[1] : url[0];
-    } else  {
-        url = ltrim(url, '/');
-    }
-    if(typeof window.history.pushState == 'function') {
-        url = $.KumbiaPHP.publicPath+url;
-        history.pushState({ path: url }, url, url);
-    } else {
-        window.location.hash = "#!/"+url;
-    }
-    return true;
-}
-
-/**
- * Función que cambia la url, si el navegador lo soporta
- */
-function pushState(){
-    // Función para enlazar cuando cambia la url de la página.
-    $(window).bind('popstate', function(event) {
-        if (!event.originalEvent.state)//Para Chrome
-            return;
-        $.kload({url: location.pathname});
-    });
-}
-
-/**
- * Función que verifica el hash, se utiliza cuando no soporta el popstate
- */
-function checkHash(){
-    var direccion = ""+window.location+"";
-    var nombre = direccion.split("#!/");
-    if(nombre.length > 1){
-        direccion = '/'+ltrim(nombre[1], '/');
-        $.kload({url: direccion});
-    }
-}
-/**
- * Función que cambia actualiza el content cuando cambia el hash
- */
-function hashChange() {
-    // Función para determinar cuando cambia el hash de la página.
-    $(window).bind("hashchange",function(event) {
-        if(prevHash) {
-            prevHash = false;
-            return;
-        }
-        var hash = ""+window.location.hash+"";
-        hash = hash.replace("#!/","");
-        if(hash && hash!="") {
-            $.kload({url: hash});
-        }
-    });
-}
-
-/** Enlazo la url **/
-$(document).ready(function() {
-    if (typeof window.history.pushState == 'function') {
-        pushState();
-    } else {
-        checkHash(); hashChange();
-    }
-});

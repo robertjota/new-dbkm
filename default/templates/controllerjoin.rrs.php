@@ -53,7 +53,7 @@ class %ControllerCamel%Controller extends %BaseController% {
      * Método para editar
      */
     public function editar($key) {
-        if (!$id = Security::getKey($key, 'upd_%lcaseModel%', 'int')) {
+        if (!$id = DwSecurity::getKey($key, 'upd_%lcaseModel%', 'int')) {
             Flash::error('Lo sentimos, error de seguridad');
             return Redirect::toAction('listar');
         }
@@ -81,7 +81,7 @@ class %ControllerCamel%Controller extends %BaseController% {
      * Método para ver
      */
     public function ver($key) {
-        if (!$id = Security::getKey($key, 'shw_%lcaseModel%', 'int')) {
+        if (!$id = DwSecurity::getKey($key, 'shw_%lcaseModel%', 'int')) {
            return Redirect::toAction('listar');
         }
 
@@ -97,7 +97,7 @@ class %ControllerCamel%Controller extends %BaseController% {
      * Método para eliminar
      */
     public function eliminar($key) {
-        if (!$id = Security::getKey($key, 'del_%lcaseModel%', 'int')) {
+        if (!$id = DwSecurity::getKey($key, 'del_%lcaseModel%', 'int')) {
             Flash::error('Lo sentimos, error de seguridad');
             return Redirect::toAction('listar');
         }
@@ -120,4 +120,3 @@ class %ControllerCamel%Controller extends %BaseController% {
         return Redirect::toAction('listar');
     }
 }
-

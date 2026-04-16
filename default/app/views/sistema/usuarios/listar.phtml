@@ -35,10 +35,10 @@
                             <tbody>
                                 <?php $counter = 1; ?>
                                 <?php foreach ($usuarios ?? [] as $usuario) : ?>
-                                    <?php $key_shw = Security::setKey($usuario->id, 'shw_usuario'); ?>
-                                    <?php $key_upd = Security::setKey($usuario->id, 'upd_usuario'); ?>
-                                    <?php $key_ina = Security::setKey($usuario->id, 'bloquear_usuario'); ?>
-                                    <?php $key_rea = Security::setKey($usuario->id, 'reactivar_usuario'); ?>
+                                    <?php $key_shw = DwSecurity::setKey($usuario->id, 'shw_usuario'); ?>
+                                    <?php $key_upd = DwSecurity::setKey($usuario->id, 'upd_usuario'); ?>
+                                    <?php $key_ina = DwSecurity::setKey($usuario->id, 'bloquear_usuario'); ?>
+                                    <?php $key_rea = DwSecurity::setKey($usuario->id, 'reactivar_usuario'); ?>
                                     <tr>
                                         <td><?php echo $counter; ?></td>
                                         <td><?php echo $usuario->login; ?></td>
@@ -48,7 +48,7 @@
                                         <td class="text-center"><button class="status-toggle"
                                                 data-user-id="<?php echo $usuario->id; ?>"
                                                 data-status="<?php echo $usuario->estado_usuario; ?>"
-                                                data-key="<?php echo Security::setKey($usuario->id, 'change_status'); ?>">
+                                                data-key="<?php echo DwSecurity::setKey($usuario->id, 'change_status'); ?>">
                                                 <?= ($usuario->estado_usuario == EstadoUsuario::ACTIVO) ?
                                                     '<span class="badge bg-success">Activo</span>' :
                                                     '<span class="badge bg-danger">Bloqueado</span>'; ?>
