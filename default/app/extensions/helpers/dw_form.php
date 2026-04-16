@@ -57,8 +57,9 @@ class DwForm extends Form
      * @return string
      */
     protected static function _getAttrsClass($attrs, $type)
-    {
+{
         if ($type === 'form' or $type === 'form-multipart') {
+            // AJAX habilitado por defecto - usar clase no-ajax para deshabilitar
             $formAjax = (APP_AJAX && Session::get('app_ajax')) ? TRUE : FALSE;
             if (isset($attrs['class'])) {
                 if (preg_match("/\bno-ajax\b/i", $attrs['class'])) {
@@ -91,7 +92,7 @@ class DwForm extends Form
             }
             //Verifico el estilo de formulario
             self::setStyleForm((isset($attrs['form-style'])) ? $attrs['form-style'] : 'form-vertical');
-            //Mantengo la información del formulario
+            //Mantengo información del formulario
             self::$_name['id']      = $attrs['id'];
             self::$_name['name']    = $attrs['name'];
             //asigno el estilo al formulario
@@ -298,8 +299,20 @@ class DwForm extends Form
                 $action .= join('/', $parameters) . '/';
             }
         }
+        
         $form .= parent::open($action, $tmp_m, $attrs); //Obtengo la etiqueta para abrir el formulario
         return $form . PHP_EOL;
+    }
+
+    /**
+     * Abre un formulario configurado para AJAX automáticamente
+     *
+     * @param string $action Acción del formulario (opcional)
+     * @return string
+     */
+    public static function openAjax($action = null)
+    {
+        return self::open($action, 'post', ['class' => 'js-remote']);
     }
 
     /**

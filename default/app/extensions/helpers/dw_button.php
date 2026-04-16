@@ -63,12 +63,37 @@ class DwButton
         $attrs = [];
         $attrs['class'] = 'btn-secondary';
         $attrs['title'] = empty($title) ? 'Cancelar' : $title;
+        
         if (empty($redir)) {
-            $attrs['onclick'] = 'history.back()';
-            return self::showButton($icon, $attrs, 'Cancelar', 'button');
-        } else {
-            return DwHtml::button($redir, $etq, $attrs, $icon);
+            // Sin redirección - intentar listar, si no existe, ir a dashboard
+            $module = Router::get('module');
+            $controller = Router::get('controller');
+            $redir = ($module ? "$module/" : "") . "$controller/";
         }
+        
+        return DwHtml::button($redir, $etq, $attrs, $icon);
+    }
+
+    /**
+     * Método para cancelar con AJAX - vuelve atrás recargando el content
+     * Ideal para formularios que funcionan con AJAX
+     * @param string $redir Ruta a redirigir (opcional)
+     * @param string $title Título a mostrar
+     * @param string $icon Icono a mostrar
+     * @return type
+     */
+    public static function backAjax($redir = NULL, $title = 'Volver', $icon = 'fa-arrow-left', $etq = 'VOLVER')
+    {
+        $attrs = [];
+        $attrs['class'] = 'btn-secondary js-link js-spinner js-url';
+        $attrs['title'] = empty($title) ? 'Volver' : $title;
+        
+        if (empty($redir)) {
+            // Sin redirección - usar history back con AJAX
+            return "<a href=\"javascript:history.back()\" class=\"btn btn-secondary js-link js-spinner js-url\" title=\"$title\"><i class=\"btn-icon-only fa $icon\"></i> $etq</a>";
+        }
+        
+        return DwHtml::button($redir, $etq, $attrs, $icon);
     }
 
     /**

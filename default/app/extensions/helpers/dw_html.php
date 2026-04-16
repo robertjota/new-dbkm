@@ -31,6 +31,7 @@ class DwHtml extends Html
             if ($action == "dashboard/") {
                 $loadAjax = false;
             }
+            // AJAX habilitado por defecto
             if ($loadAjax) {
                 if (empty($attrs['class'])) {
                     $attrs['class'] = 'js-link js-spinner js-url';
@@ -94,6 +95,11 @@ class DwHtml extends Html
             if ($action == "dashboard/") {
                 $loadAjax = false;
             }
+            // Verificar si la clase contiene no-ajax para deshabilitar AJAX
+            if (isset($attrs['class']) && preg_match("/\bno-ajax\b/i", $attrs['class'])) {
+                $loadAjax = false;
+            }
+            // AJAX habilitado por defecto
             if ($loadAjax) {
                 if (empty($attrs['class'])) {
                     $attrs['class'] = 'js-link js-spinner js-url';
@@ -191,13 +197,13 @@ class DwHtml extends Html
             $attrs = array();
         }
         $pp = (empty($label) ? 'btn-small' : '');
-        $attrs['class'] = empty($attrs['class']) ? "btn $pp text-bold text-uppercase js-url js-spinner js-link btn-$type" : "btn $pp text-bold text-uppercase js-url js-spinner js-link btn-$type " . $attrs['class'];
+        // Sin clases js-link/js-spinner - solo SweetAlert
+        $attrs['class'] = empty($attrs['class']) ? "btn $pp text-bold text-uppercase btn-$type" : "btn $pp text-bold text-uppercase btn-$type " . $attrs['class'];
         $attrs['title'] = $title;
         $attrs['rel'] = 'tooltip';
         if (!empty($label)) {
             $attrs['style'] = "margin-right: 0;";
         }
-
 
         $msg_title = isset($attrs['msg-title']) ? $attrs['msg-title'] : 'Confirmar acción';
         $msg = isset($attrs['msg']) ? $attrs['msg'] : '¿Estás seguro de realizar esta acción?';
@@ -205,7 +211,7 @@ class DwHtml extends Html
 
         unset($attrs['confirm-title'], $attrs['msg']);
 
-        $attrs['onclick'] = "confirmarAccion('/$action', '$msg_title', '$msg', '$msg_nombre'); return false;";
+        $attrs['onclick'] = "confirmarAccion('" . PUBLIC_PATH . "$action', '$msg_title', '$msg', '$msg_nombre'); return false;";
 
         $attrs = Tag::getAttrs($attrs);
 
@@ -218,7 +224,5 @@ class DwHtml extends Html
         }
 
         return "<button $attrs>$text</button>";
-
-        $pp = mb_strlen('casa');
     }
 }

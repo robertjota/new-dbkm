@@ -20,6 +20,7 @@ abstract class AppController extends Controller
 
     final protected function initialize()
     {
+        // AJAX habilitado por defecto - usar $this->setAjax(false) en controladores específicos para deshabilitar
         define('APP_AJAX', true);
     }
 
