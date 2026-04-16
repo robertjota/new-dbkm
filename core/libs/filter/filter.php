@@ -148,14 +148,14 @@ class Filter
             } elseif (array_key_exists($index, $data)) { //verificamos de nuevo la existencia del indice en $data
                 $filters = explode('|', $filters); //convertimos el filtro en arreglo
                 array_unshift($filters, $data[$index]);
-                $filtered[$index] = call_user_func_array(array('self', 'get'), $filters);
+                $filtered[$index] = call_user_func_array([Filter::class, 'get'], $filters);
                 //$filtered[$index] = self::get($data[$index], $filters); //por ahora sin opciones adicionales.
             }
         }
         if ($filterAll) {
             $filterAll = explode('|', $filterAll);
             array_unshift($filterAll, $filtered);
-            return call_user_func_array(array('self', 'get_array'), $filterAll);
+            return call_user_func_array([Filter::class, 'get_array'], $filterAll);
         } else {
             return $filtered;
         }
