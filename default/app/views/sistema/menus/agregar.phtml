@@ -1056,12 +1056,22 @@
     $(document).ready(function() {
         $("#menu_recurso_id").on('keyup change', function() {
             var recurso = $('option:selected', this).text();
-            $("#menu_url").val(recurso.replace('/*', '/'));
+            // Limpiar la URL del recurso - quitar action si existe, dejar modulo/controlador
+            var url = recurso.replace('/*', '/').replace(/\/+$/, ''); // quitar /* y barras finales
+            var parts = url.split('/');
+            if (parts.length >= 2) {
+                // Construir URL base: modulo/controlador (con / al inicio)
+                url = '/' + parts[0] + '/' + parts[1];
+                if (parts.length > 2 && parts[2] !== 'index') {
+                    url += '/' + parts[2];
+                }
+            }
+            $("#menu_url").val(url);
         });
         $("#menu_icono").on('keyup change', function() {
             var icono = $('#menu_icono').val();
             if ($('#menu_icono').val().length < 1) {
-                $(".icono").html('<h3><i class=""><span style="font-style: italic; font-size: small;">sin icono</span></i></h3>');
+                $(".icono").html('<h3><i class=""></i><span style="font-style: italic; font-size: small;">sin icono</span></h3>');
             } else {
                 $(".icono").html('<h3><i class="' + icono + '"></i></h3>');
             };

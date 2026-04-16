@@ -55,6 +55,17 @@ class Recurso extends ActiveRecord
     }
 
     /**
+     * Método toString para mostrar la URL del recurso en selects
+     */
+    public function __toString()
+    {
+        if (!empty($this->modulo)) {
+            return $this->modulo . '/' . $this->controlador . '/' . $this->accion;
+        }
+        return $this->controlador . '/' . $this->accion;
+    }
+
+    /**
      * Método para obtener el listado de los recursos del sistema
      * @param type $estado
      * @param type $order
@@ -120,6 +131,17 @@ class Recurso extends ActiveRecord
             )
         ));
         return $this->find("conditions: $conditions", "order: $order");
+    }
+    
+    /**
+     * Método estático para listar recursos por módulo
+     */
+    public static function getRecursosPorModuloStatic($modulo, $order = 'controlador')
+    {
+        $recurso = new Recurso();
+        $conditions = "recurso.modulo = '$modulo'";
+        $order_sql = 'controlador ASC, accion ASC';
+        return $recurso->find("conditions: $conditions", "order: $order_sql");
     }
 
     /**

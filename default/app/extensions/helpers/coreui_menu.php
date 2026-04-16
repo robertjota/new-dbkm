@@ -120,7 +120,12 @@ class CoreuiMenu
             self::$_level--;
             $html .= '</ul>';
         } else {
-            $html = '<a class="nav-main-link" href="' . $obj->url . '"><i class="nav-main-link-icon fas ' . $obj->icono . '"></i><span class="nav-main-link-name">' . $obj->menu . '</span></a>';
+            // Asegurar que la URL sea absoluta (comience con /)
+            $url = $obj->url;
+            if (!empty($url) && $url !== '#' && strpos($url, '/') !== 0) {
+                $url = '/' . $url;
+            }
+            $html = '<a class="nav-main-link" href="' . $url . '"><i class="nav-main-link-icon fas ' . $obj->icono . '"></i><span class="nav-main-link-name">' . $obj->menu . '</span></a>';
         }
         $html .= '</li>';
         return $html;
