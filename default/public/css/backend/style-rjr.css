@@ -64,3 +64,9 @@ table thead {
     background-color: #ced4da;
     border-color: gray;
 }
+
+/* DataTables Buttons centrado */
+.text-center .dt-buttons {
+    display: inline-block !important;
+    float: none !important;
+}

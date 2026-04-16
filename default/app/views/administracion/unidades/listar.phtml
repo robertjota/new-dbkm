@@ -1,0 +1,113 @@
+<?php View::flash(); ?>
+<?php SectionManager::start('styles')  ?>
+<link rel="stylesheet" href="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-bs5/css/dataTables.bootstrap5.min.css">
+<link rel="stylesheet" href="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-buttons-bs5/css/buttons.bootstrap5.min.css">
+<link rel="stylesheet" href="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-responsive-bs5/css/responsive.bootstrap5.min.css">
+<?php SectionManager::end('styles')  ?>
+
+<div class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="block">
+                <div class="block-header pt-3">
+                    <h3 class="block-title"></h3>
+                    <div class="block-options">
+                        <?php echo DwHtml::button("administracion/unidades/agregar/", 'Nuevo', NULL, 'fa-plus'); ?>
+                    </div>
+                </div>
+                <div class="block-content">
+                    <div class="table-responsive mb-3">
+                        <?php if ($unidads): ?>
+                        <table id="tUnidad" class="table table-bordered table-hover">
+                            <thead class="bg-gray">
+                                <tr>
+                                    <th class='text-center'>NOMBRE</th>
+                                    <th class="text-center" width="5%"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($unidads as $obj): ?>
+                                <?php if (is_object($obj)): ?>
+                                <?php $key_shw = DwSecurity::setKey($obj->id, 'shw_unidad'); ?>
+                                <?php $key_upd = DwSecurity::setKey($obj->id, 'upd_unidad'); ?>
+                                <?php $key_del = DwSecurity::setKey($obj->id, 'del_unidad'); ?>
+                                <tr>
+                                    <td><?= $obj->nombre; ?></td>
+                                    <td class="text-center">
+                                        <div class="dropdown dropstart">
+                                            <a href="javascript:void(0)" class="text-muted" id="dropdownMenuButton<?= $obj->id ?>" data-bs-toggle="dropdown" aria-expanded="false">
+                                                <i class="fas fa-ellipsis-v fs-4"></i>
+                                            </a>
+                                            <ul class="dropdown-menu text-center" aria-labelledby="dropdownMenuButton<?= $obj->id ?>">
+                                                <li class="dropdown-item">
+                                                    <?php echo DwHtml::buttonTable('Ver', "administracion/unidades/ver/$key_shw/", NULL, 'primary', 'fa-search'); ?>
+                                                    <?php echo DwHtml::buttonTable('Editar', "administracion/unidades/editar/$key_upd/", NULL, 'warning', 'fa-pencil'); ?>
+                                                    <?php echo DwHtml::buttonTableSA('Eliminar', "administracion/unidades/eliminar/$key_del/", ['msg-title' => 'Eliminar Unidad', 'msg' => '¿Está seguro de eliminar este unidad?', 'msg-nombre' => $obj->nombre], 'danger', 'fa-trash'); ?>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <?php endif; ?>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                        <?php else: ?>
+                        <p class="text-muted">No hay registros</p>
+                        <?php endif; ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<?php SectionManager::start('scripts') ?>
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-bs5/js/dataTables.bootstrap5.min.js"></script>
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-buttons/dataTables.buttons.min.js"></script>
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-buttons-bs5/js/buttons.bootstrap5.min.js"></script>
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-buttons-jszip/jszip.min.js"></script>
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-buttons-pdfmake/pdfmake.min.js"></script>
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-buttons-pdfmake/vfs_fonts.js"></script>
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-buttons/buttons.print.min.js"></script>
+<script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/datatables-buttons/buttons.html5.min.js"></script>
+<script>
+    $("#tUnidad").DataTable({
+        language: {
+            url: "https://cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json"
+        },
+        order: [[0, "asc"]],
+        responsive: true,
+        columnDefs: [
+            { targets: [-1], orderable: false, className: "text-center" },
+            { responsivePriority: 1, targets: [0, -1] }
+        ],
+        dom: '<"row"<"col-sm-12 text-center"B>>' +
+             '<"row"<"col-sm-6"l><"col-sm-6"f>>' +
+             'rt' +
+             '<"row"<"col-sm-6"i><"col-sm-6"p>>',
+        buttons: [
+            {
+                extend: "excel",
+                text: "<i class=\"fa fa-file-excel\"></i> Excel",
+                className: "btn-success btn-sm"
+            },
+            {
+                extend: "pdf",
+                text: "<i class=\"fa fa-file-pdf\"></i> PDF",
+                className: "btn-danger btn-sm",
+                customize: function(doc) {
+                    doc.defaultFontSize = 8;
+                    doc.styles.tableHeader.fontSize = 9;
+                }
+            },
+            {
+                extend: "print",
+                text: "<i class=\"fa fa-print\"></i> Imprimir",
+                className: "btn-info btn-sm"
+            }
+        ]
+    });
+</script>
+<?php SectionManager::end('scripts') ?>
