@@ -10,14 +10,14 @@
                     <?php echo DwHtml::button("sistema/configuracion/config/", 'config all', array('class' => 'mx-1 btn-sm btn-info'), 'fa-asterisk', APP_AJAX); ?>
                     <?php echo DwHtml::button("sistema/configuracion/routes/", 'routes', array('class' => 'mx-1 btn-sm btn-info'), 'fa-random', APP_AJAX); ?>
                     <?php echo DwHtml::button("sistema/configuracion/databases/", 'databases', array('class' => 'mx-1 btn-sm btn-info'), 'fa-hdd-o', APP_AJAX); ?>
-                    <div class="pull-right">
-                        <?php echo DwHtml::button("sistema/configuracion/reset/", 'reset', array('class' => 'mx-1 btn-sm btn-danger js-confirm', 'msg-title' => 'Restarurar archivos de configuración', 'msg' => 'Está seguro de querer restastaurar los archivos de configuración? <br />Recuerda que esta operación no se puede reversar.'), 'fa-warning', APP_AJAX); ?>
-
-                    </div>
+<!-- Botón reset eliminado por seguridad -->
+                    <!--<div class="pull-right">
+                        <?php //echo DwHtml::button("sistema/configuracion/reset/", 'reset', array('class' => 'mx-1 btn-sm btn-danger js-confirm', 'msg-title' => 'Restaurar archivos de configuración', 'msg' => 'Está seguro de wanting restaurar los archivos de configuración?'), 'fa-warning', APP_AJAX); ?>
+                    </div>-->
                 </div>
                 <div class="block-content">
 
-                    <?php echo DwForm::open(); ?>
+                    <?php echo DwForm::open('', 'post', array('class' => 'no-ajax')); ?>
 
                     <div class="row justify-content-evenly">
 
@@ -99,8 +99,28 @@
                                 <?php } ?>
 
                                 <div id="append-config"></div>
-                                <p>Los campos creados se definirán automáticamente al cargar el aplicativo y se almacenarán en el config.ini</p>
+                                <button type="button" class="btn btn-sm btn-success mt-2" onclick="addConfigField()">
+                                    <i class="fa fa-plus"></i> Agregar Variable
+                                </button>
+                                <p>Los campos personalizados se definirán automáticamente al cargar el aplicativo.</p>
                                 <p>Para eliminar una variable puede colocar el valor "delete-var" en el input.</p>
+                            
+                            <script>
+                            function addConfigField() {
+                                var name = prompt("Nombre de la variable (sin app_):");
+                                if (name) {
+                                    name = name.toLowerCase().replace(/[^a-z0-9_]/g, '');
+                                    if (name) {
+                                        var container = document.getElementById('append-config');
+                                        var div = document.createElement('div');
+                                        div.className = 'mb-2';
+                                        div.innerHTML = '<label class="form-label">' + name + '</label>' +
+                                            '<input type="text" class="form-control" name="custom[app_' + name + ']" value="">';
+                                        container.appendChild(div);
+                                    }
+                                }
+                            }
+                            </script>
                             </fieldset>
                         </div>
                     </div>

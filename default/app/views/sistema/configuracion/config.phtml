@@ -10,14 +10,14 @@
                     <?php echo DwHtml::button("sistema/configuracion/config/", 'config all', array('class' => 'mx-1 btn-sm btn-success active'), 'fa-asterisk', APP_AJAX); ?>
                     <?php echo DwHtml::button("sistema/configuracion/routes/", 'routes', array('class' => 'mx-1 btn-sm btn-info'), 'fa-random', APP_AJAX); ?>
                     <?php echo DwHtml::button("sistema/configuracion/databases/", 'databases', array('class' => 'mx-1 btn-sm btn-info'), 'fa-hdd-o', APP_AJAX); ?>
-                    <div class="pull-right">
-                        <?php echo DwHtml::button("sistema/configuracion/reset/", 'reset', array('class' => 'mx-1 btn-sm btn-danger js-confirm', 'msg-title' => 'Restarurar archivos de configuración', 'msg' => 'Está seguro de querer restastaurar los archivos de configuración? <br />Recuerda que esta operación no se puede reversar.'), 'fa-warning', APP_AJAX); ?>
-
-                    </div>
+<!-- Botón reset eliminado por seguridad -->
+                    <!--<div class="pull-right">
+                        <?php //echo DwHtml::button("sistema/configuracion/reset/", 'reset', array('class' => 'mx-1 btn-sm btn-danger js-confirm', 'msg-title' => 'Restaurar archivos de configuración', 'msg' => 'Está seguro de wanting restaurar los archivos de configuración?'), 'fa-warning', APP_AJAX); ?>
+                    </div>-->
                 </div>
                 <div class="block-content">
 
-                    <?php echo DwForm::open(); ?>
+                    <?php echo DwForm::open('', 'post', array('class' => 'no-ajax')); ?>
                     <div class="row justify-content-evenly">
 
                         <div class="col-md-5">
