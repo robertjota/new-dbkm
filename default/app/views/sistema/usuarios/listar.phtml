@@ -20,8 +20,8 @@
                 </div>
                 <div class="block-content">
                     <div class="table-responsive mb-3">
-                        <table id="tUsuarios" class="table table-bordered table-vcenter table-hover js-dataTable-full table-striped table-condensed table-responsive">
-                            <thead class="bg-gray">
+                        <table id="tUsuarios" class="table table-vcenter table-hover js-dataTable-full table-striped table-condensed table-responsive">
+                            <thead>
                                 <tr>
                                     <th class="text-center">#</th>
                                     <th class="text-center">USUARIO</th>
@@ -32,7 +32,7 @@
                                     <th></th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody class="fs-sm">
                                 <?php $counter = 1; ?>
                                 <?php foreach ($usuarios ?? [] as $usuario) : ?>
                                     <?php $key_shw = DwSecurity::setKey($usuario->id, 'shw_usuario'); ?>

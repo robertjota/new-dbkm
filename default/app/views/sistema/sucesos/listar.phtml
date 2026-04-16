@@ -21,7 +21,7 @@
                 </div>
                 <div class="block-content">
                     <div class="table-responsive mb-3">
-                        <table class="table table-bordered table-vcenter table-hover js-dataTable-full table-striped table-condensed table-responsive">
+                        <table class="table table-vcenter table-hover js-dataTable-full table-striped table-condensed table-responsive">
                             <thead>
                                 <tr>
                                     <th width="5%">#</th>
@@ -30,7 +30,7 @@
                                     <th class="text-center">DESCRIPCION</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody class="fs-sm">
                                 <?php $counter = 1; ?>
                                 <?php if ($loggers->items ?? false) { ?>
                                     <?php foreach ($loggers->items ?? [] as $log) : ?>

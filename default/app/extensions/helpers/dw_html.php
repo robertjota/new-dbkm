@@ -173,9 +173,9 @@ class DwHtml extends Html
     {
         if (empty($attrs)) {
             $attrs = array();
-            $attrs['class'] = "btn-small btn-$type";
+            $attrs['class'] = "btn-sm btn-$type";
         } else {
-            $attrs['class'] = empty($attrs['class']) ? "btn-small btn-$type" : "btn-small btn-$type " . $attrs['class'];
+            $attrs['class'] = empty($attrs['class']) ? "btn-sm btn-$type" : "btn-sm btn-$type " . $attrs['class'];
         }
         $attrs['title'] = $title;
         $attrs['rel'] = 'tooltip';
@@ -196,7 +196,7 @@ class DwHtml extends Html
         if (empty($attrs)) {
             $attrs = array();
         }
-        $pp = (empty($label) ? 'btn-small' : '');
+        $pp = (empty($label) ? 'btn-sm' : '');
         // Sin clases js-link/js-spinner - solo SweetAlert
         $attrs['class'] = empty($attrs['class']) ? "btn $pp text-bold text-uppercase btn-$type" : "btn $pp text-bold text-uppercase btn-$type " . $attrs['class'];
         $attrs['title'] = $title;

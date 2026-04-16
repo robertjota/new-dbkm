@@ -18,14 +18,14 @@
                 <div class="block-content">
                     <div class="table-responsive mb-3">
                         <?php if ($categorias): ?>
-                        <table id="tCategoria" class="table table-bordered table-hover">
-                            <thead class="bg-gray">
+                        <table id="tCategoria" class="table table-hover table-vcenter">
+                            <thead>
                                 <tr>
                                     <th class='text-center'>NOMBRE</th>
                                     <th class="text-center" width="5%"></th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody class="fs-sm">
                                 <?php foreach ($categorias as $obj): ?>
                                 <?php if (is_object($obj)): ?>
                                 <?php $key_shw = DwSecurity::setKey($obj->id, 'shw_categoria'); ?>

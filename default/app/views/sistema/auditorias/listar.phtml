@@ -21,8 +21,8 @@
                 </div>
                 <div class="block-content">
                     <div class="table-responsive mb-3">
-                        <table class="table table-bordered table-vcenter table-hover js-dataTable-full table-striped table-condensed table-responsive">
-                            <thead class="bg-gray">
+                        <table class="table table-vcenter table-hover js-dataTable-full table-striped table-condensed table-responsive">
+                            <thead>
                                 <tr>
                                     <th width="10%">#</th>
                                     <th>FECHA</th>
@@ -32,7 +32,7 @@
                                     <th>DESCRIPCION</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody class="fs-sm">
                                 <?php $counter = 1; ?>
                                 <?php foreach ($audits->items ?? [] as $audit) : ?>
                                     <tr>

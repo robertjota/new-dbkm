@@ -59,18 +59,16 @@
                         <p class="mb-0 text-muted fs-sm fw-medium"><?= Session::get('perfil'); ?></p>
                     </div>
                     <div class="p-2">
-                        <a class="dropdown-item d-flex align-items-center justify-content-between" href="be_pages_generic_inbox.html">
-                            <a class="dropdown-item d-flex align-items-center justify-content-between" href="<?= PUBLIC_PATH ?>sistema/mi-cuenta">
-                                <span class="fs-sm fw-medium">Perfil</span>
+                        <a class="dropdown-item d-flex align-items-center justify-content-between" href="<?= PUBLIC_PATH ?>sistema/mi-cuenta">
+                            <span class="fs-sm fw-medium"><i class="fa fa-fw fa-user me-1"></i> Perfil</span>
                                 <!-- <span class="badge rounded-pill bg-primary ms-2">1</span> -->
-                            </a>
-                            <a class="dropdown-item d-flex align-items-center justify-content-between" href="javascript:void(0)">
-                                <span class="fs-sm fw-medium">Configuración</span>
-                            </a>
+                        </a>
                     </div>
                     <div role="separator" class="dropdown-divider m-0"></div>
                     <div class="p-2">
-                        <?php echo Html::link('sistema/login/salir', 'Salir', ['class' => 'dropdown-item d-flex align-items-center justify-content-between fs-sm fw-medium']) ?>
+                        <a class="dropdown-item d-flex align-items-center justify-content-between text-danger" href="<?= PUBLIC_PATH ?>sistema/login/salir">
+                            <span class="fs-sm fw-medium"><i class="fa fa-fw fa-sign-out-alt me-1"></i> Cerrar Sesión</span>
+                        </a>
                     </div>
                 </div>
             </div>

@@ -26,7 +26,7 @@
 
     <div class="container-overflow">
 
-        <table class="table table-bordered table-hover table-striped table-condensed table-responsive">
+        <table class="table table-hover table-striped table-condensed table-responsive">
             <thead>
                 <tr>
                     <th>NUM</th>
@@ -39,7 +39,7 @@
                     <th class="col-blocked text-center">ACTIONS</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody class="fs-sm">
                 <?php foreach ($usuarios->items as $usuario): ?>
                     <?php $key_shw = DwSecurity::setKey($usuario->id, 'shw_usuario'); ?>
                     <?php $key_ina = DwSecurity::setKey($usuario->id, 'bloquear_usuario'); ?>

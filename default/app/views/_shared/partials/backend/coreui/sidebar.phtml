@@ -1,26 +1,28 @@
 <?php CoreuiMenu::load(Menu::BACKEND, Session::get('perfil_id'));
 ?>
 <!--
-          Sidebar Mini Mode - Display Helper classes
+        Agregar la clase smini-hide a un elemento lo hará invisible (opacidad: 0) cuando la barra lateral esté en modo mini
 
-          Adding 'smini-hide' class to an element will make it invisible (opacity: 0) when the sidebar is in mini mode
-          Adding 'smini-show' class to an element will make it visible (opacity: 1) when the sidebar is in mini mode
-              If you would like to disable the transition animation, make sure to also add the 'no-transition' class to your element
+        Agregar la clase smini-show a un elemento lo hará visible (opacidad: 1) cuando la barra lateral esté en modo mini
 
-          Adding 'smini-hidden' to an element will hide it when the sidebar is in mini mode
-          Adding 'smini-visible' to an element will show it (display: inline-block) only when the sidebar is in mini mode
-          Adding 'smini-visible-block' to an element will show it (display: block) only when the sidebar is in mini mode
+        Si deseas deshabilitar la animación de transición, asegúrate de agregar también la clase no-transition a tu elemento
+
+        Agregar la clase smini-hidden a un elemento lo ocultará cuando la barra lateral esté en modo mini
+
+        Agregar la clase smini-visible a un elemento lo mostrará (display: inline-block) solo cuando la barra lateral esté en modo mini
+
+        Agregar la clase smini-visible-block a un elemento lo mostrará (display: block) solo cuando la barra lateral esté en modo mini
 -->
 
 <nav id="sidebar" aria-label="Main Navigation">
     <!-- Side Header -->
     <div class="content-header">
         <!-- Logo -->
-        <a class="fw-semibold text-dual" href="index.html">
+        <a class="fw-semibold text-dual" href="/dashboard">
             <span class="smini-visible">
                 <i class="fa fa-circle-notch text-primary"></i>
             </span>
-            <span class="smini-hide fs-4 tracking-wider">DBKM<span class="fw-normal"><small>2024</small></span></span>
+            <span class="smini-hide fs-4 tracking-wider">DBKM<span class="fw-normal"><small> 2026</small></span></span>
         </a>
         <!-- END Logo -->
 
