@@ -1391,4 +1391,56 @@ class DwForm extends Form
         $btn .= $text;
         return "<button type=\"submit\" $attrs>$btn</button>";
     }
+
+    /**
+     * Crea un input group con un botón (estilo OneUI)
+     * @param string $field Nombre del campo
+     * @param array $attrs Atributos del input
+     * @param mixed $value Valor del input
+     * @param string $label Etiqueta
+     * @param string $button_text Texto del botón (opcional)
+     * @param string $button_icon Icono del botón
+     * @param array $button_attrs Atributos del botón (data-bs-toggle, etc)
+     * @param string $help Texto de ayuda
+     * @return string
+     */
+    public static function inputIconButton($field, $attrs = null, $value = null, $label = '', $button_text = '', $button_icon = 'fa-search', $button_attrs = [], $help = '')
+    {
+        $attrs = self::_getAttrsClass($attrs, 'text');
+        $input = self::getControls();
+        
+        $input .= '<div class="input-group">';
+        $input .= parent::text($field, $attrs, $value);
+        
+        $button_html = '';
+        if ($button_icon) {
+            $button_html .= '<i class="' . $button_icon . '"></i>';
+        }
+        if ($button_text) {
+            $button_html .= ' ' . $button_text;
+        }
+        
+        $btn_class = 'btn btn-secondary';
+        if (isset($button_attrs['class'])) {
+            $btn_class = 'btn ' . $button_attrs['class'];
+            unset($button_attrs['class']);
+        }
+        
+        $btn_attrs = ['type' => 'button', 'class' => $btn_class];
+        $button_attrs = array_merge($btn_attrs, $button_attrs);
+        
+        $input .= '<button';
+        foreach ($button_attrs as $k => $v) {
+            $input .= ' ' . $k . '="' . $v . '"';
+        }
+        $input .= '>' . $button_html . '</button>';
+        
+        $input .= '</div>';
+        
+        $input .= self::getControls();
+        
+        $label = ($label && self::$_show_label) ? self::label($label, $field, null, $attrs['class'])  : '';
+        
+        return '<div class="form-group">' . $label . $input . '</div>' . PHP_EOL;
+    }
 }

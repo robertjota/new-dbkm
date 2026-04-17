@@ -70,3 +70,75 @@ table thead {
     display: inline-block !important;
     float: none !important;
 }
+
+/* Input group estilo OneUI */
+.input-group {
+    border-radius: 0.375rem;
+    overflow: hidden;
+}
+
+.input-group .form-control.form-control-alt {
+    border-radius: 0;
+    border-color: #ebeef2 !important;
+    background-color: #ebeef2 !important;
+    transition: none;
+}
+
+.input-group .form-control.form-control-alt:focus {
+    border-color: #dde2e9 !important;
+    background-color: #dde2e9 !important;
+    box-shadow: none;
+}
+
+.input-group .form-control.form-control-alt[readonly] {
+    background-color: #ebeef2 !important;
+    cursor: pointer;
+}
+
+.input-group .btn {
+    border-radius: 0;
+    border-color: #334155;
+    background-color: #334155;
+    color: #fff;
+}
+
+.input-group .btn:hover {
+    background-color: #475569;
+    border-color: #475569;
+}
+
+.input-group .btn:first-child {
+    border-top-left-radius: 0.375rem;
+    border-bottom-left-radius: 0.375rem;
+}
+
+.input-group .form-control.form-control-alt:last-child {
+    border-top-right-radius: 0.375rem;
+    border-bottom-right-radius: 0.375rem;
+}
+
+.input-group .form-control.form-control-alt {
+    border-radius: 0;
+    border-color: #ebeef2;
+    background-color: #ebeef2;
+}
+
+.input-group .form-control.form-control-alt:focus {
+    border-color: #dde2e9;
+    background-color: #dde2e9;
+    box-shadow: none;
+}
+
+.input-group .btn {
+    border-radius: 0;
+}
+
+.input-group .btn:first-child {
+    border-top-left-radius: 0.375rem;
+    border-bottom-left-radius: 0.375rem;
+}
+
+.input-group .form-control.form-control-alt:last-child {
+    border-top-right-radius: 0.375rem;
+    border-bottom-right-radius: 0.375rem;
+}

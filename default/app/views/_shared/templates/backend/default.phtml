@@ -13,19 +13,11 @@
     <?php //Tag::css('bootstrap/bootstrap-theme.min');
     ?>
     <?php Tag::css('bootstrap/bootstrap-datetimepicker.min'); ?>
-    <!-- select2 CSS basico -->
+    <!-- select2 CSS -->
     <?php Tag::css('select2/select2.min'); ?>
-    <!-- datatables estilo bootstrap 3 CSS -->
-    <?php Tag::css('select2/select2-bootstrap.min'); ?>
-    <!-- datatables CSS basico -->
-    <?php Tag::css('datatables/datatables.min'); ?>
-    <!-- datatables estilo bootstrap 3 CSS -->
-    <?php Tag::css('datatables/DataTables-1.10.22/css/dataTables.bootstrap.min'); ?>
-    <?php //Tag::css('datatables/responsive/2.2.7/css/responsive.bootstrap.min');
-    ?>
-    <!-- datatables CSS basico -->
-    <?php //Tag::css('sweetalert2/theme/bootstrap-4');
-    ?>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css">
+    <!-- datatables CSS - Bootstrap 5 from template -->
+    <?php // Using template's datatables-bs5 CSS ?>
 
     <?php Tag::css('file-upload/jquery.fileupload'); ?>
     <?php Tag::css('file-upload/jquery.fileupload-ui'); ?>
@@ -41,12 +33,13 @@
     ?>
     <?php echo Html::includeCss(); ?>
     <link href="https://fonts.googleapis.com/css?family=Play:400,700" rel="stylesheet" type="text/css">
-    <!-- cargamos algunos CDN -->
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/searchpanes/1.3.0/css/searchPanes.dataTables.min.css" />
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/select/1.3.3/css/select.dataTables.min.css" />
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.2.7/css/responsive.bootstrap.min.css" />
-    <link href="https://cdn.datatables.net/fixedcolumns/4.3.0/css/fixedColumns.bootstrap.css" rel="stylesheet">
-    <link href="https://cdn.datatables.net/fixedheader/3.4.0/css/fixedHeader.bootstrap.css" rel="stylesheet">
+    <!-- datatables CDN Bootstrap 5 -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/datatables.net-bs5@1.13.4/css/dataTables.bootstrap5.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.3.6/css/buttons.bootstrap5.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/select/1.6.2/css/select.bootstrap5.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.4.1/css/responsive.bootstrap5.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/fixedcolumns/4.2.2/css/fixedColumns.bootstrap5.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/fixedheader/3.3.2/css/fixedHeader.bootstrap5.min.css" />
 
     <style type="text/css">
         <?php if (APP_MAYUS) { ?>.input-lower,
@@ -120,20 +113,22 @@
     <?php echo Tag::js('bootstrap/bootstrap.min') . PHP_EOL; ?>
     <?php echo Tag::js('bootstrap/bootstrap.typehead.min') . PHP_EOL; ?>
     <?php echo Tag::js('bootstrap/bootstrap-datetimepicker.min') . PHP_EOL; ?>
-    <!-- datatables JS -->
-    <?php echo Tag::js('datatables/datatables.min') . PHP_EOL; ?>
-    <!-- Fontawesome 5 modificado -->
-    <?php echo Tag::js('fontawesome') . PHP_EOL; ?>
-
-    <!-- para usar botones en datatables JS -->
-    <?php echo Tag::js('datatables/Buttons-1.6.5/js/dataTables.buttons.min') . PHP_EOL; ?>
-    <?php echo Tag::js('datatables/JSZip-2.5.0/jszip.min') . PHP_EOL; ?>
-    <?php echo Tag::js('datatables/pdfmake-0.1.36/pdfmake.min') . PHP_EOL; ?>
-    <?php echo Tag::js('datatables/pdfmake-0.1.36/vfs_fonts') . PHP_EOL; ?>
-    <?php echo Tag::js('datatables/Buttons-1.6.5/js/buttons.html5.min') . PHP_EOL; ?>
-    <?php echo Tag::js('datatables/Buttons-1.6.5/js/buttons.colVis.min') . PHP_EOL; ?>
-    <?php echo Tag::js('datatables/Responsive-2.2.7/js/dataTables.responsive.min') . PHP_EOL; ?>
-    <?php echo Tag::js('datatables/Responsive-2.2.7/js/responsive.bootstrap.min') . PHP_EOL; ?>
+    <!-- datatables CDN Bootstrap 5 -->
+    <script src="https://cdn.jsdelivr.net/npm/datatables.net@1.13.4/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/datatables.net-bs5@1.13.4/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/datatables.net-buttons@2.3.6/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/datatables.net-buttons@2.3.6/js/buttons.bootstrap5.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/pdfmake@0.1.53/build/pdfmake.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/pdfmake@0.1.53/build/vfs_fonts.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/datatables.net-buttons@2.3.6/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/datatables.net-buttons@2.3.6/js/buttons.colVis.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/datatables.net-responsive@2.4.1/js/dataTables.responsive.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/datatables.net-responsive-bs5@2.4.1/js/responsive.bootstrap5.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/datatables.net-select@1.6.2/js/dataTables.select.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/datatables.net-select@1.6.2/js/select.bootstrap5.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/datatables.net-fixedcolumns@4.2.2/js/dataTables.fixedColumns.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/datatables.net-fixedheader@3.3.2/js/dataTables.fixedHeader.min.js"></script>
 
 
     <!-- para usar select2 en español JS -->
@@ -155,15 +150,11 @@
     <!-- SweetAlert2 -->
     <?php echo Tag::js('sweetalert2/sweetalert2.all.min') . PHP_EOL; ?>
 
-    <!-- para hacer una suma de totales por columnas en datatables-->
-    <script src="https://cdn.datatables.net/plug-ins/1.10.24/api/sum().js"></script>
-    <!-- para los estilos en Excel de exportacion datatables-->
+    <!-- DataTables plugins -->
+    <script src="https://cdn.datatables.net/plug-ins/1.13.4/api/sum().js"></script>
     <script src="https://cdn.jsdelivr.net/npm/datatables-buttons-excel-styles@1.1.1/js/buttons.html5.styles.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/datatables-buttons-excel-styles@1.1.1/js/buttons.html5.styles.templates.min.js"></script>
-    <script type="text/javascript" src="https://cdn.datatables.net/searchpanes/1.3.0/js/dataTables.searchPanes.min.js"></script>
-    <script type="text/javascript" src="https://cdn.datatables.net/select/1.3.3/js/dataTables.select.min.js"></script>
-    <script src="https://cdn.datatables.net/fixedcolumns/4.3.0/js/dataTables.fixedColumns.js"></script>
-    <script src="https://cdn.datatables.net/fixedheader/3.4.0/js/dataTables.fixedHeader.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/searchpanes/2.1.1/js/dataTables.searchPanes.min.js"></script>
     <?php //echo Tag::js('Chart.min') . PHP_EOL;
     ?>
     <?php //echo Tag::js('datatables_buttons').PHP_EOL;

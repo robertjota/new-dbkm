@@ -1017,21 +1017,20 @@
                         <div class="col-md-4">
                             <?php echo DwForm::text('menu.posicion', array('class' => 'input-integer mask-pint'), $menu->posicion, 'Posición'); ?>
                         </div>
-                        <div class="col-md-3">
-                            <?= DwForm::select('menu.icono', $iconos, ['class' => 'input-lower'], $menu->icono, 'Icono a mostrar'); ?>
-                            <?php //echo DwForm::text('menu.icono', array('class'=>'input-lower'), $menu->icono, 'Icono a mostrar');
-                            ?>
+                        <div class="col-md-4 col-sm-6">
+                            <label for="menu_icono">Icono a Mostrar</label>
+                            <div class="input-group">
+                                <span class="input-group-text input-group-text-alt icono-preview">
+                                    <i class="<?= $menu->icono ?: 'fa fa-fw fa-empty' ?>"></i>
+                                </span>
+                                <input type="text" class="form-control form-control-alt" id="menu_icono" name="menu[icono]" placeholder="Seleccionar icono..." aria-label="Seleccionar icono..." aria-describedby="icono-preview" value="<?= $menu->icono ?>" readonly>
+                                <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#iconPickerModal" title="Elegir icono"><i class="fa fa-icons"></i></button>
+                            </div>
                         </div>
-                        <div class="col-md-1 icono pt-4">
-                            <h3><i class=""></i><span style="font-style: italic; font-size: small;">sin icono</span></h3>
-                        </div>
-                        <div class="col-md-4">
+                        <div class="col-md-4 col-sm-6">
                             <?php echo DwForm::text('menu.url', array('class' => 'input-required input-lower'), $menu->url, 'URL'); ?>
                         </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-4">
+                        <div class="col-md-4 col-sm-6">
                             <?php echo DwForm::select('menu.visibilidad', array(Menu::BACKEND => 'Backend', Menu::FRONTEND => 'Frontend'), array('class' => 'input-lower input-required'), $menu->visibilidad, 'Visibilidad'); ?>
                         </div>
                     </div>
@@ -1057,19 +1056,17 @@
     $(document).ready(function() {
         var icono = $('#menu_icono').val();
         if ($('#menu_icono').val().length < 1) {
-            $(".icono").html('<h3><i class=""><span style="font-style: italic; font-size: small;" >sin icono</span></i></h3>');
+            $(".icono-preview i").attr('class', 'fa fa-fw fa-empty');
         } else {
-            $(".icono").html('<h3><i class="fa ' + icono + '"></i></h3>');
+            $(".icono-preview i").attr('class', icono + ' fa-fw');
         };
 
         $(function() {
             $("#menu_recurso_id").on('keyup change', function() {
                 var recurso = $('option:selected', this).text();
-                // Limpiar la URL del recurso - quitar action si existe, dejar modulo/controlador
-                var url = recurso.replace('/*', '/').replace(/\/+$/, ''); // quitar /* y barras finales
+                var url = recurso.replace('/*', '/').replace(/\/+$/, '');
                 var parts = url.split('/');
                 if (parts.length >= 2) {
-                    // Construir URL base: modulo/controlador (con / al inicio)
                     url = '/' + parts[0] + '/' + parts[1];
                     if (parts.length > 2 && parts[2] !== 'index') {
                         url += '/' + parts[2];
@@ -1080,11 +1077,13 @@
             $("#menu_icono").on('keyup change', function() {
                 icono = $('#menu_icono').val();
                 if ($('#menu_icono').val().length < 1) {
-                    $(".icono").html('<h3><i class=""><span style="font-style: italic; font-size: small;" >sin icono</span></i></h3>');
+                    $(".icono-preview i").attr('class', 'fa fa-fw fa-empty');
                 } else {
-                    $(".icono").html('<h3><i class="' + icono + '"></i></h3>');
+                    $(".icono-preview i").attr('class', icono + ' fa-fw');
                 };
             });
         });
     });
 </script>
+
+<?php View::partial('backend/icon_picker', false); ?>

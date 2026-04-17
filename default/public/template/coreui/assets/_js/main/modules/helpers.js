@@ -740,6 +740,7 @@ export default class Helpers {
 
       // Add .js-select2-enabled class to tag it as activated and init it
       el.addClass('js-select2-enabled').select2({
+        theme: 'bootstrap-5',
         placeholder: el.data('placeholder') || false,
         dropdownParent: document.querySelector(el.data('container') || '#page-container'),
       });
