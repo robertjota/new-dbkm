@@ -49,11 +49,15 @@ class MenusController extends BackendController
         if (Input::hasPost('menu')) {
             if (Menu::setMenu('create', Input::post('menu'), array('activo' => Menu::ACTIVO))) {
                 if (APP_AJAX) {
-                    Flash::valid('El menú se ha creado correctamente! <br/>Por favor recarga la página para verificar los cambios.');
+                    DwResponse::sendSuccess('El menú se ha creado correctamente!', null, '/sistema/menus/listar', true);
                 } else {
                     Flash::valid('El menú se ha creado correctamente!');
+                    return Redirect::toAction('listar');
                 }
-                return Redirect::toAction('listar');
+            } else {
+                if (APP_AJAX) {
+                    DwResponse::sendError('Error al crear el menú');
+                }
             }
         }
         $this->page_title = 'Agregar menú';
@@ -82,11 +86,15 @@ class MenusController extends BackendController
         if (Input::hasPost('menu')) {
             if (Menu::setMenu('update', Input::post('menu'), array('id' => $id))) {
                 if (APP_AJAX) {
-                    Flash::valid('El menú se ha actualizado correctamente! <br/>Por favor recarga la página para verificar los cambios.');
+                    DwResponse::sendSuccess('El menú se ha actualizado correctamente!', null, '/sistema/menus/listar', true);
                 } else {
                     Flash::valid('El menú se ha actualizado correctamente!');
+                    return Redirect::toAction('listar');
                 }
-                return Redirect::toAction('listar');
+            } else {
+                if (APP_AJAX) {
+                    DwResponse::sendError('Error al actualizar el menú');
+                }
             }
         }
 
@@ -105,25 +113,45 @@ class MenusController extends BackendController
 
         $menu = new Menu();
         if (!$menu->find_first($id)) {
-            Flash::error('Lo sentimos, pero no se ha podido establecer la información del menú');
-        } else {
-            if ($menu->id <= 2) {
-                Flash::warning('Lo sentimos, pero este menú no se puede editar.');
+            if (APP_AJAX) {
+                DwResponse::sendError('No se pudo establecer la información del menú', null, '/sistema/menus/listar', true);
+            } else {
+                Flash::error('Lo sentimos, pero no se ha podido establecer la información del menú');
                 return Redirect::toAction('listar');
             }
-            if ($tipo == 'inactivar' && $menu->activo == Menu::INACTIVO) {
-                Flash::info('El menú ya se encuentra inactivo');
-            } else if ($tipo == 'reactivar' && $menu->activo == Menu::ACTIVO) {
-                Flash::info('El menú ya se encuentra activo');
+        } else {
+            if ($menu->id <= 2) {
+                if (APP_AJAX) {
+                    DwResponse::sendError('Este menú no se puede editar', null, '/sistema/menus/listar', true);
+                } else {
+                    Flash::warning('Lo sentimos, pero este menú no se puede editar.');
+                    return Redirect::toAction('listar');
+                }
             } else {
-                $estado = ($tipo == 'inactivar') ? Menu::INACTIVO : Menu::ACTIVO;
-                if (Menu::setMenu('update', $menu->to_array(), array('id' => $id, 'activo' => $estado))) {
-                    ($estado == Menu::ACTIVO) ? Flash::valid('El menú se ha reactivado correctamente!') : Flash::valid('El menú se ha inactivado correctamente!');
+                // Determinar el nuevo estado
+                $nuevo_estado = ($tipo == 'inactivar') ? Menu::INACTIVO : Menu::ACTIVO;
+                error_log("DEBUG: menu_id={$menu->id}, tipo=$tipo, activo_actual={$menu->activo}, nuevo_estado=$nuevo_estado");
+                
+                // Cambiar el estado
+                $menu->activo = $nuevo_estado;
+                if ($menu->save()) {
+                    if (APP_AJAX) {
+                        $msg = ($nuevo_estado == Menu::ACTIVO) ? 'El menú se ha reactivado correctamente!' : 'El menú se ha inactivado correctamente!';
+                        DwResponse::sendSuccess($msg, null, '/sistema/menus/listar', true);
+                    } else {
+                        ($nuevo_estado == Menu::ACTIVO) ? Flash::valid('El menú se ha reactivado correctamente!') : Flash::valid('El menú se ha inactivado correctamente!');
+                        return Redirect::toAction('listar');
+                    }
+                } else {
+                    if (APP_AJAX) {
+                        DwResponse::sendError('Error al cambiar el estado del menú');
+                    } else {
+                        Flash::error('Error al cambiar el estado del menú');
+                        return Redirect::toAction('listar');
+                    }
                 }
             }
         }
-
-        return Redirect::toAction('listar');
     }
 
     /**

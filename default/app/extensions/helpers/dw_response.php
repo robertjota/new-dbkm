@@ -15,15 +15,17 @@ class DwResponse
      * @param string $message
      * @param mixed $data
      * @param string $url
+     * @param bool $reloadMenu
      * @return array
      */
-    public static function success($message = 'Operación exitosa', $data = null, $url = null)
+    public static function success($message = 'Operación exitosa', $data = null, $url = null, $reloadMenu = false)
     {
         return [
             'status' => 'success',
             'message' => $message,
             'data' => $data,
-            'url' => $url
+            'url' => $url,
+            'reloadMenu' => $reloadMenu
         ];
     }
 
@@ -93,9 +95,9 @@ class DwResponse
     /**
      * Envía respuesta exitosa y termina
      */
-    public static function sendSuccess($message = 'Operación exitosa', $data = null, $url = null)
+    public static function sendSuccess($message = 'Operación exitosa', $data = null, $url = null, $reloadMenu = false)
     {
-        self::send(self::success($message, $data, $url));
+        self::send(self::success($message, $data, $url, $reloadMenu));
     }
 
     /**

@@ -54,19 +54,21 @@ class CoreuiMenu
         self::$_entorno = $entorno;
         self::$_perfil = $perfil;
 
-        if (self::$_main === null) {
-            self::$_main = [];
-            self::$_level = 0;
-            // Asignamos todos los menus activos en el entorno definido
-            self::$_menu = (new Menu())->getMenuActivoByEntorno($entorno);
+        self::reset();
+    }
 
-            // Asignamos todos los items del menu del perfil en el entorno
-            self::$_items = (new Menu())->getMenuActivoByEntornoAndPerfil($entorno, $perfil);
+    /**
+     * Resetea el cache del menú para forzar recarga
+     */
+    public static function reset()
+    {
+        self::$_main = [];
+        self::$_level = 0;
+        self::$_menu = (new Menu())->getMenuActivoByEntorno(self::$_entorno);
+        self::$_items = (new Menu())->getMenuActivoByEntornoAndPerfil(self::$_entorno, self::$_perfil);
 
-            // Construimos el array del menu segun los items
-            foreach (self::$_items as $item) {
-                self::makeMenuArray($item);
-            }
+        foreach (self::$_items as $item) {
+            self::makeMenuArray($item);
         }
     }
 

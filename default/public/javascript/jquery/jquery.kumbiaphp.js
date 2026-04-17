@@ -37,61 +37,43 @@
          */
         plugin: [],
 
-        /**
-         * Muestra mensaje de confirmacion
+/**
+         * Muestra mensaje de confirmacion con SweetAlert
          *
          * @param Object event
          */
         cConfirm: function(event) {
             event.preventDefault();
             var este        = $(this);            
-            var dialogo     = $("#modal_confirmar");
             var data_body   = este.attr('msg');
             var data_title  = este.attr('msg-title');
             if(data_title==undefined) {
-                data_title = 'Mensaje de confirmación';
+                data_title = '¿Estás seguro?';
             }
-            if ($("#modal_confirmar").size() > 0 ){
-                dialogo.empty();
-            } else {                
-                dialogo = $('<div id="modal_confirmar" tabindex="-1" role="dialog" aria-labelledby="modal_confirmar" aria-hidden="true"></div>');
-            }
-            dialogo.addClass('modal fade');
-            var cajon       = $('<div class="modal-dialog"></div>');
-            var contenedor  = $('<div class="modal-content"></div>');
-            var header      = $('<div><button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button><h4 class="modal-title"><i class="fa fa-warning" style="padding-right:5px; margin-top:5px;"></i>'+data_title+'</h4></div>').addClass('modal-header');
-            var cuerpo      = (data_body!=undefined) ? $('<div><p>'+data_body+'</p></div>').addClass('modal-body') : $('<div><p>Está seguro de continuar con esta operación?</p></div>').addClass('modal-body');
-            var footer      = $('<div></div>').addClass('modal-footer');
-
-            contenedor.append(header);
-            contenedor.append(cuerpo);
-            contenedor.append(footer);                                                                                    
-            cajon.append(contenedor);
-            dialogo.append(cajon);            
-            
-            if(este.hasClass('js-link')) {
-                var data_to = (este.attr('data-to') !== undefined) ? este.attr('data-to') : este.attr('href');
-                footer.append('<a class="btn btn-success js-link js-spinner" href="'+data_to+'">Aceptar</a>');
-            } else {
-                footer.append('<button class="btn btn-success">Aceptar</a>');
+            if(data_body==undefined) {
+                data_body = '¿Estás seguro de continuar con esta operación?';
             }
             
-            footer.append('<button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button>');
-                        
-            $('.btn-success', dialogo).on('click',function(){
-                dialogo.modal('hide')
-                if(este.attr('on-confirm')!=undefined) {
-                    fn = este.attr('on-confirm')+'(este)';
-                    eval(fn);
-                    return false;
+            var href = este.attr('href');
+            
+            Swal.fire({
+                title: data_title,
+                text: data_body,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Aceptar',
+                cancelButtonText: 'Cancelar',
+                confirmButtonColor: '#d98f0e',
+                cancelButtonColor: '#6c757d'
+            }).then(function(result) {
+                if (result.isConfirmed) {
+                    if(este.attr('on-confirm')!=undefined) {
+                        fn = este.attr('on-confirm')+'(este)';
+                        eval(fn);
+                    } else {
+                        window.location.href = href;
+                    }
                 }
-                if(!($(this).hasClass('js-link'))) {
-                    document.location.href = este.attr('href');
-                }
-            });
-            dialogo.modal();
-            $('body').on('shown.bs.modal', '#modal_confirmar', function () {
-                $('.btn-success', dialogo).focus();
             });
             
         },
@@ -110,7 +92,7 @@
             if(data_title===undefined) {
                 data_title = 'Imprmir reporte';
             }
-            if ($("#modal_confirmar").size() > 0 ){
+            if ($("#modal_confirmar").length > 0 ){
                 reporte.empty();
             } else {                
                 reporte = $('<div id="modal_reporte" tabindex="-1" role="dialog" aria-labelledby="modal_confirmar" aria-hidden="true"></div>');
@@ -200,12 +182,64 @@
                 // Verificar que la URL no sea un ancla o hash
                 var hashCheck = $.KumbiaPHP.publicPath+'#';
                 if(url != hashCheck && url.indexOf('#') !== 0) {
-                    options = { capa: capa, spinner: spinner, msg: true, url: url, change_url: change_url};
-                    if($.kload(options)) {
-                        if(after_load!=null) {
-                            try { eval(after_load); } catch(e) { }
+                    var self = this;
+                    // Usar $.kpost para detectar JSON en la respuesta
+                    $.ajax({
+                        url: url,
+                        type: 'GET',
+                        beforeSend: function(xhr) {
+                            xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
                         }
-                    }
+                    }).done(function(response) {
+                        // Intentar parsear como JSON
+                        var jsonResponse = null;
+                        var isJson = false;
+                        if (typeof response === 'object' && response !== null) {
+                            jsonResponse = response;
+                            isJson = true;
+                        } else if (typeof response === 'string') {
+                            try {
+                                jsonResponse = JSON.parse(response);
+                                isJson = true;
+                            } catch(e) {}
+                        }
+                        
+                        // Si es JSON, manejar como respuesta JSON
+                        if (isJson && jsonResponse && jsonResponse.status) {
+                            if (jsonResponse.status === 'success') {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Éxito',
+                                    text: jsonResponse.message || 'Operación completada',
+                                    timer: 2000,
+                                    showConfirmButton: false
+                                }).then(function() {
+                                    if (jsonResponse.url && jsonResponse.reloadMenu) {
+                                        location.href = jsonResponse.url;
+                                    } else if (jsonResponse.url) {
+                                        $.kload({ url: jsonResponse.url, spinner: true, change_url: true });
+                                    } else if (jsonResponse.reloadMenu) {
+                                        location.reload();
+                                    }
+                                });
+                            } else if (jsonResponse.status === 'error') {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error',
+                                    text: jsonResponse.message
+                                });
+                            } else if (jsonResponse.status === 'validation') {
+                                Swal.fire({
+                                    icon: 'warning',
+                                    title: 'Validación',
+                                    html: jsonResponse.message + '<br>' + (jsonResponse.errors ? Object.values(jsonResponse.errors).join('<br>') : '')
+                                });
+                            }
+                        } else {
+                            // No es JSON, cargar normalmente
+                            $('#' + capa).hide().html(response).show('fast');
+                        }
+                    });
                 }
             }
             
@@ -312,7 +346,7 @@
             $("body").on('click', 'a.js-remote', this.cRemote);
             
             // Enlace ajax con js-link class (main AJAX navigation)
-            $("body").on('click', '.js-link', this.cRemote);
+            $("body").on('click', 'a.js-link, a.js-spinner', this.cRemote);
 
             // Enlace ajax con confirmacion
             $("a.js-remote-confirm").on('click', this.cRemoteConfirm);
@@ -399,7 +433,7 @@
                 var este = $(this);
                 var id = este.attr('id');                    
                 var bar = 'progress_'+id;
-                if($('#'+bar).size() === 0) {
+                if($('#'+bar).length === 0) {
                     este.parent().after('<div id="'+bar+'" class="progress fade progress-striped active" style="margin-top: 5px;"><div class="progress-bar progress-bar-success"></div></div>');
                 }
                 var prgss = $('#'+bar);

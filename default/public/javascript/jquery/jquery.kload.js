@@ -261,9 +261,14 @@
                             timer: 2000,
                             showConfirmButton: false
                         }).then(function() {
-                            // Cargar URL de lista si existe
-                            if (jsonResponse.url) {
+                            // Si tiene URL y necesita recargar menú, navegar a URL con full reload
+                            if (jsonResponse.url && jsonResponse.reloadMenu) {
+                                var baseUrl = location.origin + '/';
+                                location.href = baseUrl + jsonResponse.url;
+                            } else if (jsonResponse.url) {
                                 $.kload({ url: jsonResponse.url, spinner: true, change_url: true });
+                            } else if (jsonResponse.reloadMenu) {
+                                location.reload();
                             } else {
                                 location.reload();
                             }
