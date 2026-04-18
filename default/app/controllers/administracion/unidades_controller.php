@@ -34,7 +34,7 @@ class UnidadesController extends BackendController
             $obj = new Unidad(Input::post('unidad'));
             if ($obj->save()) {
                 if ($this->ajax_mode) {
-                    DwResponse::sendSuccess('El unidad se ha registrado correctamente!', null, PUBLIC_PATH . 'administracion/unidades/listar/');
+                    DwResponse::sendSuccess('El unidad se ha registrado correctamente!', null, '/administracion/unidades/listar');
                 }
                 Flash::valid('El unidad se ha registrado correctamente!');
                 return Redirect::toAction('listar');
@@ -76,7 +76,7 @@ class UnidadesController extends BackendController
             $obj = new Unidad(Input::post('unidad'));
             if ($obj->update()) {
                 if ($this->ajax_mode) {
-                    DwResponse::sendSuccess('El unidad se ha actualizado correctamente!', null, PUBLIC_PATH . 'administracion/unidades/listar/');
+                    DwResponse::sendSuccess('El unidad se ha actualizado correctamente!', null, '/administracion/unidades/listar');
                 }
                 Flash::valid('El unidad se ha actualizado correctamente!');
                 return Redirect::toAction('listar');
@@ -118,7 +118,7 @@ class UnidadesController extends BackendController
         }
 
         if ($this->ajax_mode) {
-            DwResponse::sendSuccess('El unidad se ha eliminado correctamente!', null, PUBLIC_PATH . 'administracion/unidades/listar/');
+            DwResponse::sendSuccess('El unidad se ha eliminado correctamente!', null, '/administracion/unidades/listar');
         }
         Flash::valid('El unidad se ha eliminado correctamente!');
         return Redirect::toAction('listar');

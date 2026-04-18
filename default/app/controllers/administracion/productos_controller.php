@@ -34,7 +34,7 @@ class ProductosController extends BackendController
             $producto = new Producto(Input::post('producto'));
             if ($producto->save()) {
                 if ($this->ajax_mode) {
-                    DwResponse::sendSuccess('El producto se ha registrado correctamente!', null, PUBLIC_PATH . 'administracion/productos/listar/');
+                    DwResponse::sendSuccess('El producto se ha registrado correctamente!', null, '/administracion/productos/listar');
                 }
                 Flash::valid('El producto se ha registrado correctamente!');
                 return Redirect::toAction('listar');
@@ -76,7 +76,7 @@ class ProductosController extends BackendController
             $producto = new Producto(Input::post('producto'));
             if ($producto->update()) {
                 if ($this->ajax_mode) {
-                    DwResponse::sendSuccess('El producto se ha actualizado correctamente!', null, PUBLIC_PATH . 'administracion/productos/listar/');
+                    DwResponse::sendSuccess('El producto se ha actualizado correctamente!', null, '/administracion/productos/listar');
                 }
                 Flash::valid('El producto se ha actualizado correctamente!');
                 return Redirect::toAction('listar');
@@ -118,7 +118,7 @@ class ProductosController extends BackendController
         }
 
         if ($this->ajax_mode) {
-            DwResponse::sendSuccess('El producto se ha eliminado correctamente!', null, PUBLIC_PATH . 'administracion/productos/listar/');
+            DwResponse::sendSuccess('El producto se ha eliminado correctamente!', null, '/administracion/productos/listar');
         }
         Flash::valid('El producto se ha eliminado correctamente!');
         return Redirect::toAction('listar');

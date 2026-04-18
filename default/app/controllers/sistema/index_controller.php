@@ -16,7 +16,7 @@ class IndexController extends BackendController
      */
     protected function before_filter()
     {
-        return Redirect::to('admin');
+        return Redirect::to('sistema/');
     }
 
 

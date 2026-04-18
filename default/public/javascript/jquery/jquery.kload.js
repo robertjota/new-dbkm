@@ -93,6 +93,13 @@
                 $("[rel=tooltip]").tooltip('hide');
             }
         }).done(function(data) {
+            // Para páginas de lista, hacer full reload en lugar de carga AJAX
+            // Esto evita problemas con DataTables y otros componentes que no se reinicializan bien
+            if(opt.url && opt.url.indexOf('listar') > -1) {
+                location.reload();
+                return;
+            }
+            
             if(opt.change_url == true) {
                 updateUrl(opt.url);
             }
@@ -258,17 +265,15 @@
                             icon: 'success',
                             title: 'Éxito',
                             text: jsonResponse.message || 'Operación completada',
-                            timer: 2000,
+                            timer: 1500,
                             showConfirmButton: false
                         }).then(function() {
-                            // Si tiene URL y necesita recargar menú, navegar a URL con full reload
-                            if (jsonResponse.url && jsonResponse.reloadMenu) {
-                                var baseUrl = location.origin + '/';
-                                location.href = baseUrl + jsonResponse.url;
+                            // Si tiene URL, navegar directamente
+                            // Pages de lista usan full reload para evitar problemas con DataTables
+                            if (jsonResponse.url && (jsonResponse.reloadMenu || jsonResponse.url.indexOf('listar') > -1)) {
+                                location.href = jsonResponse.url;
                             } else if (jsonResponse.url) {
                                 $.kload({ url: jsonResponse.url, spinner: true, change_url: true });
-                            } else if (jsonResponse.reloadMenu) {
-                                location.reload();
                             } else {
                                 location.reload();
                             }

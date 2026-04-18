@@ -34,7 +34,7 @@ class CategoriasController extends BackendController
             $obj = new Categoria(Input::post('categoria'));
             if ($obj->save()) {
                 if ($this->ajax_mode) {
-                    DwResponse::sendSuccess('La categoria se ha registrado correctamente!', null, PUBLIC_PATH . 'admin/categorias/listar/');
+                    DwResponse::sendSuccess('La categoria se ha registrado correctamente!', null, '/administracion/categorias/listar');
                 }
                 Flash::valid('El categoria se ha registrado correctamente!');
                 return Redirect::toAction('listar');
@@ -76,7 +76,7 @@ class CategoriasController extends BackendController
             $obj = new Categoria(Input::post('categoria'));
             if ($obj->update()) {
                 if ($this->ajax_mode) {
-                    DwResponse::sendSuccess('La categoria se ha actualizado correctamente!', null, PUBLIC_PATH . 'admin/categorias/listar/');
+                    DwResponse::sendSuccess('La categoria se ha actualizado correctamente!', null, '/administracion/categorias/listar');
                 }
                 Flash::valid('El categoria se ha actualizado correctamente!');
                 return Redirect::toAction('listar');
@@ -118,7 +118,7 @@ class CategoriasController extends BackendController
         }
 
         if ($this->ajax_mode) {
-            DwResponse::sendSuccess('La categoria se ha eliminado correctamente!', null, PUBLIC_PATH . 'admin/categorias/listar/');
+            DwResponse::sendSuccess('La categoria se ha eliminado correctamente!', null, '/administracion/categorias/listar');
         }
         Flash::valid('El categoria se ha eliminado correctamente!');
         return Redirect::toAction('listar');
