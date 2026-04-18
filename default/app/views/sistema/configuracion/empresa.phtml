@@ -1,0 +1,101 @@
+<?php View::flash(); ?>
+
+<!-- Page Content -->
+<div class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="block pt-3">
+                <div class="block-header pt-3 d-flex justify-content-center">
+                    <?php echo DwHtml::button("sistema/configuracion/", 'basic', array('class' => 'mx-1 btn-sm btn-info'), 'fa-asterisk', APP_AJAX); ?>
+                    <?php echo DwHtml::button("sistema/configuracion/empresa/", 'empresa', array('class' => 'mx-1 btn-sm btn-success active'), 'fa-building', APP_AJAX); ?>
+                    <?php echo DwHtml::button("sistema/configuracion/config/", 'config all', array('class' => 'mx-1 btn-sm btn-info'), 'fa-asterisk', APP_AJAX); ?>
+                    <?php echo DwHtml::button("sistema/configuracion/routes/", 'routes', array('class' => 'mx-1 btn-sm btn-info'), 'fa-random', APP_AJAX); ?>
+                    <?php echo DwHtml::button("sistema/configuracion/databases/", 'databases', array('class' => 'mx-1 btn-sm btn-info'), 'fa-hdd-o', APP_AJAX); ?>
+                </div>
+                <div class="block-content">
+
+<?php echo DwForm::open('', 'post', array('enctype' => 'multipart/form-data', 'class' => 'no-ajax')); ?>
+
+                    <div class="row justify-content-evenly">
+
+                        <div class="col-md-5">
+                            <fieldset class="border px-3">
+                                <legend class="float-none w-auto block-header block-header-default">Datos de la Empresa</legend>
+                                <?php echo DwForm::text('empresa[nombre]', array('class' => 'input-lower input-required'), $empresa['nombre'], 'Nombre de la empresa:'); ?>
+
+                                <?php echo DwForm::text('empresa[rif]', array('class' => 'input-upper'), $empresa['rif'], 'RIF:'); ?>
+
+                                <?php echo DwForm::text('empresa[direccion]', array('class' => 'input-lower'), $empresa['direccion'], 'Dirección:'); ?>
+
+                                <?php echo DwForm::text('empresa[telefono]', array('class' => 'input-lower'), $empresa['telefono'], 'Teléfono:'); ?>
+
+                                <?php echo DwForm::email('empresa[email]', array('class' => 'input-lower'), $empresa['email'], 'Correo electrónico:'); ?>
+
+                                <?php echo DwForm::text('empresa[web]', array('class' => 'input-lower'), $empresa['web'], 'Sitio web:'); ?>
+                            </fieldset>
+                        </div>
+
+                        <div class="col-md-5">
+                            <fieldset class="border px-3">
+                                <legend class="float-none w-auto block-header block-header-default">Logos de la Empresa</legend>
+                                
+                                <div class="mb-3">
+                                    <label class="form-label">Logo Principal (para sidebar)</label>
+                                    <?php if (file_exists(PUBLIC_PATH . 'empresa/logo-empresa.png')): ?>
+                                        <div class="mb-2">
+                                            <img src="<?= PUBLIC_PATH ?>empresa/logo-empresa.png" alt="Logo" class="img-thumbnail" style="max-height: 80px;">
+                                        </div>
+                                        <small class="text-success">✓ Logo actual</small>
+                                    <?php elseif (file_exists(PUBLIC_PATH . 'empresa/logo-empresa.jpg')): ?>
+                                        <div class="mb-2">
+                                            <img src="<?= PUBLIC_PATH ?>empresa/logo-empresa.jpg" alt="Logo" class="img-thumbnail" style="max-height: 80px;">
+                                        </div>
+                                    <?php elseif (file_exists(PUBLIC_PATH . 'empresa/logo-empresa.svg')): ?>
+                                        <div class="mb-2">
+                                            <img src="<?= PUBLIC_PATH ?>empresa/logo-empresa.svg" alt="Logo" class="img-thumbnail" style="max-height: 80px;">
+                                        </div>
+                                    <?php else: ?>
+                                        <div class="mb-2 text-muted">No hay logo cargado</div>
+                                    <?php endif; ?>
+                                    <input type="file" name="logo" class="form-control" accept="image/png,image/jpeg,image/gif,image/svg+xml">
+                                    <small class="text-muted">Formatos: PNG, JPG, SVG. Nombre recomendado: logo-empresa.png</small>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label class="form-label">Logo Mini (sidebar colapsado)</label>
+                                    <?php if (file_exists(PUBLIC_PATH . 'empresa/logo-mini.png')): ?>
+                                        <div class="mb-2">
+                                            <img src="<?= PUBLIC_PATH ?>empresa/logo-mini.png" alt="Logo Mini" class="img-thumbnail" style="max-height: 40px;">
+                                        </div>
+                                        <small class="text-success">✓ Logo actual</small>
+                                    <?php elseif (file_exists(PUBLIC_PATH . 'empresa/logo-mini.jpg')): ?>
+                                        <div class="mb-2">
+                                            <img src="<?= PUBLIC_PATH ?>empresa/logo-mini.jpg" alt="Logo Mini" class="img-thumbnail" style="max-height: 40px;">
+                                        </div>
+                                    <?php elseif (file_exists(PUBLIC_PATH . 'empresa/logo-mini.svg')): ?>
+                                        <div class="mb-2">
+                                            <img src="<?= PUBLIC_PATH ?>empresa/logo-mini.svg" alt="Logo Mini" class="img-thumbnail" style="max-height: 40px;">
+                                        </div>
+                                    <?php else: ?>
+                                        <div class="mb-2 text-muted">No hay logo mini cargado</div>
+                                    <?php endif; ?>
+                                    <input type="file" name="logo_mini" class="form-control" accept="image/png,image/jpeg,image/gif,image/svg+xml">
+                                    <small class="text-muted">Formatos: PNG, JPG, SVG. Nombre recomendado: logo-mini.png</small>
+                                </div>
+
+                            </fieldset>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row mb-3 text-end">
+                        <div class="form-actions">
+                            <?php echo DwForm::send('Guardar datos de empresa'); ?>
+                            <?php echo DwForm::cancel(); ?>
+                        </div>
+                    </div>
+<?php echo DwForm::close(); ?>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

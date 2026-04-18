@@ -1,4 +1,30 @@
 <?php CoreuiMenu::load(Menu::BACKEND, Session::get('perfil_id'));
+
+// Cargar datos de la empresa
+$empresaFile = PUBLIC_PATH . 'empresa/empresa.json';
+$empresaNombre = 'DBKM';
+$empresaLogo = null;
+$empresaLogoMini = null;
+
+if (file_exists($empresaFile)) {
+    $empresaData = json_decode(file_get_contents($empresaFile), true);
+    $empresaNombre = !empty($empresaData['nombre']) ? $empresaData['nombre'] : 'DBKM';
+}
+
+// Detectar logo
+$logoExtensions = array('png', 'jpg', 'jpeg', 'svg');
+foreach ($logoExtensions as $ext) {
+    if (file_exists(PUBLIC_PATH . 'empresa/logo-empresa.' . $ext)) {
+        $empresaLogo = PUBLIC_PATH . 'empresa/logo-empresa.' . $ext;
+        break;
+    }
+}
+foreach ($logoExtensions as $ext) {
+    if (file_exists(PUBLIC_PATH . 'empresa/logo-mini.' . $ext)) {
+        $empresaLogoMini = PUBLIC_PATH . 'empresa/logo-mini.' . $ext;
+        break;
+    }
+}
 ?>
 <!--
           Sidebar Mini Mode - Display Helper classes
@@ -16,11 +42,26 @@
     <!-- Side Header -->
     <div class="content-header">
         <!-- Logo -->
-        <a class="fw-semibold text-dual" href="index.html">
-            <span class="smini-visible">
-                <i class="fa fa-circle-notch text-primary"></i>
-            </span>
-            <span class="smini-hide fs-4 tracking-wider">DBKM<span class="fw-normal"><small>2024</small></span></span>
+        <a class="fw-semibold text-dual" href="#">
+            <?php if ($empresaLogoMini): ?>
+                <span class="smini-visible">
+                    <img src="<?= $empresaLogoMini ?>" style="height: 24px;" alt="Logo">
+                </span>
+            <?php elseif ($empresaLogo): ?>
+                <span class="smini-visible">
+                    <img src="<?= $empresaLogo ?>" style="height: 24px;" alt="Logo">
+                </span>
+            <?php else: ?>
+                <span class="smini-visible">
+                    <i class="fa fa-circle-notch text-primary"></i>
+                </span>
+            <?php endif; ?>
+            
+            <?php if ($empresaLogo): ?>
+                <span class="smini-hide"><img src="<?= $empresaLogo ?>" style="height: 32px;" alt="<?= $empresaNombre ?>"></span>
+            <?php else: ?>
+                <span class="smini-hide fs-4 tracking-wider"><?= $empresaNombre ?><span class="fw-normal"><small><?= date('Y') ?></small></span></span>
+            <?php endif; ?>
         </a>
         <!-- END Logo -->
 

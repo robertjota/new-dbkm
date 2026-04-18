@@ -136,4 +136,59 @@ class ConfiguracionController extends BackendController
         }
         return Redirect::toAction('index');
     }
+
+    /**
+     * Método para configurar los datos de la empresa
+     */
+    public function empresa()
+    {
+        $this->page_title = 'Datos de la Empresa';
+        
+        $empresaFile = PUBLIC_PATH . 'empresa/empresa.json';
+        $empresaData = array(
+            'nombre' => '',
+            'rif' => '',
+            'direccion' => '',
+            'telefono' => '',
+            'email' => '',
+            'web' => ''
+        );
+        
+        if (file_exists($empresaFile)) {
+            $empresaData = json_decode(file_get_contents($empresaFile), true);
+        }
+        
+        $this->empresa = $empresaData;
+        
+        if (Input::hasPost('empresa')) {
+            $postData = Input::post('empresa');
+            
+            // Guardar datos JSON
+            $dir = dirname($empresaFile);
+            if (!is_dir($dir)) {
+                mkdir($dir, 0755, true);
+            }
+            
+            file_put_contents($empresaFile, json_encode($postData, JSON_PRETTY_PRINT));
+            
+            // Procesar logo si se subió
+            if (isset($_FILES['logo']) && $_FILES['logo']['error'] === UPLOAD_ERR_OK) {
+                $logoExt = strtolower(pathinfo($_FILES['logo']['name'], PATHINFO_EXTENSION));
+                if (in_array($logoExt, array('png', 'jpg', 'jpeg', 'gif', 'svg'))) {
+                    move_uploaded_file($_FILES['logo']['tmp_name'], PUBLIC_PATH . 'empresa/logo-empresa.' . $logoExt);
+                }
+            }
+            
+            // Procesar logo mini si se subió
+            if (isset($_FILES['logo_mini']) && $_FILES['logo_mini']['error'] === UPLOAD_ERR_OK) {
+                $logoMiniExt = strtolower(pathinfo($_FILES['logo_mini']['name'], PATHINFO_EXTENSION));
+                if (in_array($logoMiniExt, array('png', 'jpg', 'jpeg', 'gif', 'svg'))) {
+                    move_uploaded_file($_FILES['logo_mini']['tmp_name'], PUBLIC_PATH . 'empresa/logo-mini.' . $logoMiniExt);
+                }
+            }
+            
+            Flash::valid('Los datos de la empresa se han guardado correctamente!');
+            return Redirect::toAction('empresa');
+        }
+    }
 }
