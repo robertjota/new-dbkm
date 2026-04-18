@@ -1,39 +1,42 @@
 <?php
 
-return [
-    'application' => [
-        'name' => 'DBKM 2026',
-        'base_url' => 'https://kumbiaphp.atumedida-hosting.com/',
-        'production' => 'Off',
-        'database' => 'development',
-        'dbdate' => 'YYYY-MM-DD',
-        'debug' => 'On',
-        'log_exceptions' => 'On',
-        'cache_driver' => 'file',
-        'metadata_lifetime' => '+1 year',
-        'namespace_auth' => 'default',
-        'routes' => 'On',
-        'template' => 'coreui',
-    ],
-    'custom' => [
-        'app_mayus' => 'On',
-        'app_update' => 'Off',
-        'app_update_time' => '5 min',
-        'app_version' => 2,
-        'app_logger' => 'On',
-        'app_local' => 'On',
-        'app_ajax' => 'On',
-        'datagrid' => 20,
-        'login_exclusion' => 'root, admin',
-        'type_reports' => 'html.printer',
-        'timezone' => 'America/Caracas',
-        'empresa' => [
-            'nombre' => 'Mi Empresa',
-            'rif' => '',
-            'direccion' => '',
-            'telefono' => '',
-            'email' => '',
-            'web' => '',
-        ],
-    ],
-];
+return array (
+  'application' => 
+  array (
+    'name' => 'DBKM 2026',
+    'base_url' => 'https://kumbiaphp.atumedida-hosting.com/',
+    'production' => 'Off',
+    'database' => 'development',
+    'dbdate' => 'YYYY-MM-DD',
+    'debug' => 'On',
+    'log_exceptions' => 'On',
+    'cache_driver' => 'file',
+    'metadata_lifetime' => '+1 year',
+    'namespace_auth' => 'default',
+    'routes' => 'On',
+    'template' => 'coreui',
+  ),
+  'custom' => 
+  array (
+    'app_mayus' => 'On',
+    'app_update' => 'Off',
+    'app_update_time' => '5 min',
+    'app_version' => 2,
+    'app_logger' => 'On',
+    'app_local' => 'On',
+    'app_ajax' => 'On',
+    'datagrid' => 20,
+    'login_exclusion' => 'root, admin',
+    'type_reports' => 'html.printer',
+    'timezone' => 'America/Caracas',
+    'empresa' => 
+    array (
+      'nombre' => 'Mi Empresa',
+      'rif' => 'J-12345678-0',
+      'direccion' => 'prueba de dirección',
+      'telefono' => '+58 412 1233454',
+      'email' => 'sistemas@prueba.com',
+      'web' => '',
+    ),
+  ),
+);

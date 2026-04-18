@@ -18,8 +18,8 @@ class DwEmpresa
     private static function load()
     {
         if (self::$data === null) {
-            // Cargar desde config
-            self::$data = Config::get('custom.empresa');
+            // Cargar desde config usando ruta correcta
+            self::$data = Config::get('config.custom.empresa');
             if (!self::$data) {
                 self::$data = array();
             }

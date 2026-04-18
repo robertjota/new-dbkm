@@ -1,7 +1,7 @@
 <?php CoreuiMenu::load(Menu::BACKEND, Session::get('perfil_id'));
 
 // Cargar datos de la empresa desde config
-$empresaData = Config::get('custom.empresa');
+$empresaData = Config::get('config.custom.empresa');
 $empresaNombre = !empty($empresaData['nombre']) ? $empresaData['nombre'] : 'DBKM';
 $empresaLogo = null;
 $empresaLogoMini = null;

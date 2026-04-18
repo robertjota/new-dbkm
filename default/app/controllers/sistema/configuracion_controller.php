@@ -144,11 +144,9 @@ class ConfiguracionController extends BackendController
     {
         $this->page_title = 'Datos de la Empresa';
         
-        // Cargar datos actuales del config
-        $empresaData = Config::get('custom.empresa');
-        
-        $this->empresa = $empresaData ? $empresaData : array(
-            'nombre' => '',
+        // Datos por defecto
+        $this->empresa = array(
+            'nombre' => 'Mi Empresa',
             'rif' => '',
             'direccion' => '',
             'telefono' => '',
@@ -156,14 +154,24 @@ class ConfiguracionController extends BackendController
             'web' => ''
         );
         
+        // Intentar cargar del config - ruta correcta es config.custom.empresa
+        try {
+            $empresaData = Config::get('config.custom.empresa');
+            if ($empresaData && is_array($empresaData)) {
+                $this->empresa = array_merge($this->empresa, $empresaData);
+            }
+        } catch (Exception $e) {
+            // Usar valores por defecto si hay error
+        }
+        
         if (Input::hasPost('empresa')) {
             $postData = Input::post('empresa');
             
-            // Leer config actual
+            // Leer config actual - usar ruta correcta
             $config = Config::read('config');
             $config['custom']['empresa'] = $postData;
             
-            // Guardar config usando file_put_contents
+            // Guardar config
             $configFile = APP_PATH . 'config/config.php';
             $configContent = "<?php\n\nreturn " . var_export($config, true) . ";\n";
             file_put_contents($configFile, $configContent);
