@@ -58,19 +58,18 @@ class DwButton
      * @param type $icon Icono a mostrar
      * @return type
      */
-    public static function cancel($redir = NULL, $title = '', $icon = 'fa-ban', $etq = 'CANCELAR')
+public static function cancel($redir = NULL, $title = '', $icon = 'fa-ban', $etq = 'CANCELAR')
     {
         $attrs = [];
-        $attrs['class'] = 'btn-secondary';
         $attrs['title'] = empty($title) ? 'Cancelar' : $title;
         
         if (empty($redir)) {
-            // Sin redirección - intentar listar, si no existe, ir a dashboard
-            $module = Router::get('module');
-            $controller = Router::get('controller');
-            $redir = ($module ? "$module/" : "") . "$controller/";
+            // Sin URL - usar history.back() para volver a la página anterior
+            return "<a href=\"javascript:history.back()\" class=\"btn btn-secondary\" title=\"$title\"><i class=\"btn-icon-only fa $icon\"></i> $etq</a>";
         }
         
+        // Con URL específica - navegación directa con full reload
+        $attrs['class'] = 'btn-secondary no-ajax';
         return DwHtml::button($redir, $etq, $attrs, $icon);
     }
 

@@ -236,8 +236,12 @@
                                 });
                             }
                         } else {
-                            // No es JSON, cargar normalmente
-                            $('#' + capa).hide().html(response).show('fast');
+                            // Si la URL es de lista, hacer full reload para DataTables
+                            if (url.indexOf('listar') > -1) {
+                                location.reload();
+                            } else {
+                                $('#' + capa).hide().html(response).show('fast');
+                            }
                         }
                     });
                 }

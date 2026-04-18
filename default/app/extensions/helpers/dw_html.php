@@ -95,6 +95,10 @@ class DwHtml extends Html
             if ($action == "dashboard/") {
                 $loadAjax = false;
             }
+            // URLs de lista usan navegación directa (full reload) para DataTables
+            if (strpos($action, 'listar') !== false) {
+                $loadAjax = false;
+            }
             // Verificar si la clase contiene no-ajax para deshabilitar AJAX
             if (isset($attrs['class']) && preg_match("/\bno-ajax\b/i", $attrs['class'])) {
                 $loadAjax = false;

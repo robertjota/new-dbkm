@@ -50,14 +50,14 @@ class LoginController extends BackendController
         if (Input::hasPost('login') && Input::hasPost('password') && Input::hasPost('mode')) {
 
             if (Usuario::setSession('open', Input::post('login'), Input::post('password'))) {
-                return Redirect::to('sistema/');
+                return Redirect::to('dashboard/');
             } else {
                 //Se soluciona lo de la llave de seguridad
                 Flash::error('Los datos introducidos no son correctos.');
                 return Redirect::toAction('entrar/', 3);
             }
         } else if (DwAuth::isLogged()) {
-            return Redirect::to('sistema/');
+            return Redirect::to('dashboard/');
         }
     }
 
