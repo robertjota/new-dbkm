@@ -64,11 +64,26 @@ public static function cancel($redir = NULL, $title = '', $icon = 'fa-ban', $etq
         $attrs['title'] = empty($title) ? 'Cancelar' : $title;
         
         if (empty($redir)) {
-            // Sin URL - usar history.back() para volver a la página anterior
-            return "<a href=\"javascript:history.back()\" class=\"btn btn-secondary\" title=\"$title\"><i class=\"btn-icon-only fa $icon\"></i> $etq</a>";
+            // Intentar ir a listar del controller actual
+            $module = Router::get('module');
+            $controller = Router::get('controller');
+            $action = ($module ? "$module/" : "") . "$controller/listar";
+            
+            // Verificar si existe la vista listar
+            $view_path = APP_PATH . 'views/' . $controller . '/listar.phtml';
+            if ($module) {
+                $view_path = APP_PATH . 'views/' . str_replace('/', '/', $module) . '/' . $controller . '/listar.phtml';
+            }
+            
+            // Si no existe listar, usar history.back()
+            if (!file_exists($view_path)) {
+                return "<a href=\"javascript:history.back()\" class=\"btn btn-secondary\" title=\"$title\"><i class=\"btn-icon-only fa $icon\"></i> $etq</a>";
+            }
+            
+            $redir = $action;
         }
         
-        // Con URL específica - navegación directa con full reload
+        // Navegación directa con full reload
         $attrs['class'] = 'btn-secondary no-ajax';
         return DwHtml::button($redir, $etq, $attrs, $icon);
     }
