@@ -139,3 +139,66 @@ Al crear nuevos CRuds sin especificar módulo, se crea en `auxiliar`.
 - `administracion` - Administración (productos, categorías, etc.)
 - `sistema` - Sistema (usuarios, perfiles, menus, etc.)
 - `dashboard` - Panel principal
+
+### Datos de la Empresa
+
+Los datos de la empresa se configuran en `config.php` en la sección `custom.empresa`:
+
+```php
+// app/config/config.php
+'custom' => [
+    'empresa' => [
+        'nombre' => 'Mi Empresa',
+        'rif' => 'J-12345678-9',
+        'direccion' => 'Dirección de la empresa',
+        'telefono' => '0212-1234567',
+        'email' => 'correo@empresa.com',
+        'web' => 'https://empresa.com',
+    ],
+],
+```
+
+Para acceder a los datos desde el código:
+
+```php
+// Usando Config
+Config::get('custom.empresa.nombre');
+
+// O usando el helper DwEmpresa
+DwEmpresa::nombre();
+DwEmpresa::rif();
+DwEmpresa::direccion();
+DwEmpresa::telefono();
+DwEmpresa::email();
+DwEmpresa::web();
+DwEmpresa::logo();       // URL del logo
+DwEmpresa::logoMini();   // URL del logo mini
+```
+
+Los logos se almacenan en:
+- `public/empresa/logo-empresa.png` - Logo principal
+- `public/empresa/logo-mini.png` - Logo para sidebar colapsado
+
+### DwResponse - Respuestas AJAX
+
+Para respuestas JSON en controladores AJAX:
+
+```php
+// Respuesta exitosa
+DwResponse::sendSuccess('Mensaje de éxito', $data, $url, $reloadMenu);
+
+// Ejemplo con redirección
+DwResponse::sendSuccess('Guardado correctamente', null, '/modulo/controlador/listar', true);
+
+// Respuesta de error
+DwResponse::sendError('Mensaje de error');
+
+// Respuesta de validación
+DwResponse::sendValidation($errores);
+```
+
+Parámetros de `sendSuccess`:
+- `$message` - Mensaje a mostrar
+- `$data` - Datos adicionales (opcional)
+- `$url` - URL para redirigir (opcional)
+- `$reloadMenu` - true para recargar el sidebar del menú
