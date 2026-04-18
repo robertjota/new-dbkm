@@ -3,7 +3,7 @@
 /**
  * Helper para gestionar los datos de la empresa
  * 
- * Permite acceder a los datos de la empresa configurados en el sistema
+ * Lee los datos de la empresa desde config y los logos desde archivos
  */
 class DwEmpresa
 {
@@ -18,14 +18,13 @@ class DwEmpresa
     private static function load()
     {
         if (self::$data === null) {
-            $empresaFile = PUBLIC_PATH . 'empresa/empresa.json';
-            if (file_exists($empresaFile)) {
-                self::$data = json_decode(file_get_contents($empresaFile), true);
-            } else {
+            // Cargar desde config
+            self::$data = Config::get('custom.empresa');
+            if (!self::$data) {
                 self::$data = array();
             }
             
-            // Cargar logos
+            // Cargar logos desde archivos
             $logoExtensions = array('png', 'jpg', 'jpeg', 'svg');
             foreach ($logoExtensions as $ext) {
                 if (file_exists(PUBLIC_PATH . 'empresa/logo-empresa.' . $ext)) {

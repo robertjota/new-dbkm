@@ -1,15 +1,10 @@
 <?php CoreuiMenu::load(Menu::BACKEND, Session::get('perfil_id'));
 
-// Cargar datos de la empresa
-$empresaFile = PUBLIC_PATH . 'empresa/empresa.json';
-$empresaNombre = 'DBKM';
+// Cargar datos de la empresa desde config
+$empresaData = Config::get('custom.empresa');
+$empresaNombre = !empty($empresaData['nombre']) ? $empresaData['nombre'] : 'DBKM';
 $empresaLogo = null;
 $empresaLogoMini = null;
-
-if (file_exists($empresaFile)) {
-    $empresaData = json_decode(file_get_contents($empresaFile), true);
-    $empresaNombre = !empty($empresaData['nombre']) ? $empresaData['nombre'] : 'DBKM';
-}
 
 // Detectar logo
 $logoExtensions = array('png', 'jpg', 'jpeg', 'svg');

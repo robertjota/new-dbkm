@@ -144,8 +144,10 @@ class ConfiguracionController extends BackendController
     {
         $this->page_title = 'Datos de la Empresa';
         
-        $empresaFile = PUBLIC_PATH . 'empresa/empresa.json';
-        $empresaData = array(
+        // Cargar datos actuales del config
+        $empresaData = Config::get('custom.empresa');
+        
+        $this->empresa = $empresaData ? $empresaData : array(
             'nombre' => '',
             'rif' => '',
             'direccion' => '',
@@ -154,28 +156,27 @@ class ConfiguracionController extends BackendController
             'web' => ''
         );
         
-        if (file_exists($empresaFile)) {
-            $empresaData = json_decode(file_get_contents($empresaFile), true);
-        }
-        
-        $this->empresa = $empresaData;
-        
         if (Input::hasPost('empresa')) {
             $postData = Input::post('empresa');
             
-            // Guardar datos JSON
-            $dir = dirname($empresaFile);
-            if (!is_dir($dir)) {
-                mkdir($dir, 0755, true);
-            }
+            // Leer config actual
+            $config = Config::read('config');
+            $config['custom']['empresa'] = $postData;
             
-            file_put_contents($empresaFile, json_encode($postData, JSON_PRETTY_PRINT));
+            // Guardar config usando file_put_contents
+            $configFile = APP_PATH . 'config/config.php';
+            $configContent = "<?php\n\nreturn " . var_export($config, true) . ";\n";
+            file_put_contents($configFile, $configContent);
             
             // Procesar logo si se subió
             if (isset($_FILES['logo']) && $_FILES['logo']['error'] === UPLOAD_ERR_OK) {
                 $logoExt = strtolower(pathinfo($_FILES['logo']['name'], PATHINFO_EXTENSION));
                 if (in_array($logoExt, array('png', 'jpg', 'jpeg', 'gif', 'svg'))) {
-                    move_uploaded_file($_FILES['logo']['tmp_name'], PUBLIC_PATH . 'empresa/logo-empresa.' . $logoExt);
+                    $dir = PUBLIC_PATH . 'empresa';
+                    if (!is_dir($dir)) {
+                        mkdir($dir, 0755, true);
+                    }
+                    move_uploaded_file($_FILES['logo']['tmp_name'], $dir . '/logo-empresa.' . $logoExt);
                 }
             }
             
@@ -183,7 +184,11 @@ class ConfiguracionController extends BackendController
             if (isset($_FILES['logo_mini']) && $_FILES['logo_mini']['error'] === UPLOAD_ERR_OK) {
                 $logoMiniExt = strtolower(pathinfo($_FILES['logo_mini']['name'], PATHINFO_EXTENSION));
                 if (in_array($logoMiniExt, array('png', 'jpg', 'jpeg', 'gif', 'svg'))) {
-                    move_uploaded_file($_FILES['logo_mini']['tmp_name'], PUBLIC_PATH . 'empresa/logo-mini.' . $logoMiniExt);
+                    $dir = PUBLIC_PATH . 'empresa';
+                    if (!is_dir($dir)) {
+                        mkdir($dir, 0755, true);
+                    }
+                    move_uploaded_file($_FILES['logo_mini']['tmp_name'], $dir . '/logo-mini.' . $logoMiniExt);
                 }
             }
             

@@ -27,5 +27,13 @@ return [
         'login_exclusion' => 'root, admin',
         'type_reports' => 'html.printer',
         'timezone' => 'America/Caracas',
+        'empresa' => [
+            'nombre' => 'Mi Empresa',
+            'rif' => '',
+            'direccion' => '',
+            'telefono' => '',
+            'email' => '',
+            'web' => '',
+        ],
     ],
 ];
