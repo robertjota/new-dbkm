@@ -91,7 +91,9 @@
                                                 break;
                                         }
                                         ?>
-                                        <?php if (in_array($valor, array('On', 'Off'))) {  ?>
+                                        <?php if (is_array($valor)) { ?>
+                                            <?php // Skip array fields - they have their own config page ?>
+                                        <?php elseif (in_array($valor, array('On', 'Off'))) {  ?>
                                             <?php echo DwForm::select("custom.$campo", array('Off' => 'No', 'On' => 'Si'), array('class' => 'input-required'), $valor, ucfirst($text)); ?>
                                         <?php } else { ?>
                                             <?php echo DwForm::text("custom.$campo", array('class' => 'input-lower input-required'), $valor, ucfirst($text)); ?>

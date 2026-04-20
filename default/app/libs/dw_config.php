@@ -28,6 +28,9 @@ class DwConfig
             foreach ($config as $seccion => &$filas) {
                 if (is_array($filas)) {
                     foreach ($filas as $variable => &$valor) {
+                        if (is_array($valor)) {
+                            continue; // Skip arrays - they have their own config pages
+                        }
                         if ($valor === '1' || $valor === 1) {
                             $valor = 'On';
                         } else if (empty($valor) && $valor !== '0') {
