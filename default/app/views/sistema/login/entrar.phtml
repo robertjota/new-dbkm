@@ -3,24 +3,22 @@
 <?php echo DwForm::open('sistema/login/entrar/', '', ['class' => 'js-validation-signin', 'id' => 'formulario']) ?>
 <?php echo DwForm::focus('login'); ?>
 
-<div class="py-3">
-    <div class="mb-4">
-        <input type="text" class="form-control form-control-alt form-control-lg" id="login" name="login" placeholder="Usuario">
-    </div>
-    <div class="mb-4">
-        <input type="password" class="form-control form-control-alt form-control-lg" id="password" name="password" placeholder="Password">
-    </div>
+<div class="mb-4">
+    <input type="text" class="form-control form-control-lg form-control-alt py-3" id="login" name="login" placeholder="Usuario">
 </div>
-<div>
-    <?php echo DwForm::hidden('mode', null, 'auth'); ?>
+<div class="mb-4">
+    <input type="password" class="form-control form-control-lg form-control-alt py-3" id="password" name="password" placeholder="Contraseña">
 </div>
 
-<div>
-    <?php echo DwForm::token(); ?>
-</div>
-<div class="row mb-4">
-    <div class="col-md-6 col-xl-5">
-        <button type="submit" class="btn w-100 btn-alt-primary">
+<?php echo DwForm::hidden('mode', null, 'auth'); ?>
+<?php echo DwForm::token(); ?>
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <a class="text-muted fs-sm fw-medium d-block d-lg-inline-block mb-1" href="#">¿Olvidaste tu contraseña?</a>
+    </div>
+    <div>
+        <button type="submit" class="btn btn-lg btn-alt-primary">
             <i class="fa fa-fw fa-sign-in-alt me-1 opacity-50"></i> Entrar
         </button>
     </div>

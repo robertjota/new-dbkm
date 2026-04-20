@@ -10,116 +10,128 @@
     <meta name="description" content="KumbiaPHP Login">
     <meta name="robots" content="noindex, nofollow">
 
+    <?php 
+    // Cargar logo de empresa para login
+    $loginLogo = null;
+    $loginLogoMini = null;
+    $empresaLogoPath = dirname(APP_PATH) . '/public/empresa/';
+    $logoExtensions = ['png', 'jpg', 'jpeg', 'svg'];
+    
+    foreach ($logoExtensions as $ext) {
+        if (file_exists($empresaLogoPath . 'logo-empresa.' . $ext)) {
+            $loginLogo = PUBLIC_PATH . 'empresa/logo-empresa.' . $ext;
+            break;
+        }
+    }
+    ?>
+
     <!-- Icons -->
-    <!-- The following icons can be replaced with your own, they are used by desktop and mobile browsers -->
     <link rel="shortcut icon" href="<?= PUBLIC_PATH ?>template/coreui/assets/media/favicons/favicon.png">
     <link rel="icon" type="image/png" sizes="192x192" href="<?= PUBLIC_PATH ?>template/coreui/assets/media/favicons/favicon-192x192.png">
     <link rel="apple-touch-icon" sizes="180x180" href="<?= PUBLIC_PATH ?>template/coreui/assets/media/favicons/apple-touch-icon-180x180.png">
-    <!-- END Icons -->
 
     <!-- Stylesheets -->
-    <!-- OneUI framework -->
     <link rel="stylesheet" id="css-main" href="<?= PUBLIC_PATH ?>template/coreui/assets/css/oneui.min.css">
     <link rel="stylesheet" href="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/sweetalert2/sweetalert2.min.css">
     <link rel="stylesheet" id="css-main" href="<?= PUBLIC_PATH ?>css/backend/style-rjr.css">
 
-    <script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/oneui.app.min.js"></script>
-
-    <!-- jQuery (required for jQuery Validation plugin) -->
+    <!-- jQuery -->
     <script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/lib/jquery.min.js"></script>
 
-    <!-- You can include a specific file from css/themes/ folder to alter the default color theme of the template. eg: -->
-    <!-- <link rel="stylesheet" id="css-theme" href="<?= PUBLIC_PATH ?>template/coreui/assets/css/themes/amethyst.min.css"> -->
-    <!-- END Stylesheets -->
+    <!-- OneUI App -->
+    <script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/oneui.app.min.js"></script>
 </head>
 
 <body>
-    <!-- Page Container -->
-    <!--
-        Available classes for #page-container:
-
-    GENERIC
-
-      'remember-theme'                            Remembers active color theme and dark mode between pages using localStorage when set through
-                                                  - Theme helper buttons [data-toggle="theme"],
-                                                  - Layout helper buttons [data-toggle="layout" data-action="dark_mode_[on/off/toggle]"]
-                                                  - ..and/or One.layout('dark_mode_[on/off/toggle]')
-
-    SIDEBAR & SIDE OVERLAY
-
-      'sidebar-r'                                 Right Sidebar and left Side Overlay (default is left Sidebar and right Side Overlay)
-      'sidebar-mini'                              Mini hoverable Sidebar (screen width > 991px)
-      'sidebar-o'                                 Visible Sidebar by default (screen width > 991px)
-      'sidebar-o-xs'                              Visible Sidebar by default (screen width < 992px)
-      'sidebar-dark'                              Dark themed sidebar
-
-      'side-overlay-hover'                        Hoverable Side Overlay (screen width > 991px)
-      'side-overlay-o'                            Visible Side Overlay by default
-
-      'enable-page-overlay'                       Enables a visible clickable Page Overlay (closes Side Overlay on click) when Side Overlay opens
-
-      'side-scroll'                               Enables custom scrolling on Sidebar and Side Overlay instead of native scrolling (screen width > 991px)
-
-    HEADER
-
-      ''                                          Static Header if no class is added
-      'page-header-fixed'                         Fixed Header
-
-    HEADER STYLE
-
-      ''                                          Light themed Header
-      'page-header-dark'                          Dark themed Header
-
-    MAIN CONTENT LAYOUT
-
-      ''                                          Full width Main Content if no class is added
-      'main-content-boxed'                        Full width Main Content with a specific maximum width (screen width > 1200px)
-      'main-content-narrow'                       Full width Main Content with a percentage width (screen width > 1200px)
-
-    DARK MODE
-
-      'sidebar-dark page-header-dark dark-mode'   Enable dark mode (light sidebar/header is not supported with dark mode)
-    -->
     <div id="page-container">
-
         <!-- Main Container -->
         <main id="main-container">
             <!-- Page Content -->
-            <div class="hero-static d-flex align-items-center">
-                <div class="content">
-                    <div class="row justify-content-center push">
-                        <div class="col-md-8 col-lg-6 col-xl-4">
-                            <!-- Sign In Block -->
-                            <div class="block block-rounded mb-0">
-                                <div class="block-header block-header-default">
-                                    <h3 class="block-title">Iniciar sesión</h3>
-                                    <div class="block-options">
-                                        <a class="btn-block-option fs-sm" href="#">¿Olvidaste tu contraseña?</a>
-                                    </div>
-                                </div>
-                                <div class="block-content">
-                                    <div class="p-sm-3 px-lg-4 px-xxl-5 py-lg-5">
-                                        <h1 class="h2 mb-1">KumbiaPHP</h1>
-                                        <p class="fw-medium text-muted">
-                                            Bienvenido, ingresa tus credenciales.
-                                        </p>
-
-                                        <!-- Sign In Form -->
-                                        <!-- jQuery Validation (.js-validation-signin class is initialized in js/pages/op_auth_signin.min.js which was auto compiled from _js/pages/op_auth_signin.js) -->
-                                        <!-- For more info and examples you can check out https://github.com/jzaefferer/jquery-validation -->
-
-                                        <?php View::content() ?>
-
-                                        <!-- END Sign In Form -->
-                                    </div>
-                                </div>
+            <div class="bg-image" style="background-image: url('<?= PUBLIC_PATH ?>template/coreui/assets/media/photos/photo28@2x.jpg');">
+                <div class="row g-0 bg-primary-dark-op">
+                    <!-- Meta Info Section (Left) -->
+                    <div class="hero-static col-lg-4 d-none d-lg-flex flex-column justify-content-center">
+                        <div class="p-4 p-xl-5 flex-grow-1 d-flex align-items-center">
+                            <div class="w-100">
+                                <a class="link-fx fw-semibold fs-2 text-white" href="<?= PUBLIC_PATH ?>">
+                                    <img src="<?= PUBLIC_PATH ?>img/logo-sistema.png" alt="Logo" style="height: 48px;" class="img-fluid mb-3">
+                                </a>
+                                <p class="text-white-75 me-xl-8 mt-2">
+                                    Software desarrollado por <strong>RJR Sistemas</strong>. Sistema de gestión administrativo. Ingresa tus credenciales para acceder al panel.
+                                </p>
                             </div>
-                            <!-- END Sign In Block -->
+                        </div>
+                        <div class="p-4 p-xl-5 d-xl-flex justify-content-between align-items-center fs-sm">
+                            <p class="fw-medium text-white-50 mb-0">
+                                <strong>RJR Sistemas</strong> &copy; <?= date('Y') ?><br>
+                                <span class="text-white-50">Versión del PHP: <strong><?= PHP_VERSION ?></strong></span>
+                            </p>
+                            <ul class="list list-inline mb-0 py-2">
+                                <li class="list-inline-item">
+                                    <a class="text-white-75 fw-medium" href="#">Términos</a>
+                                </li>
+                                <li class="list-inline-item">
+                                    <a class="text-white-75 fw-medium" href="#">Privacidad</a>
+                                </li>
+                            </ul>
                         </div>
                     </div>
-                    <div class="fs-sm text-muted text-center">
-                        <strong>KumbiaPHP <?= KUMBIA_VERSION ?></strong> &copy; <span data-toggle="year-copy"></span>
+                    <!-- END Meta Info Section -->
+
+                    <!-- Main Section (Right) -->
+                    <div class="hero-static col-lg-8 d-flex flex-column align-items-center bg-body-extra-light">
+                        <div class="p-3 w-100 d-lg-none text-center">
+                            <a class="link-fx fw-semibold fs-3 text-dark" href="<?= PUBLIC_PATH ?>">
+                                <?php if ($loginLogo): ?>
+                                <img src="<?= $loginLogo ?>?v=<?= time() ?>" alt="Logo" style="height: 32px;" class="img-fluid">
+                                <?php else: ?>
+                                <img src="<?= PUBLIC_PATH ?>img/logo-sistema.png" alt="Logo" style="height: 32px;" class="img-fluid">
+                                <?php endif; ?>
+                            </a>
+                        </div>
+                        <div class="p-4 w-100 flex-grow-1 d-flex align-items-center">
+                            <div class="w-100">
+                                <!-- Header -->
+                                <div class="text-center mb-5">
+                                    <p class="mb-3">
+                                        <?php if ($loginLogo): ?>
+                                        <img src="<?= $loginLogo ?>?v=<?= time() ?>" alt="Logo" style="height: 64px; max-width: 200px;" class="img-fluid">
+                                        <?php else: ?>
+                                        <img src="<?= PUBLIC_PATH ?>img/logo-sistema.png" alt="Logo" style="height: 64px;" class="img-fluid">
+                                        <?php endif; ?>
+                                    </p>
+                                    <h1 class="fw-bold mb-2">Iniciar Sesión</h1>
+                                    <p class="fw-medium text-muted">
+                                        Bienvenido, ingresa tus credenciales.
+                                    </p>
+                                </div>
+                                <!-- END Header -->
+
+                                <!-- Sign In Form -->
+                                <div class="row g-0 justify-content-center">
+                                    <div class="col-sm-8 col-xl-4">
+                                        <?php View::content() ?>
+                                    </div>
+                                </div>
+                                <!-- END Sign In Form -->
+                            </div>
+                        </div>
+                        <div class="px-4 py-3 w-100 d-lg-none d-flex flex-column flex-sm-row justify-content-between fs-sm text-center text-sm-start">
+                            <p class="fw-medium text-black-50 py-2 mb-0">
+                                <strong>RJR Sistemas</strong> &copy; <?= date('Y') ?><br>
+                                <span>Versión del PHP: <strong><?= PHP_VERSION ?></strong></span>
+                            </p>
+                            <ul class="list list-inline py-2 mb-0">
+                                <li class="list-inline-item">
+                                    <a class="text-muted fw-medium" href="#">Términos</a>
+                                </li>
+                                <li class="list-inline-item">
+                                    <a class="text-muted fw-medium" href="#">Privacidad</a>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
+                    <!-- END Main Section -->
                 </div>
             </div>
             <!-- END Page Content -->
@@ -128,19 +140,9 @@
     </div>
     <!-- END Page Container -->
 
-    <!--
-        OneUI JS
-
-        Core libraries and functionality
-        webpack is putting everything together at <?= PUBLIC_PATH ?>template/coreui/assets/_js/main/app.js
-    -->
-
     <!-- Page JS Plugins -->
     <script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/sweetalert2/sweetalert2.min.js"></script>
     <script src="<?= PUBLIC_PATH ?>template/coreui/assets/js/plugins/jquery-validation/jquery.validate.min.js"></script>
-
-    <!-- Page JS Code -->
-    <script src="<?= PUBLIC_PATH ?>template/coreui/assets/_js/pages/op_auth_signin.js"></script>
 
     <!-- Script personalizados -->
     <?= Tag::js('rjr/sweet-alert-config') ?>

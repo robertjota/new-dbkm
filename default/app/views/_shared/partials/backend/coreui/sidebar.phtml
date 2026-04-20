@@ -71,7 +71,7 @@ foreach ($logoExtensions as $ext) {
         <div class="smini-hide d-flex justify-content-center align-items-center w-100">
             <a class="fw-semibold text-dual" href="/dashboard">
                 <?php if($empresaLogo): ?>
-                <img src="<?=$empresaLogo?>?v=<?=time()?>" style="height: 28px;">
+                <img src="<?=$empresaLogo?>?v=<?=time()?>" style="height: 30px;">
                 <?php else: ?>
                 <span class="fs-4 tracking-wider"><?= $empresaNombre ?></span>
                 <?php endif; ?>
@@ -82,7 +82,7 @@ foreach ($logoExtensions as $ext) {
         <div class="smini-visible-block">
             <a class="fw-semibold text-dual" href="/dashboard">
                 <?php if($empresaLogoMini || $empresaLogo): ?>
-                <img src="<?=$empresaLogoMini ?: $empresaLogo?>?v=<?=time()?>" style="height: 20px;">
+                <img src="<?=$empresaLogoMini ?: $empresaLogo?>?v=<?=time()?>" style="height: 30px; margin-bottom:30px;">
                 <?php else: ?>
                 <i class="fa fa-circle-notch text-primary"></i>
                 <?php endif; ?>
