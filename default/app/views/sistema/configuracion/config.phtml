@@ -133,12 +133,12 @@
     </div>
 </div>
 
-<div class="modal fade" tabindex="-1" id="form-add-config" role="dialog" aria-labelledby="form-add-config" aria-hidden="true">
+<div class="modal fade" id="form-add-config" tabindex="-1" aria-labelledby="form-add-config" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <?php echo DwForm::open('', '', array('id' => 'form-modal', 'class' => '')); ?>
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 <h3>Agregar variable de configuración</h3>
             </div>
             <div class="modal-body">
@@ -153,7 +153,7 @@
             </div>
             <div class="modal-footer">
                 <?php echo DwForm::submit("Crear", array('class' => 'btn btn-primary')); ?>
-                <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
             </div>
             <?php echo DwForm::close(); ?>
         </div>
@@ -163,16 +163,17 @@
 <script type="text/javascript">
     $(function() {
         $("#form-modal").submit(function() {
-            variable = $('#variable');
-            valor = $("#valor");
-            $('<div class="form-group">' +
-                '<label for="custom_' + variable.val() + '" class="control-label">' + variable.val() + ':<span class="req">*</span></label>' +
-                '<input id="custom_' + variable.val() + '" name="custom[' + variable.val() + ']" type="text" value="' + valor.val() + '" class="form-control input-lower input-required" required="required">' +
-                '<p class="help-block"> <span class="help-error" id="err_custom_' + variable.val() + '">&nbsp; </span></p>' +
-                '</div>').appendTo('#append-config');
-            variable.attr('value', '');
-            valor.attr('value', '');
-            jsSpinner('hide');
+            variable = $('#variable').val().toLowerCase();
+            valor = $('#valor').val();
+            if (variable) {
+                variable = 'app_' + variable.replace(/[^a-z0-9_]/g, '');
+                $('<div class="mb-2">' +
+                    '<label class="form-label">' + variable + '</label>' +
+                    '<input type="text" name="custom[' + variable + ']" value="' + valor + '" class="form-control input-lower">' +
+                    '</div>').appendTo('#append-config');
+            }
+            $('#variable').val('');
+            $('#valor').val('');
             $("#form-add-config").modal('hide');
             return false;
         });
