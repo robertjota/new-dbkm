@@ -52,7 +52,7 @@
                             <fieldset class="border px-3">
                                 <legend class="float-none w-auto block-header block-header-default">Configuración personalizada</legend>
 
-                                <?php echo DwForm::fieldset("<a id='add-config' href='#form-add-config' class='btn btn-default' data-toggle='modal'><i class='fa fa-check fa-pd-expand'></i>Agregar parámetro</a>"); ?>
+                                <a id="add-config" href="#form-add-config" class="btn btn-success btn-sm" data-bs-toggle="modal"><i class="fa fa-plus"></i> Agregar parámetro</a>
                                 <?php if (isset($config['custom'])) { ?>
                                     <?php foreach ($config['custom'] as $campo => $valor): ?>
                                         <?php
