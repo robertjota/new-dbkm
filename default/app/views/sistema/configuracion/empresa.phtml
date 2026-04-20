@@ -6,17 +6,15 @@
         <div class="col-md-12">
             <div class="block pt-3">
                 <div class="block-header pt-3 d-flex justify-content-center">
-                    <?php echo DwHtml::button("sistema/configuracion/", 'basic', array('class' => 'mx-1 btn-sm btn-info'), 'fa-asterisk', APP_AJAX); ?>
-                    <?php echo DwHtml::button("sistema/configuracion/empresa/", 'empresa', array('class' => 'mx-1 btn-sm btn-success active'), 'fa-building', APP_AJAX); ?>
-                    <?php echo DwHtml::button("sistema/configuracion/config/", 'config all', array('class' => 'mx-1 btn-sm btn-info'), 'fa-cog', APP_AJAX); ?>
-                    <?php echo DwHtml::button("sistema/configuracion/routes/", 'routes', array('class' => 'mx-1 btn-sm btn-info'), 'fa-random', APP_AJAX); ?>
-                    <?php echo DwHtml::button("sistema/configuracion/databases/", 'databases', array('class' => 'mx-1 btn-sm btn-info'), 'fa-hdd-o', APP_AJAX); ?>
+                    <?php echo DwHtml::button("sistema/configuracion/", 'basic', array('class' => 'mx-1 btn-sm btn-info'), 'fa-asterisk', false); ?>
+                    <?php echo DwHtml::button("sistema/configuracion/empresa/", 'empresa', array('class' => 'mx-1 btn-sm btn-success active'), 'fa-building', false); ?>
+                    <?php echo DwHtml::button("sistema/configuracion/config/", 'config all', array('class' => 'mx-1 btn-sm btn-info'), 'fa-cog', false); ?>
+                    <?php echo DwHtml::button("sistema/configuracion/routes/", 'routes', array('class' => 'mx-1 btn-sm btn-info'), 'fa-random', false); ?>
+                    <?php echo DwHtml::button("sistema/configuracion/databases/", 'databases', array('class' => 'mx-1 btn-sm btn-info'), 'fa-hdd-o', false); ?>
                 </div>
                 <div class="block-content">
 
-                    <pre><?php // print_r($empresa); ?></pre>
-
-                    <form action="" method="post" enctype="multipart/form-data" class="no-ajax">
+                    <form action="/sistema/configuracion/empresa/" method="post" enctype="multipart/form-data">
 
                     <div class="row justify-content-evenly">
 
@@ -25,27 +23,27 @@
                                 <legend class="float-none w-auto block-header block-header-default">Datos de la Empresa</legend>
                                 <div class="mb-3">
                                     <label class="form-label">Nombre de la empresa</label>
-                                    <input type="text" name="empresa[nombre]" value="<?php echo $empresa['nombre']; ?>" class="form-control">
+                                    <input type="text" name="empresa[nombre]" value="<?php echo isset($empresa['nombre']) ? htmlspecialchars($empresa['nombre'], ENT_QUOTES) : ''; ?>" class="form-control">
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label">RIF</label>
-                                    <input type="text" name="empresa[rif]" value="<?php echo $empresa['rif']; ?>" class="form-control">
+                                    <input type="text" name="empresa[rif]" value="<?php echo isset($empresa['rif']) ? htmlspecialchars($empresa['rif'], ENT_QUOTES) : ''; ?>" class="form-control">
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label">Dirección</label>
-                                    <input type="text" name="empresa[direccion]" value="<?php echo $empresa['direccion']; ?>" class="form-control">
+                                    <input type="text" name="empresa[direccion]" value="<?php echo isset($empresa['direccion']) ? htmlspecialchars($empresa['direccion'], ENT_QUOTES) : ''; ?>" class="form-control">
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label">Teléfono</label>
-                                    <input type="text" name="empresa[telefono]" value="<?php echo $empresa['telefono']; ?>" class="form-control">
+                                    <input type="text" name="empresa[telefono]" value="<?php echo isset($empresa['telefono']) ? htmlspecialchars($empresa['telefono'], ENT_QUOTES) : ''; ?>" class="form-control">
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label">Correo electrónico</label>
-                                    <input type="email" name="empresa[email]" value="<?php echo $empresa['email']; ?>" class="form-control">
+                                    <input type="email" name="empresa[email]" value="<?php echo isset($empresa['email']) ? htmlspecialchars($empresa['email'], ENT_QUOTES) : ''; ?>" class="form-control">
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label">Sitio web</label>
-                                    <input type="text" name="empresa[web]" value="<?php echo $empresa['web']; ?>" class="form-control">
+                                    <input type="text" name="empresa[web]" value="<?php echo isset($empresa['web']) ? htmlspecialchars($empresa['web'], ENT_QUOTES) : ''; ?>" class="form-control">
                                 </div>
                             </fieldset>
                         </div>
@@ -56,35 +54,40 @@
                                 
                                 <div class="mb-3">
                                     <label class="form-label">Logo Principal (para sidebar)</label>
+                                    <div id="preview-logo" class="mb-2">
                                     <?php 
                                     $logoExtensions = ['png', 'jpg', 'jpeg', 'svg'];
                                     $logoExists = false;
+                                    $logoPath = dirname(APP_PATH) . '/public/empresa/';
                                     foreach($logoExtensions as $ext) {
-                                        if(file_exists(PUBLIC_PATH . 'empresa/logo-empresa.' . $ext)) {
-                                            echo '<div class="mb-2"><img src="'.PUBLIC_PATH.'empresa/logo-empresa.'.$ext.'" alt="Logo" class="img-thumbnail" style="max-height: 80px;"></div>';
+                                        if(file_exists($logoPath . 'logo-empresa.' . $ext)) {
+                                            echo '<img src="/empresa/logo-empresa.'.$ext.'?t='.time().'" alt="Logo" class="img-thumbnail" style="max-height: 80px;">';
                                             $logoExists = true;
                                             break;
                                         }
                                     }
-                                    if(!$logoExists) echo '<div class="mb-2 text-muted">No hay logo cargado</div>'; 
+                                    if(!$logoExists) echo '<div class="text-muted">No hay logo cargado</div>'; 
                                     ?>
-                                    <input type="file" name="logo" class="form-control" accept="image/png,image/jpeg,image/gif,image/svg+xml">
+                                    </div>
+                                    <input type="file" name="logo" class="form-control" accept="image/png,image/jpeg,image/gif,image/svg+xml" onchange="previewImage(this, 'preview-logo')">
                                 </div>
                                 
                                 <div class="mb-3">
                                     <label class="form-label">Logo Mini (sidebar colapsado)</label>
+                                    <div id="preview-logo_mini" class="mb-2">
                                     <?php 
                                     $logoMiniExists = false;
                                     foreach($logoExtensions as $ext) {
-                                        if(file_exists(PUBLIC_PATH . 'empresa/logo-mini.' . $ext)) {
-                                            echo '<div class="mb-2"><img src="'.PUBLIC_PATH.'empresa/logo-mini.'.$ext.'" alt="Logo Mini" class="img-thumbnail" style="max-height: 40px;"></div>';
+                                        if(file_exists($logoPath . 'logo-mini.' . $ext)) {
+                                            echo '<img src="/empresa/logo-mini.'.$ext.'?t='.time().'" alt="Logo Mini" class="img-thumbnail" style="max-height: 40px;">';
                                             $logoMiniExists = true;
                                             break;
                                         }
                                     }
-                                    if(!$logoMiniExists) echo '<div class="mb-2 text-muted">No hay logo mini cargado</div>'; 
+                                    if(!$logoMiniExists) echo '<div class="text-muted">No hay logo mini cargado</div>'; 
                                     ?>
-                                    <input type="file" name="logo_mini" class="form-control" accept="image/png,image/jpeg,image/gif,image/svg+xml">
+                                    </div>
+                                    <input type="file" name="logo_mini" class="form-control" accept="image/png,image/jpeg,image/gif,image/svg+xml" onchange="previewImage(this, 'preview-logo_mini')">
                                 </div>
 
                             </fieldset>
@@ -97,6 +100,18 @@
                         </div>
                     </div>
                     </form>
+                    
+                    <script>
+                    function previewImage(input, previewId) {
+                        if (input.files && input.files[0]) {
+                            var reader = new FileReader();
+                            reader.onload = function(e) {
+                                document.getElementById(previewId).innerHTML = '<img src="' + e.target.result + '" class="img-thumbnail" style="max-height: 80px;">';
+                            };
+                            reader.readAsDataURL(input.files[0]);
+                        }
+                    }
+                    </script>
                 </div>
             </div>
         </div>

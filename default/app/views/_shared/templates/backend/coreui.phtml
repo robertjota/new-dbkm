@@ -51,7 +51,12 @@
   </style>
 </head>
 
-<body>
+<?php 
+// Aplicar modo oscuro basado en preferencia del usuario
+$darkModeClass = (Session::get('dark_mode') === 'on') ? 'dark-mode' : '';
+?>
+
+<body class="<?= $darkModeClass ?>">
   <!-- Page Container -->
   <!--
         Available classes for #page-container:

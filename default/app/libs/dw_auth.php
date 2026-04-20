@@ -94,6 +94,7 @@ class DwAuth
                     Session::set('apellido', $usuario->apellido);
                     Session::set('login', $usuario->login);
                     Session::set('tema', $usuario->tema);
+                    Session::set('dark_mode', $usuario->dark_mode ?? 'off');
                     Session::set('email', $usuario->email);
                     Session::set('estado', $usuario->estado);
                     Session::set('app_ajax', $usuario->app_ajax);

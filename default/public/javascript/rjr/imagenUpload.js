@@ -76,22 +76,3 @@ class ImagenUpload {
         }
     }
 }
-
-// Ejemplo de uso:
-// const userImageUploader = new ImagenUpload({
-//     inputSelector: '#fotografia',
-//     uploadUrl: '/sistema/upload',
-//     tempPath: 'img/upload/personas/temp/',
-//     finalPath: 'img/upload/personas/',
-//     onSuccess: (result) => {
-//         $("#usuario_fotografia").val(result.data.name);
-//         $("#img-usuario").attr('src', PUBLIC_PATH + 'img/upload/personas/temp/' + result.data.name);
-//     },
-//     onError: (error) => {
-//         swal.fire({
-//             icon: 'error',
-//             title: 'Error',
-//             text: error
-//         });
-//     }
-// });

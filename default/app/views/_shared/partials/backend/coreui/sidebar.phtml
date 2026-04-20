@@ -1,4 +1,26 @@
 <?php CoreuiMenu::load(Menu::BACKEND, Session::get('perfil_id'));
+
+// Cargar datos de la empresa desde config
+$empresaData = Config::get('config.custom.empresa');
+$empresaNombre = !empty($empresaData['nombre']) ? $empresaData['nombre'] : 'DBKM';
+$empresaLogo = null;
+$empresaLogoMini = null;
+
+// Detectar logo
+$basePath = dirname(APP_PATH) . '/public/empresa/';
+$logoExtensions = array('png', 'jpg', 'jpeg', 'svg');
+foreach ($logoExtensions as $ext) {
+    if (file_exists($basePath . 'logo-empresa.' . $ext)) {
+        $empresaLogo = '/empresa/logo-empresa.' . $ext;
+        break;
+    }
+}
+foreach ($logoExtensions as $ext) {
+    if (file_exists($basePath . 'logo-mini.' . $ext)) {
+        $empresaLogoMini = '/empresa/logo-mini.' . $ext;
+        break;
+    }
+}
 ?>
 <!--
         Agregar la clase smini-hide a un elemento lo hará invisible (opacidad: 0) cuando la barra lateral esté en modo mini
@@ -15,38 +37,67 @@
 -->
 
 <nav id="sidebar" aria-label="Main Navigation">
-    <!-- Side Header -->
-    <div class="content-header">
-        <!-- Logo -->
-        <a class="fw-semibold text-dual" href="/dashboard">
-            <span class="smini-visible">
-                <i class="fa fa-circle-notch text-primary"></i>
-            </span>
-            <span class="smini-hide fs-4 tracking-wider">DBKM<span class="fw-normal"><small> 2026</small></span></span>
-        </a>
-        <!-- END Logo -->
+<style>
+/* Centrar verticalmente el logo mini cuando la sidebar está en modo mini */
+.smini .content-header .smini-visible-block {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;  /* Esto centrará también horizontalmente si lo deseas */
+    height: 100% !important;
+}
 
-        <!-- Extra -->
-        <div>
-            <!-- Dark Mode -->
-            <!-- Layout API, functionality initialized in Template._uiApiLayout() -->
-            <button type="button" class="btn btn-sm btn-alt-secondary" data-toggle="layout" data-action="dark_mode_toggle">
-                <i class="far fa-moon"></i>
-            </button>
-            <!-- END Dark Mode -->
+/* Si quieres que el logo mini quede a la izquierda (no centrado horizontalmente), usa solo align-items */
+.smini .content-header .smini-visible-block {
+    display: flex !important;
+    align-items: center !important;
+    height: 100% !important;
+    justify-content: center !important;
+    /* Sin justify-content para que quede a la izquierda */
+}
 
-            <!-- END Options -->
+/* Asegurar que el contenedor del logo tenga altura completa */
+.content-header {
+    display: flex;
+    align-items: center;
+}
 
-            <!-- Close Sidebar, Visible only on mobile screens -->
-            <!-- Layout API, functionality initialized in Template._uiApiLayout() -->
-            <a class="d-lg-none btn btn-sm btn-alt-secondary ms-1" data-toggle="layout" data-action="sidebar_close" href="javascript:void(0)">
-                <i class="fa fa-fw fa-times"></i>
+</style>
+
+<!-- Side Header -->
+<div class="content-header">
+    <!-- Logo -->
+    <div class="w-100">
+        <!-- Contenedor para modo expandido (centrado) -->
+        <div class="smini-hide d-flex justify-content-center align-items-center w-100">
+            <a class="fw-semibold text-dual" href="/dashboard">
+                <?php if($empresaLogo): ?>
+                <img src="<?=$empresaLogo?>?v=<?=time()?>" style="height: 28px;">
+                <?php else: ?>
+                <span class="fs-4 tracking-wider"><?= $empresaNombre ?></span>
+                <?php endif; ?>
             </a>
-            <!-- END Close Sidebar -->
         </div>
-        <!-- END Extra -->
+
+        <!-- Contenedor para modo mini -->
+        <div class="smini-visible-block">
+            <a class="fw-semibold text-dual" href="/dashboard">
+                <?php if($empresaLogoMini || $empresaLogo): ?>
+                <img src="<?=$empresaLogoMini ?: $empresaLogo?>?v=<?=time()?>" style="height: 20px;">
+                <?php else: ?>
+                <i class="fa fa-circle-notch text-primary"></i>
+                <?php endif; ?>
+            </a>
+        </div>
     </div>
-    <!-- END Side Header -->
+
+    <!-- Extra - Botón cerrar solo visible en móvil -->
+    <div>
+        <a class="d-lg-none btn btn-sm btn-alt-secondary ms-1" data-toggle="layout" data-action="sidebar_close" href="javascript:void(0)">
+            <i class="fa fa-fw fa-times"></i>
+        </a>
+    </div>
+</div>
+<!-- END Side Header -->
 
     <!-- Sidebar Scrolling -->
     <div class="js-sidebar-scroll">

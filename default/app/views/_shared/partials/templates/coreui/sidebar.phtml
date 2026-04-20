@@ -6,17 +6,18 @@ $empresaNombre = !empty($empresaData['nombre']) ? $empresaData['nombre'] : 'DBKM
 $empresaLogo = null;
 $empresaLogoMini = null;
 
-// Detectar logo
+// Detectar logo - usar la ruta correcta
+$basePath = dirname(APP_PATH) . '/public/empresa/';
 $logoExtensions = array('png', 'jpg', 'jpeg', 'svg');
 foreach ($logoExtensions as $ext) {
-    if (file_exists(PUBLIC_PATH . 'empresa/logo-empresa.' . $ext)) {
-        $empresaLogo = PUBLIC_PATH . 'empresa/logo-empresa.' . $ext;
+    if (file_exists($basePath . 'logo-empresa.' . $ext)) {
+        $empresaLogo = '/empresa/logo-empresa.' . $ext;
         break;
     }
 }
 foreach ($logoExtensions as $ext) {
-    if (file_exists(PUBLIC_PATH . 'empresa/logo-mini.' . $ext)) {
-        $empresaLogoMini = PUBLIC_PATH . 'empresa/logo-mini.' . $ext;
+    if (file_exists($basePath . 'logo-mini.' . $ext)) {
+        $empresaLogoMini = '/empresa/logo-mini.' . $ext;
         break;
     }
 }
@@ -36,15 +37,15 @@ foreach ($logoExtensions as $ext) {
 <nav id="sidebar" aria-label="Main Navigation">
     <!-- Side Header -->
     <div class="content-header">
-        <!-- Logo -->
-        <a class="fw-semibold text-dual" href="#">
+<!-- Logo -->
+        <a class="fw-semibold text-dual d-flex flex-column align-items-center justify-content-center" style="gap: 4px;" href="#">
             <?php if ($empresaLogoMini): ?>
                 <span class="smini-visible">
-                    <img src="<?= $empresaLogoMini ?>" style="height: 24px;" alt="Logo">
+                    <img src="<?= $empresaLogoMini ?>?v=<?= time() ?>" style="height: 24px;" alt="Logo">
                 </span>
             <?php elseif ($empresaLogo): ?>
                 <span class="smini-visible">
-                    <img src="<?= $empresaLogo ?>" style="height: 24px;" alt="Logo">
+                    <img src="<?= $empresaLogo ?>?v=<?= time() ?>" style="height: 24px;" alt="Logo">
                 </span>
             <?php else: ?>
                 <span class="smini-visible">
@@ -53,7 +54,7 @@ foreach ($logoExtensions as $ext) {
             <?php endif; ?>
             
             <?php if ($empresaLogo): ?>
-                <span class="smini-hide"><img src="<?= $empresaLogo ?>" style="height: 32px;" alt="<?= $empresaNombre ?>"></span>
+                <span class="smini-hide"><img src="<?= $empresaLogo ?>?v=<?= time() ?>" style="height: 32px;" alt="<?= $empresaNombre ?>"></span>
             <?php else: ?>
                 <span class="smini-hide fs-4 tracking-wider"><?= $empresaNombre ?><span class="fw-normal"><small><?= date('Y') ?></small></span></span>
             <?php endif; ?>

@@ -31,6 +31,9 @@ class MiCuentaController extends BackendController
             return Redirect::to('dashboard');
         }
 
+        // Verificar y agregar campo dark_mode si no existe
+        $this->ensureDarkModeColumn();
+
         $perfil         = $usuario->perfil;
         $app_ajax_old   = $usuario->app_ajax;
         $tmp_usr        = $usuario;
@@ -43,6 +46,11 @@ class MiCuentaController extends BackendController
             if ($usuario) {
                 ActiveRecord::commitTrans();
 
+                // Actualizar dark_mode en sesión si cambió
+                if (isset(Input::post('usuario')['dark_mode'])) {
+                    Session::set('dark_mode', Input::post('usuario')['dark_mode']);
+                }
+
                 Flash::valid('El usuario se ha actualizado correctamente.');
                 Flash::info('Reinicie la sesión para que los cambios se actualicen correctamente');
                 $usuario->perfil = $perfil;
@@ -54,6 +62,7 @@ class MiCuentaController extends BackendController
 
         $this->temas = DwUtils::getFolders(dirname(APP_PATH) . '/public/css/backend/themes/');
         $this->usuario = $usuario;
+        $this->perfil = $perfil;
         $this->page_title = 'Actualizar mis datos';
     }
 
@@ -72,5 +81,24 @@ class MiCuentaController extends BackendController
         sleep(1); //Por la velocidad del script no permite que se actualize el archivo
         $this->data = $data;
         View::json();
+    }
+
+    /**
+     * Verificar y agregar campo dark_mode si no existe
+     */
+    private function ensureDarkModeColumn()
+    {
+        try {
+            $db = Db::factory();
+            // Verificar si la columna existe
+            $result = $db->fetch_all("SHOW COLUMNS FROM usuarios LIKE 'dark_mode'");
+            if (empty($result)) {
+                // Agregar la columna
+                $db->query("ALTER TABLE usuarios ADD COLUMN dark_mode ENUM('off', 'on') DEFAULT 'off' AFTER tema");
+                Flash::info('Se ha agregado la opción de modo oscuro a tu perfil');
+            }
+        } catch (Exception $e) {
+            // Silenciar errores
+        }
     }
 }

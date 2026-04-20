@@ -144,9 +144,12 @@ class ConfiguracionController extends BackendController
     {
         $this->page_title = 'Datos de la Empresa';
         
+        // Cargar config directamente del archivo
+        $config = require APP_PATH . 'config/config.php';
+        
         // Datos por defecto
-        $this->empresa = array(
-            'nombre' => 'Mi Empresa',
+        $empresa = array(
+            'nombre' => '',
             'rif' => '',
             'direccion' => '',
             'telefono' => '',
@@ -154,54 +157,87 @@ class ConfiguracionController extends BackendController
             'web' => ''
         );
         
-        // Intentar cargar del config - ruta correcta es config.custom.empresa
-        try {
-            $empresaData = Config::get('config.custom.empresa');
-            if ($empresaData && is_array($empresaData)) {
-                $this->empresa = array_merge($this->empresa, $empresaData);
-            }
-        } catch (Exception $e) {
-            // Usar valores por defecto si hay error
+        // Cargar desde config si existe
+        if (isset($config['custom']['empresa']) && is_array($config['custom']['empresa'])) {
+            $empresa = array_merge($empresa, $config['custom']['empresa']);
         }
         
-        if (Input::hasPost('empresa')) {
-            $postData = Input::post('empresa');
+        $this->empresa = $empresa;
+        
+        // Procesar formulario
+        $posted = Input::post('empresa');
+        
+        if (is_array($posted) && count($posted) > 0) {
+            // Cargar config actual
+            $fullConfig = require APP_PATH . 'config/config.php';
+            $fullConfig['custom']['empresa'] = $posted;
             
-            // Leer config actual - usar ruta correcta
-            $config = Config::read('config');
-            $config['custom']['empresa'] = $postData;
+            // Guardar
+            $rs = DwConfig::write('config', $fullConfig['custom'], 'custom');
             
-            // Guardar config
-            $configFile = APP_PATH . 'config/config.php';
-            $configContent = "<?php\n\nreturn " . var_export($config, true) . ";\n";
-            file_put_contents($configFile, $configContent);
+            // Subir logos si existen
+            $this->uploadLogo('logo', 'logo-empresa');
+            $this->uploadLogo('logo_mini', 'logo-mini');
             
-            // Procesar logo si se subió
-            if (isset($_FILES['logo']) && $_FILES['logo']['error'] === UPLOAD_ERR_OK) {
-                $logoExt = strtolower(pathinfo($_FILES['logo']['name'], PATHINFO_EXTENSION));
-                if (in_array($logoExt, array('png', 'jpg', 'jpeg', 'gif', 'svg'))) {
-                    $dir = PUBLIC_PATH . 'empresa';
-                    if (!is_dir($dir)) {
-                        mkdir($dir, 0755, true);
-                    }
-                    move_uploaded_file($_FILES['logo']['tmp_name'], $dir . '/logo-empresa.' . $logoExt);
-                }
+            if ($rs) {
+                Flash::valid('Datos guardados correctamente!');
+            } else {
+                Flash::error('Error al guardar los datos');
             }
             
-            // Procesar logo mini si se subió
-            if (isset($_FILES['logo_mini']) && $_FILES['logo_mini']['error'] === UPLOAD_ERR_OK) {
-                $logoMiniExt = strtolower(pathinfo($_FILES['logo_mini']['name'], PATHINFO_EXTENSION));
-                if (in_array($logoMiniExt, array('png', 'jpg', 'jpeg', 'gif', 'svg'))) {
-                    $dir = PUBLIC_PATH . 'empresa';
-                    if (!is_dir($dir)) {
-                        mkdir($dir, 0755, true);
-                    }
-                    move_uploaded_file($_FILES['logo_mini']['tmp_name'], $dir . '/logo-mini.' . $logoMiniExt);
-                }
-            }
-            
-            Flash::valid('Los datos de la empresa se han guardado correctamente!');
             return Redirect::toAction('empresa');
+        }
+    }
+    
+    /**
+     * Subir imagen de logo
+     */
+    private function uploadLogo($inputName, $fileName)
+    {
+        if (isset($_FILES[$inputName]) && $_FILES[$inputName]['error'] === UPLOAD_ERR_OK) {
+            // Usar la ruta correcta: one level up from APP_PATH + public/empresa
+            $uploadDir = dirname(APP_PATH) . '/public/empresa/';
+            
+            Flash::info("Guardando en: $uploadDir");
+            
+            // Crear directorio si no existe
+            if (!is_dir($uploadDir)) {
+                $created = mkdir($uploadDir, 0777, true);
+                Flash::info("Directorio creado: " . ($created ? 'SI' : 'NO'));
+            }
+            
+            $tmpFile = $_FILES[$inputName]['tmp_name'];
+            $ext = strtolower(pathinfo($_FILES[$inputName]['name'], PATHINFO_EXTENSION));
+            
+            // Extensiones permitidas
+            $allowed = ['png', 'jpg', 'jpeg', 'gif', 'svg'];
+            
+            if (in_array($ext, $allowed)) {
+                // Eliminar logos anteriores con otras extensiones
+                foreach ($allowed as $oldExt) {
+                    $oldFile = $uploadDir . $fileName . '.' . $oldExt;
+                    if (file_exists($oldFile)) {
+                        unlink($oldFile);
+                    }
+                }
+                
+                // Nuevo archivo destino
+                $target = $uploadDir . $fileName . '.' . $ext;
+                
+                if (is_uploaded_file($tmpFile)) {
+                    $result = move_uploaded_file($tmpFile, $target);
+                } else {
+                    $result = copy($tmpFile, $target);
+                }
+                
+                if ($result && file_exists($target)) {
+                    Flash::valid("Logo $fileName guardado ($ext)");
+                } else {
+                    Flash::error("Error al guardar $inputName");
+                }
+            } else {
+                Flash::error("Extensión no permitida: $ext");
+            }
         }
     }
 }

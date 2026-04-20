@@ -101,7 +101,7 @@
                                 </div>
                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
                                     <div class="form-group">
-                                        <?= DwForm::pass('usuario.repassword', array('class' => 'input-repass input-lower', 'data-equalto' => 'usuario_password'), '', 'Repita la contraseña'); ?>
+                                        <?= DwForm::pass('usuario.repassword', array('class' => 'input-password input-lower'), '', 'Repita la contraseña'); ?>
                                     </div>
                                 </div>
                             </div>
@@ -120,9 +120,9 @@
                     </div>
                 </div>
             </div>
-            <?= DwForm::close(); ?>
-            <?php $tema = $usuario->tema; ?>
-        </div>
+<?= DwForm::close(); ?>
+        <?php $dark_mode = $usuario->dark_mode ?? 'off'; ?>
+    </div>
 
     </div>
 </div>

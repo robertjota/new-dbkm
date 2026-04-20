@@ -109,8 +109,12 @@ class DwConfig
             $php .= "    '$section' => [\n";
             foreach ($values as $key => $value) {
                 if ($value !== 'delete-var') {
-                    $value = is_numeric($value) ? $value : "'$value'";
-                    $php .= "        '$key' => $value,\n";
+                    if (is_array($value)) {
+                        $php .= "        '$key' => " . var_export($value, true) . ",\n";
+                    } else {
+                        $value = is_numeric($value) ? $value : "'$value'";
+                        $php .= "        '$key' => $value,\n";
+                    }
                 }
             }
             $php .= "    ],\n";
