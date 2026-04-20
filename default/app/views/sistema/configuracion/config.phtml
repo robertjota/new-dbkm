@@ -61,7 +61,7 @@
                                                 $text = 'Sistema en actualización';
                                                 break;
                                             case 'app_update_time':
-                                                $text = 'Tiempo de la actualización';
+                                                $text = 'Tiempo de actualización (minutos)';
                                                 break;
                                             case 'app_version':
                                                 $text = 'Versión de la aplicación';
@@ -70,10 +70,13 @@
                                                 $text = 'Generar logs de la base de datos';
                                                 break;
                                             case 'app_office':
-                                                $text = 'Manejo de sucursales de la empresa';
+                                                $text = 'Manejo de sucursales';
                                                 break;
                                             case 'app_ajax':
                                                 $text = 'Cargar con AJAX';
+                                                break;
+                                            case 'app_local':
+                                                $text = 'Aplicación en localhost';
                                                 break;
                                             case 'app_lock_time':
                                                 $text = 'Tiempo de bloqueo (minutos)';
@@ -81,23 +84,17 @@
                                             case 'app_session_timeout':
                                                 $text = 'Tiempo de cierre de sesión (minutos)';
                                                 break;
-                                            case 'app_local':
-                                                $text = 'La aplicación se encuentra en el localhost';
-                                                break;
-                                            case 'app_local':
-                                                $text = 'La aplicación se encuentra en el localhost';
-                                                break;
                                             case 'login_exclusion':
-                                                $text = 'Nombre de usuarios excluidos';
+                                                $text = 'Usuarios excluidos';
                                                 break;
                                             case 'datagrid':
-                                                $text = 'Cantidad de datos por página en los reportes';
+                                                $text = 'Registros por página';
                                                 break;
-                                            case 'app_lock_time':
-                                                $text = 'Tiempo de bloqueo (minutos)';
+                                            case 'timezone':
+                                                $text = 'Zona horaria';
                                                 break;
-                                            case 'app_session_timeout':
-                                                $text = 'Tiempo de cierre (minutos)';
+                                            case 'type_reports':
+                                                $text = 'Tipo de reportes';
                                                 break;
                                             default:
                                                 $text = $campo;
