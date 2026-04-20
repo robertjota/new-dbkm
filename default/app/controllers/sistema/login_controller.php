@@ -69,12 +69,75 @@ class LoginController extends BackendController
     public function salir($js = '')
     {
         View::select('entrar');
+        
+        // Guardar tiempo de actividad para estadísticas
+        $last_activity = Session::get('last_activity');
+        if ($last_activity) {
+            $activity_time = time() - $last_activity;
+            Flash::info('Tiempo de actividad: ' . round($activity_time/60) . ' minutos');
+        }
+        
         if (Usuario::setSession('close')) {
             Flash::valid("La sesión ha sido cerrada correctamente.");
         }
+        
         if (!empty($js)) {
             Flash::info('Activa el uso de JavaScript en su navegador para poder continuar.');
         }
+        
         return Redirect::toAction('entrar/', 3);
+    }
+
+    /**
+     * Método para bloquear la sesión
+     */
+    public function bloquear()
+    {
+        // Guardar que la sesión está bloqueada
+        Session::set('session_locked', true);
+        Session::set('lock_time', time());
+        
+        return Redirect::to('dashboard/?locked=true');
+    }
+
+    /**
+     * Método para desbloquear la sesión
+     */
+    public function desbloquear()
+    {
+        if (!Session::get('session_locked')) {
+            return Redirect::to('dashboard/');
+        }
+        
+        $password = Input::post('password');
+        
+        if (empty($password)) {
+            Flash::error('Ingrese la contraseña');
+            return Redirect::to('dashboard/?locked=true');
+        }
+        
+        // Verificar la contraseña del usuario actual
+        $login = Session::get('login');
+        
+        if ($login && Usuario::setSession('open', $login, $password)) {
+            Session::set('session_locked', false);
+            Session::delete('lock_time');
+            return Redirect::to('dashboard/');
+        } else {
+            Flash::error('Contraseña incorrecta');
+            return Redirect::to('dashboard/?locked=true&error=1');
+        }
+    }
+    
+    /**
+     * Heartbeat para mantener la sesión activa
+     */
+    public function heartbeat()
+    {
+        if (DwAuth::isLogged()) {
+            Session::set('last_activity', time());
+            Session::set('session_locked', false);
+        }
+        View::json(['success' => true]);
     }
 }

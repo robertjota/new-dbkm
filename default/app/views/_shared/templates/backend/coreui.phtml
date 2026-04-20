@@ -166,20 +166,30 @@ $darkModeClass = (Session::get('dark_mode') === 'on') ? 'dark-mode' : '';
   <?= Tag::js('jquery/jquery.kload') . PHP_EOL; ?>
   <?= Tag::js('validador') . PHP_EOL; ?>
 
-  <!-- CODIGO PARA CERRAR SESION -->
+  <?php 
+  // Obtener tiempos de configuración
+  $config = require APP_PATH . 'config/config.php';
+  $lockTime = $config['custom']['app_lock_time'] ?? 5;
+  $sessionTimeout = $config['custom']['app_session_timeout'] ?? 30;
+  ?>
+  
+  <!-- AUTO LOCK SCRIPT -->
   <script type="text/javascript">
-    var autoLogoutTimer;
-    resetTimer();
-    $(document).on('mouseover mousedown touchstart click keydown mousewheel DDMouseScroll wheel scroll', document, function(e) {
-      resetTimer();
+    window.APP_LOCK_TIME = <?= $lockTime * 60 * 1000 ?>;
+    window.APP_SESSION_TIMEOUT = <?= $sessionTimeout * 60 * 1000 ?>;
+  </script>
+  <?= Tag::js('rjr/auto-lock') . PHP_EOL; ?>
+
+  <!-- Guardar tiempo de actividad -->
+  <script type="text/javascript">
+    document.addEventListener('mousemove', function() {
+      <?php if (DwAuth::isLogged()): ?>
+      fetch('<?= PUBLIC_PATH ?>/sistema/login/heartbeat/', {
+        method: 'POST',
+        credentials: 'same-origin'
+      }).catch(function() {});
+      <?php endif; ?>
     });
-    function resetTimer() {
-      clearTimeout(autoLogoutTimer)
-      autoLogoutTimer = setTimeout(idleLogout, 600000)
-    }
-    function idleLogout() {
-      window.location.href = "<?php echo PUBLIC_PATH; ?>logout";
-    }
   </script>
 </body>
 

@@ -75,6 +75,15 @@
                                             case 'app_ajax':
                                                 $text = 'Cargar con AJAX';
                                                 break;
+                                            case 'app_lock_time':
+                                                $text = 'Tiempo de bloqueo (minutos)';
+                                                break;
+                                            case 'app_session_timeout':
+                                                $text = 'Tiempo de cierre de sesión (minutos)';
+                                                break;
+                                            case 'app_local':
+                                                $text = 'La aplicación se encuentra en el localhost';
+                                                break;
                                             case 'app_local':
                                                 $text = 'La aplicación se encuentra en el localhost';
                                                 break;
@@ -84,6 +93,12 @@
                                             case 'datagrid':
                                                 $text = 'Cantidad de datos por página en los reportes';
                                                 break;
+                                            case 'app_lock_time':
+                                                $text = 'Tiempo de bloqueo (minutos)';
+                                                break;
+                                            case 'app_session_timeout':
+                                                $text = 'Tiempo de cierre (minutos)';
+                                                break;
                                             default:
                                                 $text = $campo;
                                                 break;
@@ -91,6 +106,10 @@
                                         ?>
                                         <?php if (in_array($valor, array('On', 'Off'))) {  ?>
                                             <?php echo DwForm::select("custom.$campo", array('Off' => 'No', 'On' => 'Si'), array('class' => 'input-required'), $valor, ucfirst($text)); ?>
+                                        <?php } elseif (in_array($campo, array('app_lock_time', 'app_session_timeout', 'datagrid'))) { ?>
+                                            <?php echo DwForm::number("custom.$campo", array('class' => 'input-required', 'min' => '1', 'max' => '1440'), $valor, ucfirst($text)); ?>
+                                        <?php } elseif (is_array($valor)) { ?>
+                                            <?php // Skip array fields like empresa - they have their own config page ?>
                                         <?php } else { ?>
                                             <?php echo DwForm::text("custom.$campo", array('class' => 'input-lower input-required'), $valor, ucfirst($text)); ?>
                                         <?php } ?>
