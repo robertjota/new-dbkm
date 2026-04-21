@@ -23,7 +23,7 @@ return [
         'app_logger' => 'On',
         'app_local' => 'On',
         'app_ajax' => 'On',
-        'app_lock_time' => 1,
+        'app_lock_time' => 5,
         'app_session_timeout' => 30,
         'datagrid' => 20,
         'login_exclusion' => 'root, admin',
