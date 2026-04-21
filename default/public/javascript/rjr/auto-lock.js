@@ -59,8 +59,6 @@
     
     function showLockScreen() {
         console.log('Auto-lock: Mostrando pantalla de bloqueo');
-        // Mostrar también un alert para debugging
-        alert('¡Pantalla de bloqueo activada! LockTime: ' + lockTime + 'ms');
         isLocked = true;
         clearTimeout(lockTimer);
         clearTimeout(sessionTimer);

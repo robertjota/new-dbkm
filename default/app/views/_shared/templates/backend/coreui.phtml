@@ -180,16 +180,16 @@ $darkModeClass = (Session::get('dark_mode') === 'on') ? 'dark-mode' : '';
   </script>
   <?= Tag::js('rjr/auto-lock') . PHP_EOL; ?>
 
-  <!-- Guardar tiempo de actividad -->
+  <!-- Heartbeat - cada 30 segundos para mantener sesión activa -->
   <script type="text/javascript">
-    document.addEventListener('mousemove', function() {
-      <?php if (DwAuth::isLogged()): ?>
+    <?php if (DwAuth::isLogged()): ?>
+    setInterval(function() {
       fetch('<?= PUBLIC_PATH ?>/sistema/login/heartbeat/', {
         method: 'POST',
         credentials: 'same-origin'
       }).catch(function() {});
-      <?php endif; ?>
-    });
+    }, 30000);
+    <?php endif; ?>
   </script>
 </body>
 
