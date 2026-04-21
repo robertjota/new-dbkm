@@ -2,8 +2,8 @@
     'use strict';
     
     // Tiempos en minutos desde config (convertidos a ms)
-    var lockTime = (window.APP_LOCK_TIME || 5) * 60 * 1000;
-    var sessionTimeout = (window.APP_SESSION_TIMEOUT || 30) * 60 * 1000;
+    var lockTime = window.APP_LOCK_TIME || 300000; // 5 min default
+    var sessionTimeout = window.APP_SESSION_TIMEOUT || 1800000; // 30 min default
     
     var logoutUrl = '/sistema/login/salir/sesion';
     var lockUrl = '/sistema/login/bloquear';
