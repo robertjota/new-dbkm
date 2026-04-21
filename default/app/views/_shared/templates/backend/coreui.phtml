@@ -159,7 +159,7 @@ $darkModeClass = (Session::get('dark_mode') === 'on') ? 'dark-mode' : '';
   <!-- Script personalizados -->
   <?= Tag::js('rjr/sweet-alert-config') . PHP_EOL;  ?>
   <?= Tag::js('rjr/alert_helpers') . PHP_EOL;  ?>
-  <?= Tag::js('rjr/auto-logout') . PHP_EOL;  ?>
+  <?php // Tag::js('rjr/auto-logout') - disabled, usando auto-lock.js ?>
   <?= Tag::js('jquery/jquery.kumbiaphp') . PHP_EOL; ?>
   <?= Tag::js('jquery/jquery.spin') . PHP_EOL; ?>
   <?= Tag::js('jquery/jquery.keyfilter') . PHP_EOL; ?>

@@ -58,6 +58,9 @@
     }
     
     function showLockScreen() {
+        console.log('Auto-lock: Mostrando pantalla de bloqueo');
+        // Mostrar también un alert para debugging
+        alert('¡Pantalla de bloqueo activada! LockTime: ' + lockTime + 'ms');
         isLocked = true;
         clearTimeout(lockTimer);
         clearTimeout(sessionTimer);
@@ -103,10 +106,14 @@
     }
     
     // Solo ejecutar en páginas del admin (no en login)
-    if (window.location.pathname.indexOf('/sistema/') === 0 || 
-        window.location.pathname.indexOf('/dashboard') === 0 ||
-        window.location.pathname.indexOf('/admin') === 0) {
-        
+    var path = window.location.pathname;
+    var isAdminPage = path.indexOf('/sistema/') !== -1 || 
+                  path.indexOf('/dashboard') !== -1 || 
+                  path.indexOf('/admin') !== -1 ||
+                  path.indexOf('/backend') !== -1;
+    
+    if (isAdminPage && path.indexOf('/sistema/login') === -1) {
+        console.log('Auto-lock: Activado para', path);
         resetTimers();
         
         // Events that reset the timers (actividad del usuario)
