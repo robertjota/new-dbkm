@@ -1,7 +1,7 @@
 (function() {
     'use strict';
     
-    var sessionTimeout = window.APP_SESSION_TIMEOUT || 1800000; // 30 min default
+    var sessionTimeoutSec = window.APP_SESSION_TIMEOUT || 1800; // 30 min in seconds
     var logoutUrl = '/sistema/login/salir/sesion';
     var sessionTimer;
     
@@ -11,7 +11,7 @@
     
     function resetTimer() {
         clearTimeout(sessionTimer);
-        sessionTimer = setTimeout(logout, sessionTimeout);
+        sessionTimer = setTimeout(logout, sessionTimeoutSec * 1000);
     }
     
     // Solo ejecutar en páginas del admin
