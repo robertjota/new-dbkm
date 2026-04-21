@@ -57,8 +57,7 @@
         return lockOverlay;
     }
     
-    function showLockScreen() {
-        console.log('Auto-lock: Mostrando pantalla de bloqueo');
+function showLockScreen() {
         isLocked = true;
         clearTimeout(lockTimer);
         clearTimeout(sessionTimer);
@@ -111,7 +110,6 @@
                   path.indexOf('/backend') !== -1;
     
     if (isAdminPage && path.indexOf('/sistema/login') === -1) {
-        console.log('Auto-lock: Activado para', path);
         resetTimers();
         
         // Events that reset the timers (actividad del usuario)
