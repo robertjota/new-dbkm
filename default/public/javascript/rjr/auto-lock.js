@@ -1,14 +1,14 @@
 (function() {
     'use strict';
     
-    var sessionTimeoutMs = window.APP_SESSION_TIMEOUT || 300000; // 5 min default
-    var warningMs = 30000; // 30 segundos antes
+    var sessionTimeoutSec = window.APP_SESSION_TIMEOUT || 300; // 5 min in seconds
+    var warningSec = 30; // 30 segundos antes
     var logoutUrl = '/sistema/login/salir/sesion';
     var mainTimer;
     var warningTimer;
     var isShowingWarning = false;
     
-    console.log('Auto-lock: sessionTimeoutMs =', sessionTimeoutMs);
+    console.log('Auto-lock: sessionTimeoutSec =', sessionTimeoutSec);
     
     function logout() {
         console.log('Auto-lock: logout triggered');
@@ -19,25 +19,43 @@
         if (isShowingWarning) return;
         isShowingWarning = true;
         
-        console.log('Auto-lock: showing warning');
+        console.log('Auto-lock: showing warning after', sessionTimeoutSec - warningSec, 'seconds');
+        
+        var timeLeft = warningSec;
+        var timerInterval = setInterval(function() {
+            timeLeft--;
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                logout();
+            }
+        }, 1000);
         
         Swal.fire({
             title: 'Sesión a punto de expirar',
-            text: 'Tu sesión expirará en 10 segundos. ¿Deseas mantenerla abierta?',
+            text: 'Tu sesión expirará en ' + warningSec + ' segundos. ¿Deseas mantenerla abierta?',
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: 'Sí, mantener',
             cancelButtonText: 'No, cerrar',
-            timer: 10000,
-            timerProgressBar: true
+            timer: warningSec * 1000,
+            timerProgressBar: true,
+            didOpen: function() {
+                var timer = Swal.getPopup().querySelector('b');
+                if (timer) {
+                    var interval = setInterval(function() {
+                        timer.textContent = timeLeft;
+                    }, 1000);
+                }
+            }
         }).then(function(result) {
+            clearInterval(timerInterval);
             if (result.isConfirmed) {
                 console.log('Auto-lock: session extended');
                 resetTimers();
                 isShowingWarning = false;
                 Swal.fire({
                     title: 'Sesión extendida',
-                    text: 'Tu sesión ha sido extendida por 1 minuto más.',
+                    text: 'Tu sesión ha sido extendida.',
                     icon: 'success',
                     timer: 2000,
                     showConfirmButton: false
@@ -49,12 +67,12 @@
     }
     
     function resetTimers() {
-        console.log('Auto-lock: timers reset');
+        console.log('Auto-lock: timers reset to', sessionTimeoutSec, 'seconds');
         clearTimeout(mainTimer);
         clearTimeout(warningTimer);
         isShowingWarning = false;
         
-        mainTimer = setTimeout(showWarning, sessionTimeoutMs - warningMs);
+        mainTimer = setTimeout(showWarning, (sessionTimeoutSec - warningSec) * 1000);
     }
     
     // Solo ejecutar en páginas del admin
