@@ -101,12 +101,12 @@
                                                 break;
                                         }
                                         ?>
-                                        <?php if (in_array($valor, array('On', 'Off'))) {  ?>
-                                            <?php echo DwForm::select("custom.$campo", array('Off' => 'No', 'On' => 'Si'), array('class' => 'input-required'), $valor, ucfirst($text)); ?>
-                                        <?php } elseif (in_array($campo, array('app_lock_time', 'app_session_timeout', 'datagrid'))) { ?>
-                                            <?php echo DwForm::number("custom.$campo", array('class' => 'input-required', 'min' => '1', 'max' => '1440'), $valor, ucfirst($text)); ?>
+                                        <?php if (in_array($campo, array('app_lock_time', 'app_session_timeout', 'datagrid'))) { ?>
+                                            <?php echo DwForm::number("custom.$campo", array('class' => 'input-required', 'min' => '1', 'max' => '1440'), is_numeric($valor) ? $valor : 0, ucfirst($text)); ?>
                                         <?php } elseif (is_array($valor)) { ?>
-                                            <?php // Skip array fields like empresa - they have their own config page ?>
+                                            <?php // Skip array fields like empresa ?>
+                                        <?php } elseif (in_array($valor, array('On', 'Off'))) { ?>
+                                            <?php echo DwForm::select("custom.$campo", array('Off' => 'No', 'On' => 'Si'), array('class' => 'input-required'), $valor, ucfirst($text)); ?>
                                         <?php } else { ?>
                                             <?php echo DwForm::text("custom.$campo", array('class' => 'input-lower input-required'), $valor, ucfirst($text)); ?>
                                         <?php } ?>
