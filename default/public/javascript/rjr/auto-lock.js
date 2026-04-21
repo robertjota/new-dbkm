@@ -1,61 +1,60 @@
 (function() {
     'use strict';
     
-    var sessionTimeoutSec = window.APP_SESSION_TIMEOUT || 1800; // 30 min in seconds
-    var warningSec = 60; // 1 minute warning before timeout
+    var sessionTimeoutMs = window.APP_SESSION_TIMEOUT || 60000; // 1 min default
+    var warningMs = 10000; // 10 segundos antes
     var logoutUrl = '/sistema/login/salir/sesion';
-    var sessionTimer;
+    var mainTimer;
     var warningTimer;
-    var timerInterval;
+    var isShowingWarning = false;
+    
+    console.log('Auto-lock: sessionTimeoutMs =', sessionTimeoutMs);
     
     function logout() {
+        console.log('Auto-lock: logout triggered');
         window.location.href = logoutUrl + '?reason=timeout';
     }
     
     function showWarning() {
-        warningTimer = setTimeout(function() {
-            var timeLeft = warningSec;
-            
-            var interval = setInterval(function() {
-                timeLeft--;
-                if (timeLeft <= 0) {
-                    clearInterval(interval);
-                    logout();
-                }
-            }, 1000);
-            
-            Swal.fire({
-                title: 'Sesión a punto de expirar',
-                html: 'Tu sesión expirará en <b>' + warningSec + '</b> segundos. ¿Deseas mantenerla abierta?',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'Sí, mantener abierta',
-                cancelButtonText: 'No, cerrar sesión',
-                allowOutsideClick: false,
-                allowEscapeKey: false
-            }).then(function(result) {
-                if (result.isConfirmed) {
-                    resetTimer();
-                    Swal.fire({
-                        title: 'Sesión extendida',
-                        text: 'Tu sesión ha sido extendida.',
-                        icon: 'success',
-                        timer: 2000,
-                        showConfirmButton: false
-                    });
-                } else {
-                    logout();
-                }
-            });
-        }, (sessionTimeoutSec - warningSec) * 1000);
+        if (isShowingWarning) return;
+        isShowingWarning = true;
+        
+        console.log('Auto-lock: showing warning');
+        
+        Swal.fire({
+            title: 'Sesión a punto de expirar',
+            text: 'Tu sesión expirará en 10 segundos. ¿Deseas mantenerla abierta?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Sí, mantener',
+            cancelButtonText: 'No, cerrar',
+            timer: 10000,
+            timerProgressBar: true
+        }).then(function(result) {
+            if (result.isConfirmed) {
+                console.log('Auto-lock: session extended');
+                resetTimers();
+                isShowingWarning = false;
+                Swal.fire({
+                    title: 'Sesión extendida',
+                    text: 'Tu sesión ha sido extendida por 1 minuto más.',
+                    icon: 'success',
+                    timer: 2000,
+                    showConfirmButton: false
+                });
+            } else {
+                logout();
+            }
+        });
     }
     
-    function resetTimer() {
-        clearTimeout(sessionTimer);
+    function resetTimers() {
+        console.log('Auto-lock: timers reset');
+        clearTimeout(mainTimer);
         clearTimeout(warningTimer);
-        clearInterval(timerInterval);
+        isShowingWarning = false;
         
-        sessionTimer = setTimeout(showWarning, sessionTimeoutSec * 1000);
+        mainTimer = setTimeout(showWarning, sessionTimeoutMs - warningMs);
     }
     
     // Solo ejecutar en páginas del admin
@@ -65,11 +64,15 @@
                       path.indexOf('/admin') !== -1;
     
     if (isAdminPage && path.indexOf('/sistema/login') === -1) {
-        resetTimer();
+        resetTimers();
         
         // events que resetean el timer
         ['mousedown', 'keydown', 'scroll', 'touchstart', 'mousemove'].forEach(function(event) {
-            document.addEventListener(event, resetTimer);
+            document.addEventListener(event, function() {
+                if (!isShowingWarning) {
+                    resetTimers();
+                }
+            });
         });
     }
     
