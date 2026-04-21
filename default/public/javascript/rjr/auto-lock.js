@@ -63,6 +63,24 @@ function showLockScreen() {
         clearTimeout(sessionTimer);
         createLockOverlay();
         lockOverlay.style.display = 'flex';
+        
+        // Bloquear navegación cuando está bloqueado
+        window.addEventListener('beforeunload', function(e) {
+            if (isLocked) {
+                e.preventDefault();
+                e.returnValue = '';
+                return '';
+            }
+        });
+        
+        // Bloquear clicks en enlaces
+        document.addEventListener('click', function(e) {
+            var link = e.target.closest('a');
+            if (link && isLocked && link.href && !link.href.startsWith('#')) {
+                e.preventDefault();
+                link.href = 'javascript:void(0)';
+            }
+        });
     }
     
     function hideLockScreen() {
@@ -161,5 +179,23 @@ function showLockScreen() {
     
     // Verificar si la sesión expiró al cargar la página
     document.addEventListener('DOMContentLoaded', checkSessionExpired);
+    
+    // Si hay navigation entries, proteger el historial
+    if (window.history && window.history.pushState) {
+        var originalPushState = window.history.pushState;
+        window.history.pushState = function(state, title, url) {
+            if (isLocked) {
+                logout(); // Cerrar sesión si intenta navegar mientras bloqueado
+                return;
+            }
+            return originalPushState.call(window.history, state, title, url);
+        };
+        
+        window.onpopstate = function() {
+            if (isLocked) {
+                logout(); // Cerrar sesión si navega back/forward
+            }
+        };
+    }
     
 })();
