@@ -167,15 +167,12 @@ $darkModeClass = (Session::get('dark_mode') === 'on') ? 'dark-mode' : '';
   <?= Tag::js('validador') . PHP_EOL; ?>
 
   <?php 
-  // Obtener tiempos de configuración
-  $config = require APP_PATH . 'config/config.php';
-  $lockTime = $config['custom']['app_lock_time'] ?? 5;
+  // Obtener tiempo de sesión
   $sessionTimeout = $config['custom']['app_session_timeout'] ?? 30;
   ?>
   
-  <!-- AUTO LOCK SCRIPT -->
+  <!-- AUTO LOGOUT SCRIPT -->
   <script type="text/javascript">
-    window.APP_LOCK_TIME = <?= $lockTime * 60 * 1000 ?>;
     window.APP_SESSION_TIMEOUT = <?= $sessionTimeout * 60 * 1000 ?>;
   </script>
   <?= Tag::js('rjr/auto-lock') . PHP_EOL; ?>

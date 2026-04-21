@@ -24,7 +24,7 @@ return [
         'app_local' => 'On',
         'app_ajax' => 'On',
         'app_lock_time' => 5,
-        'app_session_timeout' => 30,
+        'app_session_timeout' => 5,
         'datagrid' => 20,
         'login_exclusion' => 'root, admin',
         'type_reports' => 'html.printer',
