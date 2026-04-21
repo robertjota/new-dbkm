@@ -1,8 +1,8 @@
 (function() {
     'use strict';
     
-    var sessionTimeoutMs = window.APP_SESSION_TIMEOUT || 60000; // 1 min default
-    var warningMs = 10000; // 10 segundos antes
+    var sessionTimeoutMs = window.APP_SESSION_TIMEOUT || 300000; // 5 min default
+    var warningMs = 30000; // 30 segundos antes
     var logoutUrl = '/sistema/login/salir/sesion';
     var mainTimer;
     var warningTimer;
