@@ -167,7 +167,8 @@ $darkModeClass = (Session::get('dark_mode') === 'on') ? 'dark-mode' : '';
   <?= Tag::js('validador') . PHP_EOL; ?>
 
   <?php 
-  // Obtener tiempo de sesión en minutos
+  // Obtener tiempo de sesión
+  $config = require APP_PATH . 'config/config.php';
   $sessionTimeout = (int) ($config['custom']['app_session_timeout'] ?? 30);
   ?>
   
