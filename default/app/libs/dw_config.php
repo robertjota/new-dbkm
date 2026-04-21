@@ -25,11 +25,16 @@ class DwConfig
             self::defineConstants($config);
             
             //Segunda pasada: preparar valores para retorno
+            $numericFields = ['app_lock_time', 'app_session_timeout', 'datagrid', 'app_version'];
             foreach ($config as $seccion => &$filas) {
                 if (is_array($filas)) {
                     foreach ($filas as $variable => &$valor) {
                         if (is_array($valor)) {
-                            continue; // Skip arrays - they have their own config pages
+                            continue; // Skip arrays
+                        }
+                        // No convertir campos numéricos known
+                        if (in_array($variable, $numericFields)) {
+                            continue;
                         }
                         if ($valor === '1' || $valor === 1) {
                             $valor = 'On';
