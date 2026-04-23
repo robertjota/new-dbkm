@@ -6,12 +6,7 @@
 
 // SweetAlert2, for more examples you can check out https://github.com/sweetalert2/sweetalert2
 class pageDialogs {
-  /*
-   * SweetAlert2 demo functionality
-   *
-   */
   static sweetAlert2() {
-    // Set default properties
     let toast = Swal.mixin({
       buttonsStyling: false,
       target: '#page-container',
@@ -22,85 +17,39 @@ class pageDialogs {
       }
     });
 
-    // Init a simple dialog on button click
-    document.querySelector('.js-swal-simple').addEventListener('click', e => {
-      toast.fire('Hi, this is just a simple message!');
-    });
-
-    // Init an success dialog on button click
-    document.querySelector('.js-swal-success').addEventListener('click', e => {
-      toast.fire('Success', 'Everything was updated perfectly!', 'success');
-    });
-
-    // Init an info dialog on button click
-    document.querySelector('.js-swal-info').addEventListener('click', e => {
-      toast.fire('Info', 'Just an informational message!', 'info');
-    });
-
-    // Init an warning dialog on button click
-    document.querySelector('.js-swal-warning').addEventListener('click', e => {
-      toast.fire('Warning', 'Something needs your attention!', 'warning');
-    });
-
-    // Init an error dialog on button click
-    document.querySelector('.js-swal-error').addEventListener('click', e => {
-      toast.fire('Oops...', 'Something went wrong!', 'error');
-    });
-
-    // Init an question dialog on button click
-    document.querySelector('.js-swal-question').addEventListener('click', e => {
-      toast.fire('Question', 'Are you sure about that?', 'question');
-    });
-
-    // Init an example confirm dialog on button click
-    document.querySelector('.js-swal-confirm').addEventListener('click', e => {
-      toast.fire({
-        title: 'Are you sure?',
-        text: 'You will not be able to recover this imaginary file!',
-        icon: 'warning',
-        showCancelButton: true,
-        customClass: {
-          confirmButton: 'btn btn-danger m-1',
-          cancelButton: 'btn btn-secondary m-1'
-        },
-        confirmButtonText: 'Yes, delete it!',
-        html: false,
-        preConfirm: e => {
-          return new Promise(resolve => {
-            setTimeout(() => {
-              resolve();
-            }, 50);
-          });
-        }
+    let btns = [
+      {selector: '.js-swal-simple', fire: () => toast.fire('Hi, this is just a simple message!')},
+      {selector: '.js-swal-success', fire: () => toast.fire('Success', 'Everything was updated perfectly!', 'success')},
+      {selector: '.js-swal-info', fire: () => toast.fire('Info', 'Just an informational message!', 'info')},
+      {selector: '.js-swal-warning', fire: () => toast.fire('Warning', 'Something needs your attention!', 'warning')},
+      {selector: '.js-swal-error', fire: () => toast.fire('Oops...', 'Something went wrong!', 'error')},
+      {selector: '.js-swal-question', fire: () => toast.fire('Question', 'Are you sure about that?', 'question')},
+      {selector: '.js-swal-confirm', fire: () => toast.fire({
+        title: 'Are you sure?', text: 'You will not be able to recover this imaginary file!',
+        icon: 'warning', showCancelButton: true,
+        customClass: {confirmButton: 'btn btn-danger m-1', cancelButton: 'btn btn-secondary m-1'},
+        confirmButtonText: 'Yes, delete it!'
       }).then(result => {
         if (result.value) {
           toast.fire('Deleted!', 'Your imaginary file has been deleted.', 'success');
-          // result.dismiss can be 'overlay', 'cancel', 'close', 'esc', 'timer'
         } else if (result.dismiss === 'cancel') {
           toast.fire('Cancelled', 'Your imaginary file is safe :)', 'error');
         }
-      });
-    });
+      })},
+      {selector: '.js-swal-custom-position', fire: () => toast.fire({position: 'top-end', title: 'Perfect!', text: 'Nice Position!', icon: 'success'})}
+    ];
 
-    // Init an example confirm alert on button click
-    document.querySelector('.js-swal-custom-position').addEventListener('click', e => {
-      toast.fire({
-        position: 'top-end',
-        title: 'Perfect!',
-        text: 'Nice Position!',
-        icon: 'success'
-      });
+    btns.forEach(btn => {
+      let el = document.querySelector(btn.selector);
+      if (el) {
+        el.addEventListener('click', btn.fire);
+      }
     });
   }
 
-  /*
-   * Init functionality
-   *
-   */
   static init() {
     this.sweetAlert2();
   }
 }
 
-// Initialize when page loads
 One.onLoad(() => pageDialogs.init());
