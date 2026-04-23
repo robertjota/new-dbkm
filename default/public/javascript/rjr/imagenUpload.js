@@ -1,3 +1,5 @@
+// Evitar redeclarar la clase
+if (typeof ImagenUpload === 'undefined') {
 class ImagenUpload {
     constructor(config) {
         this.config = {
@@ -75,4 +77,5 @@ class ImagenUpload {
             return { success: false, message: error.message };
         }
     }
+}
 }
